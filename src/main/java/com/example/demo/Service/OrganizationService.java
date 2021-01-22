@@ -33,6 +33,11 @@ public class OrganizationService {
 		return l;
 	}
 
+	//get max id
+	public Long maxId() {
+		return organizationrepository.maxId();
+	}
+	
 	// get max tenant id
 	public String maxTenantid() {
 		return organizationrepository.maxTenantid();
@@ -49,8 +54,8 @@ public class OrganizationService {
 	}
 
 	// add new organization instance
-	public void addOrganization(Organization organization) {
-		Long id = organizationrepository.maxId();
+	public Organization addOrganization(Organization organization) {
+		Long id = maxId();
 		if (id == null) {
 			organization.setId(1l);
 		} else {
@@ -65,7 +70,7 @@ public class OrganizationService {
 		}
 		organization.setCreatetime(new Timestamp(System.currentTimeMillis()));
 		organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-		organizationrepository.save(organization);
+		return organizationrepository.save(organization);
 	}
 
 	// edit an existing organization instance

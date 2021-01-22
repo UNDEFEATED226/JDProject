@@ -44,8 +44,8 @@ public class UserService {
 	}
 
 	// add new User instance
-	public void addUser(User user) {
-		Long max = userrepository.maxId();
+	public User addUser(User user) {
+		Long max = maxId();
 		if (max == null) {
 			user.setId(1l);
 		} else {
@@ -53,7 +53,7 @@ public class UserService {
 		}
 		user.setCreatetime(new Timestamp(System.currentTimeMillis()));
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-		userrepository.save(user);
+		return userrepository.save(user);
 	}
 
 	// edit an existing User Entity
@@ -65,5 +65,10 @@ public class UserService {
 		}
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
 		userrepository.save(user);
+	}
+	
+	//返回当前最大id值
+	public Long maxId() {
+		return userrepository.maxId();
 	}
 }

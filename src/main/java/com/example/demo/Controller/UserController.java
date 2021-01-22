@@ -2,13 +2,15 @@ package com.example.demo.Controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.demo.Entity.User;
 import com.example.demo.Service.UserService;
 
@@ -34,8 +36,12 @@ public class UserController {
 	}
 
 	//find an existing user instance by its id
-	@PostMapping("/findbyid/{id}")
-	public User findById(@PathVariable Long id) {
-		return userservice.findById(id);
+	@GetMapping("/findbyid")
+	public User findById(Long id) {
+		try {
+			return userservice.findById(id);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
+		}
 	}
 }

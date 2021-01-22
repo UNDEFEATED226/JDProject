@@ -6,6 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 //User Entity
 @Entity
@@ -32,8 +35,11 @@ public class User {
 	@Column(name="is_deleted")
 	private Integer isdeleted;
 	
+	@Email
 	private String email;
 	
+	@Min(0)
+	@Max(1)
 	private Integer sex;
 	
 	private String comment;

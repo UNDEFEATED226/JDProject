@@ -19,6 +19,9 @@ public class OrganizationService {
 
 	// find an Organization instance by its id
 	public Organization findById(Long id) {
+		if(! id.getClass().toString().equals("class java.lang.Long")) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
+		}
 		try {
 			return organizationrepository.findById(id).get();
 		} catch (Exception e) {

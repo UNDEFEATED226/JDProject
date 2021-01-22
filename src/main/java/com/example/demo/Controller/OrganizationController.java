@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +21,7 @@ public class OrganizationController {
 	@Autowired
 	OrganizationService organizationservice;
 
+	
 	// return all the Organization instances
 	@GetMapping("/findallorganization")
 	public List<Organization> findAllOrganization() {
@@ -29,8 +29,8 @@ public class OrganizationController {
 	}
 
 	// find a Organization instance by its id
-	@PostMapping("/findbyid/{id}")
-	public Organization findById(@PathVariable Long id) {
+	@GetMapping("/findbyid")
+	public Organization findById(Long id) {
 		try {
 			return organizationservice.findById(id);
 		} catch (Exception e) {

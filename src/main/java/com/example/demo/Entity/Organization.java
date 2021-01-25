@@ -6,36 +6,48 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 //Organization Entity
 @Entity
 @Table(name="iot_hub_rbac_organization")
 public class Organization {
 	
+	@NotNull
 	@Id
 	private Long id;
 	
+	@Size(max=64)
 	@Column(name="org_name")
 	private String orgname;
 	
+	@Digits(integer=11,fraction=0)
 	@Column(name="parent_org_id")
 	private Long parentorgid;
 	
+	@Digits(integer=11,fraction=0)
 	@Column(name="org_level")
 	private Long orglevel;
 	
+	@Digits(integer=11,fraction=0)
 	@Column(name="org_type")
 	private Long orgtype;
 	
+	@Size(max=64)
 	@Column(name="org_type_name")
 	private String orgtypename;
 	
+	@Digits(integer=11,fraction=0)
 	@Column(name="org_catlog")
 	private Long orgcatlog;
 	
+	@Size(max=64)
 	@Column(name="base_org_code")
 	private String baseorgcode;
 	
+	@Size(max=64)
 	@Column(name="tenant_id")
 	private String tenantid;
 	
@@ -45,12 +57,15 @@ public class Organization {
 	@Column(name="create_time")
 	private Timestamp createtime;
 	
+	@Digits(integer=4,fraction=0)
 	@Column(name="is_deleted")
 	private Integer isdeleted;
 	
+	@Size(max=255)
 	@Column(name="full_parent_id")
 	private String fullparentid;
 	
+	@Digits(integer=1,fraction=0)
 	@Column(name="is_have_child")
 	private Integer ishavechild;
 

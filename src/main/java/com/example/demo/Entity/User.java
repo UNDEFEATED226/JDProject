@@ -6,42 +6,51 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 //User Entity
 @Entity
 @Table(name="iot_hub_rbac_user")
 public class User {
 	
+	@NotNull
 	@Id
 	private Long id;
 	
+	@NotNull
 	@Column(name="user_id")
 	private String userid;
 	
+	@Size(min=1,max=64)
+
 	@Column(name="login_name")
 	private String loginname;
 	
+	@Size(min=8,max=256)
+
 	private String password;
 	
+	@Size(max=64)
 	@Column(name="real_name")
 	private String realname;
 	
+	@Size(max=256)
 	@Column(name="org_id")
 	private String orgid;
 	
 	@Column(name="is_deleted")
 	private Integer isdeleted;
 	
+	@Size(max=64)
 	@Email
 	private String email;
 	
-	@Min(0)
-	@Max(1)
 	private Integer sex;
 	
+	@Size(max=256)
 	private String comment;
 	
 	@Column(name="create_time")
@@ -56,6 +65,7 @@ public class User {
 	@Column(name="user_group_id")
 	private BigInteger usergroupid;
 	
+	@Digits(integer=20,fraction=0)
 	@Column(name="tenant_id")
 	private BigInteger tenantid;
 	
@@ -65,9 +75,11 @@ public class User {
 	@Column(name="is_forbidden")
 	private Integer isforbidden;
 	
+	@Size(max=256)
 	@Column(name="full_parent_id")
 	private String fullparentid;
 	
+	@Size(max=20)
 	private String mobile;
 
 	public Long getId() {

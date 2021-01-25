@@ -88,7 +88,7 @@ public class UserService {
 			user.setId(1l);
 			user.setUserid("jd-iot-"+getMD5(String.valueOf(1l)));
 		} else {
-			user.setId(max + 1);
+			user.setId(max+1);
 			user.setUserid("jd-iot-"+getMD5(String.valueOf(max+1)));
 		}
 		user.setCreatetime(new Timestamp(System.currentTimeMillis()));

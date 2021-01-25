@@ -13,15 +13,14 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.Entity.Organization;
 import com.example.demo.Service.OrganizationService;
 
+@RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/organization")
-@RestController
 public class OrganizationController {
 
 	@Autowired
 	OrganizationService organizationservice;
 
-	
 	// return all the Organization instances
 	@GetMapping("/findallorganization")
 	public List<Organization> findAllOrganization() {

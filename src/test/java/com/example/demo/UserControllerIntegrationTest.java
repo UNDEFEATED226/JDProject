@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +17,8 @@ import com.example.demo.Service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.server.LocalServerPort;
 
+
+@ActiveProfiles({"integration"})
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -53,9 +56,13 @@ public class UserControllerIntegrationTest {
 	@Sql({ "classpath:sql/integration-test-user.sql" })
 	// 是否可以正确添加新用户并且赋值正确
 	public void addNewUser_Test() {
-		Long max = userservice.maxId() + 1;
+		
 		User u = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser", new User(), User.class);
-		assertEquals(u.getId().longValue(), max.longValue());
+		System.out.println(u.getId());
+		System.out.println(u.getRealname());
+		System.out.println(u.getUserid());
+		//System.out.println(temp.getRealname());
+		assertEquals(u.getId().longValue(),108l);
 	}
 
 	@Test

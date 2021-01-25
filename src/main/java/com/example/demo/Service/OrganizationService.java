@@ -17,18 +17,6 @@ public class OrganizationService {
 	@Autowired
 	OrganizationRepository organizationrepository;
 
-	// find an Organization instance by its id
-	public Organization findById(Long id) {
-		if(! id.getClass().toString().equals("class java.lang.Long")) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
-		}
-		try {
-			return organizationrepository.findById(id).get();
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
-		}
-	}
-
 	// return all the Organization instances
 	public List<Organization> findAllOrganization() {
 		List<Organization> l = new ArrayList<Organization>();
@@ -36,11 +24,11 @@ public class OrganizationService {
 		return l;
 	}
 
-	//get max id
+	// get max id
 	public Long maxId() {
 		return organizationrepository.maxId();
 	}
-	
+
 	// get max tenant id
 	public String maxTenantid() {
 		return organizationrepository.maxTenantid();
@@ -74,6 +62,10 @@ public class OrganizationService {
 		organization.setCreatetime(new Timestamp(System.currentTimeMillis()));
 		organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
 		return organizationrepository.save(organization);
+	}
+
+	public Organization findById(Long id) {
+		return organizationrepository.findById(id).get();
 	}
 
 	// edit an existing organization instance

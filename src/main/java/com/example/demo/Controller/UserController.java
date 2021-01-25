@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import com.example.demo.Entity.User;
 import com.example.demo.Service.UserService;
 
@@ -23,19 +22,19 @@ public class UserController {
 	@Autowired
 	UserService userservice;
 
-	//add new user instance
+	// add new user instance
 	@PostMapping("/adduser")
 	public User addUser(@RequestBody User user) {
 		return userservice.addUser(user);
 	}
 
-	//return all the user instances
+	// return all the user instances
 	@GetMapping("/findalluser")
 	public List<User> findAllUser() {
 		return userservice.findAllUser();
 	}
 
-	//find an existing user instance by its id
+	// find an existing user instance by its id
 	@GetMapping("/findbyid")
 	public User findById(Long id) {
 		try {

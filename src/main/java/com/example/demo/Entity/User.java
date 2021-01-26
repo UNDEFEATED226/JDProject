@@ -24,13 +24,13 @@ public class User {
 	@Column(name="user_id")
 	private String userid;
 	
+	@NotNull
 	@Size(min=1,max=64)
-
 	@Column(name="login_name")
 	private String loginname;
 	
+	@NotNull
 	@Size(min=8,max=256)
-
 	private String password;
 	
 	@Size(max=64)

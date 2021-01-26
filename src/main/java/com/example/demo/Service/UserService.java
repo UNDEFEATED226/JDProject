@@ -19,50 +19,42 @@ public class UserService {
 	@Autowired
 	UserRepository userrepository;
 
-	//根据id生成MD5 32位
-    public static String getMD5(String str) {
-        try {           
-            MessageDigest md = MessageDigest.getInstance("MD5");        
-            md.update(str.getBytes());  
-            return new BigInteger(1, md.digest()).toString(16);
-        } catch (Exception e) {
-           e.printStackTrace();
-           return null;
-        }
-    }
-    
-    //for MD5 generator
-    public static String MD5(String s) {
-        char hexDigits[]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};       
-        try {
-            byte[] btInput = s.getBytes();
-          
-            MessageDigest mdInst = MessageDigest.getInstance("MD5");            
-            mdInst.update(btInput);            
-            byte[] md = mdInst.digest();          
-            int j = md.length;
-            char str[] = new char[j * 2];
-            int k = 0;
-            for (int i = 0; i < j; i++) {
-                byte byte0 = md[i];
-                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
-                str[k++] = hexDigits[byte0 & 0xf];
-            }
-            return new String(str);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    
-	// return all the user instances
+	/**
+	 * 为id生成MD5值
+	 * 
+	 * @param id 需要生成MD5值的id
+	 * 
+	 * @return 生成的MD5值
+	 */
+	public static String getMD5(String id) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(id.getBytes());
+			return new BigInteger(1, md.digest()).toString(16);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 查找并返回所有用户实体
+	 * 
+	 * @return
+	 */
 	public List<User> findAllUser() {
 		List<User> l = new ArrayList<User>();
 		userrepository.findAll().forEach(l::add);
 		return l;
 	}
 
-	// find a User instance by its id
+	/**
+	 * 通过id查找指定用户
+	 * 
+	 * @param id
+	 * 
+	 * @return 指定用户实体
+	 */
 	public User findById(Long id) {
 		try {
 			return userrepository.findById(id).get();
@@ -71,7 +63,11 @@ public class UserService {
 		}
 	}
 
-	// delete an existing User instance
+	/**
+	 * 通过id删除指定用户
+	 * 
+	 * @param id
+	 */
 	public void deleteUser(Long id) {
 		try {
 			userrepository.findById(id);
@@ -81,22 +77,33 @@ public class UserService {
 		userrepository.deleteById(id);
 	}
 
-	// add new User instance
+	/**
+	 * 添加单个用户实体
+	 * 
+	 * @param user 单个用户实体
+	 * 
+	 * @return
+	 */
 	public User addUser(User user) {
 		Long max = maxId();
 		if (max == null) {
 			user.setId(1l);
-			user.setUserid("jd-iot-"+getMD5(String.valueOf(1l)));
+			user.setUserid("jd-iot-" + getMD5(String.valueOf(1l)));
 		} else {
-			user.setId(max+1);
-			user.setUserid("jd-iot-"+getMD5(String.valueOf(max+1)));
+			user.setId(max + 1);
+			user.setUserid("jd-iot-" + getMD5(String.valueOf(max + 1)));
 		}
 		user.setCreatetime(new Timestamp(System.currentTimeMillis()));
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
 		return userrepository.save(user);
 	}
 
-	// edit an existing User Entity
+	/**
+	 * 通过id编辑指定用户
+	 * 
+	 * @param id   想要修改的用户的id
+	 * @param user 修改完的用户实体
+	 */
 	public void editUser(Long id, User user) {
 		try {
 			userrepository.findById(id);
@@ -106,8 +113,12 @@ public class UserService {
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
 		userrepository.save(user);
 	}
-	
-	//返回当前最大id值
+
+	/**
+	 * 返回最大id值
+	 * 
+	 * @return
+	 */
 	public Long maxId() {
 		return userrepository.maxId();
 	}

@@ -47,21 +47,18 @@ public class UserControllerIntegrationTest {
 	@Sql({ "classpath:sql/integration-test-user.sql" })
 	// 验证返回用户示例是否是预期值
 	public void compareUserEntity_Test() {
-		User u = userservice.findById(107l);
 		User g = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", User.class, 107);
-		assertEquals(u.getId().longValue(), g.getId().longValue());
+		assertEquals(107l,g.getId().longValue());
 	}
 
 	@Test
 	@Sql({ "classpath:sql/integration-test-user.sql" })
 	// 是否可以正确添加新用户并且赋值正确
 	public void addNewUser_Test() {
-		
-		User u = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser", new User(), User.class);
-		System.out.println(u.getId());
-		System.out.println(u.getRealname());
-		System.out.println(u.getUserid());
-		//System.out.println(temp.getRealname());
+		User user=new User();
+		user.setLoginname("1");
+		user.setPassword("11111111");
+		User u = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser", user, User.class);
 		assertEquals(u.getId().longValue(),108l);
 	}
 

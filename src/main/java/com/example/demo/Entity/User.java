@@ -13,73 +13,73 @@ import javax.validation.constraints.Size;
 
 //User Entity
 @Entity
-@Table(name="iot_hub_rbac_user")
+@Table(name = "iot_hub_rbac_user")
 public class User {
-	
+
 	@NotNull
 	@Id
 	private Long id;
-	
+
 	@NotNull
-	@Column(name="user_id")
+	@Column(name = "user_id")
 	private String userid;
-	
+
 	@NotNull
-	@Size(min=1,max=64)
-	@Column(name="login_name")
+	@Size(min = 1, max = 64)
+	@Column(name = "login_name")
 	private String loginname;
-	
+
 	@NotNull
-	@Size(min=8,max=256)
+	@Size(min = 8, max = 256)
 	private String password;
-	
-	@Size(max=64)
-	@Column(name="real_name")
+
+	@Size(max = 64)
+	@Column(name = "real_name")
 	private String realname;
-	
-	@Size(max=256)
-	@Column(name="org_id")
+
+	@Size(max = 256)
+	@Column(name = "org_id")
 	private String orgid;
-	
-	@Column(name="is_deleted")
+
+	@Column(name = "is_deleted")
 	private Integer isdeleted;
-	
-	@Size(max=64)
+
+	@Size(max = 64)
 	@Email
 	private String email;
-	
+
 	private Integer sex;
-	
-	@Size(max=256)
+
+	@Size(max = 256)
 	private String comment;
-	
-	@Column(name="create_time")
+
+	@Column(name = "create_time")
 	private Timestamp createtime;
-	
-	@Column(name="update_time")
+
+	@Column(name = "update_time")
 	private Timestamp updatetime;
-	
-	@Column(name="user_status")
+
+	@Column(name = "user_status")
 	private String userstatus;
-	
-	@Column(name="user_group_id")
+
+	@Column(name = "user_group_id")
 	private BigInteger usergroupid;
-	
-	@Digits(integer=20,fraction=0)
-	@Column(name="tenant_id")
+
+	@Digits(integer = 20, fraction = 0)
+	@Column(name = "tenant_id")
 	private BigInteger tenantid;
-	
-	@Column(name="is_tenant_admin")
+
+	@Column(name = "is_tenant_admin")
 	private Integer istenantadmin;
-	
-	@Column(name="is_forbidden")
+
+	@Column(name = "is_forbidden")
 	private Integer isforbidden;
-	
-	@Size(max=256)
-	@Column(name="full_parent_id")
+
+	@Size(max = 256)
+	@Column(name = "full_parent_id")
 	private String fullparentid;
-	
-	@Size(max=20)
+
+	@Size(max = 20)
 	private String mobile;
 
 	public Long getId() {

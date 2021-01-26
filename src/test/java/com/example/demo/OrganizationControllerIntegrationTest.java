@@ -10,9 +10,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.server.ResponseStatusException;
 import static org.junit.Assert.assertEquals;
 import java.util.List;
-import java.util.NoSuchElementException;
 import com.example.demo.Entity.Organization;
 import com.example.demo.Service.OrganizationService;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +67,7 @@ public class OrganizationControllerIntegrationTest {
 	@Sql({ "classpath:sql/integration-test-user.sql" })
 	// 处理不存在参数
 	public void findById_Test() {
-		Assertions.assertThrows(NoSuchElementException.class, () -> {
+		Assertions.assertThrows(ResponseStatusException.class, () -> {
 			organizationservice.findById(900l);
 		});
 	}

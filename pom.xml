@@ -8,11 +8,12 @@
 		<version>2.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>IOTCore</artifactId>
+	<groupId>com.jd</groupId>
+	<artifactId>iot-admin-console</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>IOTCore</name>
-	<description>Demo project for Spring Boot</description>
+	<name>iot-admin-console</name>
+	<packaging>jar</packaging>
+	<description>IOT ADMIN CONSOLE</description>
 
 	<properties>
 		<java.version>11</java.version>

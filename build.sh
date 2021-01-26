@@ -37,7 +37,7 @@ function clean_before_build
 function build_package()
 {
     cd ${WORKSPACE_DIR}
-    mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true || return 1
+    mvn clean install -Dmaven.test.skip=false -Dmaven.javadoc.skip=true || return 1
 }
 
 function build_dependency_package()

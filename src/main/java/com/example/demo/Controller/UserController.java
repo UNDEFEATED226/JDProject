@@ -17,7 +17,7 @@ import com.example.demo.Service.UserService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
-//controller for 用户实体
+//Controller for 用户实体
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController

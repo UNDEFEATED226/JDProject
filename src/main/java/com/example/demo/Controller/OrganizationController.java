@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
+//Controller for organization
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")

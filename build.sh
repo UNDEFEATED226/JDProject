@@ -8,7 +8,7 @@
 
 ###############用户修改部分################
 readonly PACKAGE_DIR_NAME="./"    #如果在pom文件中定义了模块，请设置该变量,可选项
-readonly DEPENDENCY_PACKAGE_DIR_NAME="iot-admin-portal"    #如果在pom文件中定义了模块，请设置该变量,可选项
+readonly DEPENDENCY_PACKAGE_DIR_NAME="iot-admin-portal.master"    #如果在pom文件中定义了模块，请设置该变量,可选项
 readonly PACKAGE_JAR_NAME="iot-admin-console-0.0.1-SNAPSHOT.jar"    #定义产出的jar包名,必填项
 #最终的抽包路径为$OUTPUT
 ###########################################
@@ -79,9 +79,8 @@ function copy_result
 function copy_dependency_result
 {
     cd ${WORKSPACE_DIR}/${DEPENDENCY_PACKAGE_DIR_NAME}
-    mv build frontend #rename react output directory for furthur usage
-    cp -r ./frontend ${OUTPUT}/bin || return 1
-   #如果有其他需要拷贝的文件，可以在这里添加
+    mkdir ${WORKSPACE_DIR}/src/main/resources/static/
+    cp -r build/* ${WORKSPACE_DIR}/src/main/resources/static/
 }
 
 #执行
@@ -96,8 +95,9 @@ function main()
     echo
 
     echo "At: "$(date "+%Y-%m-%d %H:%M:%S") 'Building...'
-    build_package $@ || exit 1
     build_dependency_package $@ || exit 1
+    copy_dependency_result || exit 1
+    build_package $@ || exit 1
     echo "At: "$(date "+%Y-%m-%d %H:%M:%S") 'Build completed'
     echo
 
@@ -108,7 +108,6 @@ function main()
 
     echo "At: "$(date "+%Y-%m-%d %H:%M:%S") 'Copy result to publish dir...'
     copy_result || exit 1
-    copy_dependency_result || exit 1
     echo "At: "$(date "+%Y-%m-%d %H:%M:%S") 'Copy completed'
     echo
 

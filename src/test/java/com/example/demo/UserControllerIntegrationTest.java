@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -70,6 +71,7 @@ public class UserControllerIntegrationTest {
 		assertNotNull(user);
 		assertEquals("user", user.getLoginname());
 		assertEquals("password", user.getPassword());
+		assertEquals(BigInteger.valueOf(333), user.getTenantid());
 	}
 
 	@Test

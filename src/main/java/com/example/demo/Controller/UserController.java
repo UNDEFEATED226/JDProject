@@ -49,7 +49,7 @@ public class UserController {
 	 */
 	@GetMapping("/findalluser")
 	public List<User> findAllUser() {
-		log.info("查找所有用户...");
+		log.info("查找所有用户:[{}]",gson.toJson(userservice.findAllUser()));
 		return userservice.findAllUser();
 	}
 

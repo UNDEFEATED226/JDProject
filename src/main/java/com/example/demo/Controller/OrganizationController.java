@@ -39,7 +39,7 @@ public class OrganizationController {
 	 */
 	@GetMapping("/findallorganization")
 	public List<Organization> findAllOrganization() {
-		log.info("查找所有组织...");
+		log.info("查找所有组织:[{}]",organizationservice.findAllOrganization());
 		return organizationservice.findAllOrganization();
 	}
 

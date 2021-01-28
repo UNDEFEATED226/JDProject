@@ -5,11 +5,15 @@ import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.demo.Entity.Role;
 import com.example.demo.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.example.demo.Repository.RoleRepository;
 import com.example.demo.Repository.UserRepository;
 
 //Service for User Entity
@@ -18,6 +22,12 @@ public class UserService {
 
 	@Autowired
 	UserRepository userrepository;
+
+	@Autowired
+	RoleService roleservice;
+	
+	@Autowired
+	OrganizationService organizationservice;
 
 	/**
 	 * 为id生成MD5值
@@ -77,14 +87,9 @@ public class UserService {
 		userrepository.deleteById(id);
 	}
 
-	/**
-	 * 添加单个用户实体
-	 * 
-	 * @param user 单个用户实体
-	 * 
-	 * @return
-	 */
-	public User addUser(User user) {
+
+	public User addUser(User user, Long orgid) {
+		user.setTenantid(BigInteger.valueOf(Long.parseLong(organizationservice.findById(orgid).getTenantid())));
 		Long max = maxId();
 		if (max == null) {
 			user.setId(1l);
@@ -95,7 +100,12 @@ public class UserService {
 		}
 		user.setCreatetime(new Timestamp(System.currentTimeMillis()));
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-		return userrepository.save(user);
+		User u = userrepository.save(user);
+		Role r = new Role();
+		r.setUserid(u.getId());
+		r.setRoleid(1l);
+		roleservice.addRole(r);
+		return u;
 	}
 
 	/**

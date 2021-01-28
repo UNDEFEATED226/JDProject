@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,15 +32,11 @@ public class UserController {
 
 	Gson gson = new Gson();
 
-	/**
-	 * 添加单个用户实体
-	 * 
-	 * @param 单个用户实体
-	 */
-	@PostMapping("/adduser")
-	public User addUser(@RequestBody User user) {
-		log.info("添加用户[{}]", gson.toJson(user));
-		return userservice.addUser(user);
+	@PostMapping("/adduser/{orgid}")
+	public User addUser(@PathVariable("orgid") Long orgid,@RequestBody User user) {
+		User u = userservice.addUser(user, orgid);
+		log.info("添加用户[{}]", gson.toJson(u));
+		return u;
 	}
 
 	/**
@@ -49,7 +46,7 @@ public class UserController {
 	 */
 	@GetMapping("/findalluser")
 	public List<User> findAllUser() {
-		log.info("查找所有用户:[{}]",gson.toJson(userservice.findAllUser()));
+		log.info("查找所有用户:[{}]", gson.toJson(userservice.findAllUser()));
 		return userservice.findAllUser();
 	}
 
@@ -63,7 +60,7 @@ public class UserController {
 	@GetMapping("/findbyid")
 	public User findById(Long id) {
 		try {
-			log.info("查找用户id:[{}],用户:", id,gson.toJson(userservice.findById(id)));
+			log.info("查找用户id:[{}],用户:", id, gson.toJson(userservice.findById(id)));
 			return userservice.findById(id);
 		} catch (Exception e) {
 			log.error("查找用户id:[{}]时报错,错误信息:{}", id, e.toString());

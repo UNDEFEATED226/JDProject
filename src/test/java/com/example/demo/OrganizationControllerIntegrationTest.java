@@ -57,8 +57,10 @@ public class OrganizationControllerIntegrationTest {
 	@Sql({ "classpath:sql/integration-test-organization.sql" })
 	// 是否可以正确添加新公司并且赋值正确
 	public void addNewOrganization_Test() {
+		Organization org = new Organization();
+		org.setOrgname("org");
 		Organization o = this.restTemplate.postForObject("http://localhost:" + port + "/organization/addorganization",
-				new Organization(), Organization.class);
+				org, Organization.class);
 		assertEquals(o.getId().longValue(), 2l);
 		assertEquals(o.getTenantid(), "334");
 	}

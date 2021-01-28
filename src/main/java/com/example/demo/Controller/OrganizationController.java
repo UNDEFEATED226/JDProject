@@ -69,7 +69,7 @@ public class OrganizationController {
 	 */
 	@PostMapping("/addorganization")
 	public Organization addOrganization(@RequestBody Organization organization) {
-		log.info("添加用户:[{}]",gson.toJson(organization));
+		log.info("添加组织:[{}]",gson.toJson(organization));
 		return organizationservice.addOrganization(organization);
 	}
 }

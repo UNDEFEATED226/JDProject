@@ -65,6 +65,7 @@ public class User {
 	@Column(name = "user_group_id")
 	private BigInteger usergroupid;
 
+	@NotNull
 	@Digits(integer = 20, fraction = 0)
 	@Column(name = "tenant_id")
 	private BigInteger tenantid;

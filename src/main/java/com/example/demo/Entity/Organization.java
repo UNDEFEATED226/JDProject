@@ -18,6 +18,7 @@ public class Organization {
 	@Id
 	private Long id;
 	
+	@NotNull
 	@Size(max=64)
 	@Column(name="org_name")
 	private String orgname;

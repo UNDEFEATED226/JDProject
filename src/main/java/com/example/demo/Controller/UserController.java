@@ -32,9 +32,22 @@ public class UserController {
 
 	Gson gson = new Gson();
 
-	@PostMapping("/adduser/{orgid}")
-	public User addUser(@PathVariable("orgid") Long orgid,@RequestBody User user) {
-		User u = userservice.addUser(user, orgid);
+	/**
+	 * 添加单个用户
+	 * 
+	 * @param user
+	 * 
+	 * @return
+	 */
+	@PostMapping("/adduser")
+	public User addUser(@RequestBody User user) {
+		User u = new User();
+		try {
+			u = userservice.addUser(user);
+		} catch (ResponseStatusException e) {
+			log.error("添加用户[{}]失败,组织ID:{}不存在", gson.toJson(u), user.getOrgid());
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGID DOES NOT EXIST");
+		}
 		log.info("添加用户[{}]", gson.toJson(u));
 		return u;
 	}
@@ -63,7 +76,7 @@ public class UserController {
 			log.info("查找用户id:[{}],用户:", id, gson.toJson(userservice.findById(id)));
 			return userservice.findById(id);
 		} catch (Exception e) {
-			log.error("查找用户id:[{}]时报错,错误信息:{}", id, e.toString());
+			log.error("查找用户id:[{}]:{}", id, e.toString());
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
 		}
 	}

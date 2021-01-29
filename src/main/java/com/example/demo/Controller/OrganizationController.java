@@ -39,7 +39,7 @@ public class OrganizationController {
 	 */
 	@GetMapping("/findallorganization")
 	public List<Organization> findAllOrganization() {
-		log.info("查找所有组织:[{}]",organizationservice.findAllOrganization());
+		log.info("查找所有组织:[{}]",gson.toJson(organizationservice.findAllOrganization()));
 		return organizationservice.findAllOrganization();
 	}
 
@@ -53,7 +53,7 @@ public class OrganizationController {
 	@GetMapping("/findbyid")
 	public Organization findById(Long id) {
 		try {
-			log.info("查找组织id:[{}],组织:",id,organizationservice.findById(id));
+			log.info("查找组织id:[{}],组织:",id,gson.toJson(organizationservice.findById(id)));
 			return organizationservice.findById(id);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");

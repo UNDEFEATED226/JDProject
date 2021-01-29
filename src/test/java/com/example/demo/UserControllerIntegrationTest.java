@@ -66,8 +66,8 @@ public class UserControllerIntegrationTest {
 		User u = new User();
 		u.setLoginname("user");
 		u.setPassword("password");
-		String str = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser/{orgid}",u,String.class,1);
-		User user = gson.fromJson(str, User.class);
+		u.setOrgid("1");
+		User user = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser",u,User.class);
 		assertNotNull(user);
 		assertEquals("user", user.getLoginname());
 		assertEquals("password", user.getPassword());

@@ -37,6 +37,7 @@ public class User {
 	@Column(name = "real_name")
 	private String realname;
 
+	@NotNull
 	@Size(max = 256)
 	@Column(name = "org_id")
 	private String orgid;

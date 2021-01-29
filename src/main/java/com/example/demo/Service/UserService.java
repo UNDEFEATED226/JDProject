@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.Entity.Organization;
 import com.example.demo.Entity.Role;
 import com.example.demo.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserService {
 
 	@Autowired
 	RoleService roleservice;
-	
+
 	@Autowired
 	OrganizationService organizationservice;
 
@@ -87,9 +88,21 @@ public class UserService {
 		userrepository.deleteById(id);
 	}
 
-
-	public User addUser(User user, Long orgid) {
-		user.setTenantid(BigInteger.valueOf(Long.parseLong(organizationservice.findById(orgid).getTenantid())));
+	/**
+	 * 添加单个用户
+	 * 
+	 * @param user
+	 * 
+	 * @return
+	 */
+	public User addUser(User user) {
+		Organization organization;
+		try {
+			organization = organizationservice.findById(Long.parseLong(user.getOrgid()));
+		} catch (ResponseStatusException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
+		}
+		user.setTenantid(BigInteger.valueOf(Long.parseLong(organization.getTenantid())));
 		Long max = maxId();
 		if (max == null) {
 			user.setId(1l);

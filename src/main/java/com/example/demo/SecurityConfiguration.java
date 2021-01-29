@@ -43,7 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 					.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
 		} else {
-			http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
+			 http.csrf().disable().httpBasic().and().authorizeRequests().anyRequest().authenticated();
 		}
 	}
 }

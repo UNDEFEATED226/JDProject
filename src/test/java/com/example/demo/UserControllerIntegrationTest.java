@@ -31,7 +31,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 public class UserControllerIntegrationTest {
 	@LocalServerPort
 	private int port;
-	
+
 	Gson gson = new Gson();
 
 	@Autowired
@@ -60,18 +60,18 @@ public class UserControllerIntegrationTest {
 	}
 
 	@Test
-	@Sql({ "classpath:sql/integration-test-user.sql" })
+	@Sql({ "classpath:sql/integration-test-user.sql", "classpath:sql/integration-test-organization.sql" })
 	// 是否可以正确添加新用户并且赋值正确
 	public void addNewUser_Test() {
 		User u = new User();
 		u.setLoginname("user");
 		u.setPassword("password");
 		u.setOrgid("1");
-		User user = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser",u,User.class);
-		assertNotNull(user);
-		assertEquals("user", user.getLoginname());
-		assertEquals("password", user.getPassword());
-		assertEquals(BigInteger.valueOf(333), user.getTenantid());
+		User user = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser", u, User.class);
+		assertEquals(user.getId().longValue(),108l);
+		assertEquals(user.getLoginname(),"user");
+		assertEquals(user.getPassword(),"password");
+		assertEquals(user.getOrgid(),"1");
 	}
 
 	@Test

@@ -1,23 +1,24 @@
 package com.example.demo.Service;
 
 import java.math.BigInteger;
+import org.slf4j.Logger;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.example.demo.Entity.Organization;
 import com.example.demo.Entity.Role;
 import com.example.demo.Entity.User;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import com.example.demo.Repository.RoleRepository;
 import com.example.demo.Repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 
 //Service for User Entity
+@Slf4j
 @Service
 public class UserService {
 
@@ -29,6 +30,8 @@ public class UserService {
 
 	@Autowired
 	OrganizationService organizationservice;
+	
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
 	/**
 	 * 为id生成MD5值
@@ -43,7 +46,7 @@ public class UserService {
 			md.update(id.getBytes());
 			return new BigInteger(1, md.digest()).toString(16);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info("生成MD5失败:"+e.toString());
 			return null;
 		}
 	}

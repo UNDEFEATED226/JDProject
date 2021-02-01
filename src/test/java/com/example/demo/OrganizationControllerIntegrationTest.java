@@ -61,8 +61,8 @@ public class OrganizationControllerIntegrationTest {
 		org.setOrgname("org");
 		Organization o = this.restTemplate.postForObject("http://localhost:" + port + "/organization/addorganization",
 				org, Organization.class);
-		assertEquals(o.getId().longValue(), 2l);
-		assertEquals(o.getTenantid(), "334");
+		assertEquals(o.getId().longValue(), 3l);
+		assertEquals(o.getTenantid(), "335");
 	}
 
 	@Test

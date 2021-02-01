@@ -11,11 +11,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import com.example.demo.Entity.User;
 import com.example.demo.Service.UserService;
@@ -68,10 +65,10 @@ public class UserControllerIntegrationTest {
 		u.setPassword("password");
 		u.setOrgid("1");
 		User user = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser", u, User.class);
-		assertEquals(user.getId().longValue(),108l);
-		assertEquals(user.getLoginname(),"user");
-		assertEquals(user.getPassword(),"password");
-		assertEquals(user.getOrgid(),"1");
+		assertEquals(user.getId().longValue(), 108l);
+		assertEquals(user.getLoginname(), "user");
+		assertEquals(user.getPassword(), "8eeef9c3377e87dbd9adbeac247363e5");
+		assertEquals(user.getOrgid(), "1");
 	}
 
 	@Test
@@ -90,5 +87,20 @@ public class UserControllerIntegrationTest {
 		User u = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", User.class,
 				"abc");
 		assertEquals(u.getId(), null);
+	}
+
+	@Test
+	@Sql({ "classpath:sql/integration-test-user.sql", "classpath:sql/integration-test-organization.sql" })
+	public void editUser_Test() {
+		User u = userservice.findById(107l);
+		u.setLoginname("gbaj");
+		u.setPassword("gbaj1234");
+		u.setOrgid("2");
+		User user = this.restTemplate.postForObject("http://localhost:" + port + "/user/edituser/{id}", u,User.class,
+				107);
+		System.out.println(user.getPassword());
+		System.out.println(user.getTenantid());
+		assertEquals(user.getTenantid(),BigInteger.valueOf(334l));
+		assertEquals(user.getPassword(),"5069bb29f369b7fdd96737f029c2d659");
 	}
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import com.example.demo.Entity.Organization;
 import com.example.demo.Entity.Role;
 import com.example.demo.Entity.User;
+import com.example.demo.PasswordEncrypt.passEncrypt;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -114,6 +115,7 @@ public class UserService {
 			user.setId(max + 1);
 			user.setUserid("jd-iot-" + getMD5(String.valueOf(max + 1)));
 		}
+		user.setPassword(passEncrypt.getMD5(user.getPassword()));
 		user.setCreatetime(new Timestamp(System.currentTimeMillis()));
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
 		User u = userrepository.save(user);
@@ -130,14 +132,15 @@ public class UserService {
 	 * @param id   想要修改的用户的id
 	 * @param user 修改完的用户实体
 	 */
-	public void editUser(Long id, User user) {
+	public User editUser(Long id, User user) {
 		try {
 			userrepository.findById(id);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
 		}
+		user.setPassword(passEncrypt.getMD5(user.getPassword()));
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-		userrepository.save(user);
+		return userrepository.save(user);
 	}
 
 	/**

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,6 +78,25 @@ public class UserController {
 		} catch (Exception e) {
 			log.error("查找用户id:[{}]:{}", id, e.toString());
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
+		}
+	}
+
+	/**
+	 * 编辑指定用户
+	 * 
+	 * @param id 用户id
+	 * @param user 修改后的用户实体
+	 * 
+	 * @return
+	 */
+	@PostMapping("/edituser/{id}")
+	public User editUser(@PathVariable Long id, @RequestBody User user) {
+		try {
+			log.info("编辑用户id:[{}],用户:",id,gson.toJson(user));
+			return userservice.editUser(id, user);
+		}catch(ResponseStatusException e) {
+			log.error("编辑用户id:[{}]失败",id);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"NOT FOUND");
 		}
 	}
 }

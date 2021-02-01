@@ -18,5 +18,6 @@ CREATE TABLE iot_hub_rbac_organization(
 ) 
 ;
 INSERT INTO iot_hub_rbac_organization VALUES (1, '上海繁易信息科技股份有限公司', NULL, NULL, NULL, NULL, NULL, NULL, '333', NULL, '2021-01-14 10:30:01', 0, NULL, NULL);
+INSERT INTO iot_hub_rbac_organization VALUES (2, '上海繁易信息科技股份有限公司', NULL, NULL, NULL, NULL, NULL, NULL, '334', NULL, '2021-01-14 10:30:01', 0, NULL, NULL);
 
 

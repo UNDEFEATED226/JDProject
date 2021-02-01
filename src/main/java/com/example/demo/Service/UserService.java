@@ -31,7 +31,7 @@ public class UserService {
 
 	@Autowired
 	OrganizationService organizationservice;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
 	/**
@@ -47,7 +47,7 @@ public class UserService {
 			md.update(id.getBytes());
 			return new BigInteger(1, md.digest()).toString(16);
 		} catch (Exception e) {
-			log.info("生成MD5失败:"+e.toString());
+			log.info("生成MD5失败:" + e.toString());
 			return null;
 		}
 	}
@@ -133,11 +133,18 @@ public class UserService {
 	 * @param user 修改完的用户实体
 	 */
 	public User editUser(Long id, User user) {
+		Organization organization;
+		try {
+			organization = organizationservice.findById(Long.parseLong(user.getOrgid()));
+		} catch (ResponseStatusException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
+		}
 		try {
 			userrepository.findById(id);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
 		}
+		user.setTenantid(BigInteger.valueOf(Long.parseLong(organization.getTenantid())));
 		user.setPassword(passEncrypt.getMD5(user.getPassword()));
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
 		return userrepository.save(user);

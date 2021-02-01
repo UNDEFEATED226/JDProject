@@ -60,9 +60,11 @@ public class User {
 	@Column(name = "update_time")
 	private Timestamp updatetime;
 
+	@Size(max=64)
 	@Column(name = "user_status")
 	private String userstatus;
 
+	@Digits(integer=20,fraction=0)
 	@Column(name = "user_group_id")
 	private BigInteger usergroupid;
 

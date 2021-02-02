@@ -44,9 +44,8 @@ public class UserService {
      */
     public static String getMd5(String id) {
         try {
-            Charset.defaultCharset();
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(id.getBytes());
+            md.update(id.getBytes("UTF-8"));
             return new BigInteger(1, md.digest()).toString(16);
         } catch (Exception e) {
             log.info("生成MD5失败:" + e.toString());

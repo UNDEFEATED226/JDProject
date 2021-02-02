@@ -1,6 +1,6 @@
 package com.jd.iot.admin.passwordencrypt;
 
-import java.nio.charset.Charset;
+import java.io.UnsupportedEncodingException;
 
 public class PassEncrypt {
 
@@ -12,9 +12,14 @@ public class PassEncrypt {
      * @return 加密后的密码
      */
     public static String getMd5(String str) {
-        Charset.defaultCharset();
         String base = str + "/" + slat;
-        String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
+        String md5="";
+        try {
+            md5 = DigestUtils.md5DigestAsHex(base.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return md5;
     }
 }

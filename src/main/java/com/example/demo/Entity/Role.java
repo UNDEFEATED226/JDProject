@@ -1,7 +1,6 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
 import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,31 +12,31 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "iot_hub_rbac_user_role")
 public class Role {
-	
-	@Digits(integer=11,fraction=0)
+
+	@Digits(integer = 11, fraction = 0)
 	@NotNull
 	@Id
 	private Long id;
 
-	@Digits(integer=11,fraction=0)
+	@Digits(integer = 11, fraction = 0)
 	@Column(name = "user_id")
 	private Long userid;
 
-	@Digits(integer=11,fraction=0)
+	@Digits(integer = 11, fraction = 0)
 	@Column(name = "role_id")
 	private Long roleid;
-	
-	@Column (name = "is_deleted")
+
+	@Column(name = "is_deleted")
 	private Integer isdeleted;
-	
+
 	@NotNull
 	@Column(name = "create_time")
 	private Timestamp createtime;
-	
+
 	@NotNull
-	@Column (name = "update_time")
+	@Column(name = "update_time")
 	private Timestamp updatetime;
-	
+
 	public Long getId() {
 		return id;
 	}

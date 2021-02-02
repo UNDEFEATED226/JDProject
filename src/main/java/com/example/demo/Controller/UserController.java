@@ -1,6 +1,10 @@
-package com.example.demo.Controller;
+package com.example.demo.controller;
 
+import com.example.demo.entity.User;
+import com.example.demo.service.UserService;
+import com.google.gson.Gson;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import com.example.demo.Entity.User;
-import com.example.demo.Service.UserService;
-import com.google.gson.Gson;
-import lombok.extern.slf4j.Slf4j;
 
 //Controller for 用户实体
 @Slf4j
@@ -32,12 +32,13 @@ public class UserController {
 
 	Gson gson = new Gson();
 
-	/**
+	/**.
 	 * 添加单个用户
 	 * 
-	 * @param user
+
+   * @param user
 	 * 
-	 * @return
+	 * @return 添加成功的用户实体
 	 */
 	@PostMapping("/adduser")
 	public User addUser(@RequestBody User user) {
@@ -53,7 +54,7 @@ public class UserController {
 	/**
 	 * 查找所有用户实体
 	 * 
-	 * @return
+	 * @return 所有用户实体
 	 */
 	@GetMapping("/findalluser")
 	public List<User> findAllUser() {
@@ -85,16 +86,16 @@ public class UserController {
 	 * @param id 用户id
 	 * @param user 修改后的用户实体
 	 * 
-	 * @return
+	 * @return 成功修改后的用户实体
 	 */
 	@PostMapping("/edituser/{id}")
 	public User editUser(@PathVariable Long id, @RequestBody User user) {
 		try {
-			log.info("修改用户id:[{}],用户:",id,gson.toJson(user));
+			log.info("修改用户id:[{}],用户:", id, gson.toJson(user));
 			return userservice.editUser(id, user);
-		}catch(ResponseStatusException e) {
-			log.error("修改用户id:[{}]失败",id);
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"NOT FOUND");
+		} catch (ResponseStatusException e) { 
+			log.error("修改用户id:[{}]失败", id);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
 		}
 	}
 }

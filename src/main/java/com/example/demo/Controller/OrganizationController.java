@@ -1,6 +1,10 @@
-package com.example.demo.Controller;
+package com.example.demo.controller;
 
+import com.example.demo.entity.Organization;
+import com.example.demo.service.OrganizationService;
+import com.google.gson.Gson;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import com.example.demo.Entity.Organization;
-import com.example.demo.Service.OrganizationService;
-import com.google.gson.Gson;
-
-import lombok.extern.slf4j.Slf4j;
 
 //Controller for organization
 @Slf4j
@@ -54,10 +53,12 @@ public class OrganizationController {
 	@GetMapping("/findbyid")
 	public Organization findById(Long id) {
 		try {
-			log.info("查找组织id:[{}],组织:", id, gson.toJson(organizationservice.findById(id)));
+			log.info("查找组织id:[{}],组织:", id,
+			        gson.toJson(organizationservice.findById(id)));
 			return organizationservice.findById(id);
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+			        "ORGANIZATION NOT FOUND");
 		}
 	}
 
@@ -74,13 +75,20 @@ public class OrganizationController {
 		return organizationservice.addOrganization(organization);
 	}
 
+	/**
+	 * 修改指定组织
+	 * @param id 需修改组织的id
+	 * @param organization 修改完的组织
+	 * @return 成功修改完的组织
+	 */
 	@PostMapping("/editorganization/{id}")
-	public Organization editOrganization(@PathVariable Long id, @RequestBody Organization organization) {	
+	public Organization editOrganization(@PathVariable Long id,
+	        @RequestBody Organization organization) {	
 		try {
-			log.info("修改组织id:[{}],组织:{}",id,gson.toJson(organization));
+			log.info("修改组织id:[{}],组织:{}", id, gson.toJson(organization));
 			return organizationservice.editOrganization(id, organization);
 		} catch (ResponseStatusException e) {
-			log.error("修改组织id:[{}]失败",id);
+			log.error("修改组织id:[{}]失败", id);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
 		}
 	}

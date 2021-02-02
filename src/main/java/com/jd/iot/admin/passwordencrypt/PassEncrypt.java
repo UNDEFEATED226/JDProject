@@ -1,5 +1,7 @@
 package com.jd.iot.admin.passwordencrypt;
 
+import java.nio.charset.Charset;
+
 public class PassEncrypt {
 
     private static final String slat = "&%bder***&&%%$$#@";
@@ -10,6 +12,7 @@ public class PassEncrypt {
      * @return 加密后的密码
      */
     public static String getMd5(String str) {
+        Charset.defaultCharset();
         String base = str + "/" + slat;
         String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
         return md5;

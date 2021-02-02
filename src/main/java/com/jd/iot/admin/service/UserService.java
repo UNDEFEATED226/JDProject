@@ -5,8 +5,8 @@ import com.jd.iot.admin.entity.Role;
 import com.jd.iot.admin.entity.User;
 import com.jd.iot.admin.passwordencrypt.PassEncrypt;
 import com.jd.iot.admin.repository.UserRepository;
-
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ public class UserService {
      */
     public static String getMd5(String id) {
         try {
+            Charset.defaultCharset();
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(id.getBytes());
             return new BigInteger(1, md.digest()).toString(16);

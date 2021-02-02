@@ -116,6 +116,8 @@ public class UserService {
 			user.setUserid("jd-iot-" + getMD5(String.valueOf(max + 1)));
 		}
 		user.setPassword(passEncrypt.getMD5(user.getPassword()));
+		user.setIsforbidden(0);
+		user.setIstenantadmin(0);
 		user.setCreatetime(new Timestamp(System.currentTimeMillis()));
 		user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
 		User u = userrepository.save(user);
@@ -125,12 +127,14 @@ public class UserService {
 		roleservice.addRole(r);
 		return u;
 	}
-
+	
 	/**
-	 * 通过id编辑指定用户
+	 * 修改指定用户
 	 * 
-	 * @param id   想要修改的用户的id
-	 * @param user 修改完的用户实体
+	 * @param id 所需修改用户的id
+	 * @param user 修改后的用户实体
+	 * 
+	 * @return
 	 */
 	public User editUser(Long id, User user) {
 		Organization organization;

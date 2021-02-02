@@ -66,7 +66,7 @@ public class OrganizationControllerIntegrationTest {
 	}
 
 	@Test
-	@Sql({ "classpath:sql/integration-test-user.sql" })
+	@Sql({ "classpath:sql/integration-test-organization.sql" })
 	// 处理不存在参数
 	public void findById_Test() {
 		Assertions.assertThrows(ResponseStatusException.class, () -> {
@@ -75,11 +75,25 @@ public class OrganizationControllerIntegrationTest {
 	}
 
 	@Test
-	@Sql({ "classpath:sql/integration-test-user.sql" })
+	@Sql({ "classpath:sql/integration-test-organization.sql" })
 	// 处理非法参数，期待数字输入字符
 	public void findById_Test2() {
 		Organization u = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findbyid?id={id}",
 				Organization.class, "abc");
 		assertEquals(u.getId(), null);
+	}
+	@Test
+	@Sql({ "classpath:sql/integration-test-organization.sql" })
+	//检查是否可以成功修改指定组织
+	public void editOrganization_test() {
+		Organization temp = new Organization();
+		temp.setId(1l);
+		temp.setOrgname("上海无名企业");
+		temp.setFullparentid("N/A");
+		Organization o = this.restTemplate.postForObject("http://localhost:"+port+"/organization/editorganization/{id}",temp,Organization.class,1);
+		System.out.println(o.getOrgname());
+		System.out.println(o.getFullparentid());
+		assertEquals(o.getOrgname(),"上海无名企业");
+		assertEquals(o.getFullparentid(),"N/A");
 	}
 }

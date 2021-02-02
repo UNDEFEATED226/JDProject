@@ -102,18 +102,20 @@ public class OrganizationService {
 	}
 
 	/**
-	 * 通过id编辑某个指定组织
+	 * 修改指定组织实体
 	 * 
-	 * @param id
-	 * @param organization 修改完的组织实体
+	 * @param id 所需修改组织的id
+	 * @param organization 修改后的组织实体
+	 * 
+	 * @return
 	 */
-	public void editOrganization(Long id, Organization organization) {
+	public Organization editOrganization(Long id, Organization organization) {
 		try {
 			organizationrepository.findById(id);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, " ORGANIZATION NOT FOUND");
 		}
 		organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-		organizationrepository.save(organization);
+		return organizationrepository.save(organization);
 	}
 }

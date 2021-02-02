@@ -41,15 +41,13 @@ public class UserController {
 	 */
 	@PostMapping("/adduser")
 	public User addUser(@RequestBody User user) {
-		User u = new User();
 		try {
-			u = userservice.addUser(user);
+			log.info("添加用户:{}", gson.toJson(user));
+			return userservice.addUser(user);
 		} catch (ResponseStatusException e) {
-			log.error("添加用户[{}]失败,组织ID:{}不存在", gson.toJson(u), user.getOrgid());
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGID DOES NOT EXIST");
+			log.error("添加用户[{}]失败", gson.toJson(user));
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ADD USER FAILURE");
 		}
-		log.info("添加用户[{}]", gson.toJson(u));
-		return u;
 	}
 
 	/**
@@ -82,7 +80,7 @@ public class UserController {
 	}
 
 	/**
-	 * 编辑指定用户
+	 * 修改指定用户
 	 * 
 	 * @param id 用户id
 	 * @param user 修改后的用户实体
@@ -92,10 +90,10 @@ public class UserController {
 	@PostMapping("/edituser/{id}")
 	public User editUser(@PathVariable Long id, @RequestBody User user) {
 		try {
-			log.info("编辑用户id:[{}],用户:",id,gson.toJson(user));
+			log.info("修改用户id:[{}],用户:",id,gson.toJson(user));
 			return userservice.editUser(id, user);
 		}catch(ResponseStatusException e) {
-			log.error("编辑用户id:[{}]失败",id);
+			log.error("修改用户id:[{}]失败",id);
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"NOT FOUND");
 		}
 	}

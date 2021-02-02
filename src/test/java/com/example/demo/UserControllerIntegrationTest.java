@@ -91,6 +91,7 @@ public class UserControllerIntegrationTest {
 
 	@Test
 	@Sql({ "classpath:sql/integration-test-user.sql", "classpath:sql/integration-test-organization.sql" })
+	//检查是否可以成功修改指定用户
 	public void editUser_Test() {
 		User u = userservice.findById(107l);
 		u.setLoginname("gbaj");

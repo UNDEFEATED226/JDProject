@@ -1,4 +1,4 @@
-package com.example.demo.passwordencrypt;
+package com.jd.iot.admin.passwordencrypt;
 
 public class PassEncrypt {
 

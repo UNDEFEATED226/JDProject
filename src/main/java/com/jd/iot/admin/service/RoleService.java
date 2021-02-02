@@ -1,7 +1,8 @@
-package com.example.demo.service;
+package com.jd.iot.admin.service;
 
-import com.example.demo.entity.Role;
-import com.example.demo.repository.RoleRepository;
+import com.jd.iot.admin.entity.Role;
+import com.jd.iot.admin.repository.RoleRepository;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;

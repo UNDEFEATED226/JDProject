@@ -2,8 +2,10 @@ package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
 
-import com.example.demo.entity.Role;
-import com.example.demo.service.RoleService;
+import com.jd.iot.admin.IotCoreApplication;
+import com.jd.iot.admin.entity.Role;
+import com.jd.iot.admin.service.RoleService;
+
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

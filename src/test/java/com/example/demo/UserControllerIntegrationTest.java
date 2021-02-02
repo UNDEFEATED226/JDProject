@@ -2,9 +2,11 @@ package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
 
-import com.example.demo.entity.User;
-import com.example.demo.service.UserService;
 import com.google.gson.Gson;
+import com.jd.iot.admin.IotCoreApplication;
+import com.jd.iot.admin.entity.User;
+import com.jd.iot.admin.service.UserService;
+
 import java.math.BigInteger;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

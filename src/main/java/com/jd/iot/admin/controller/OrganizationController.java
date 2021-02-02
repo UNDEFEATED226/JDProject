@@ -1,8 +1,9 @@
-package com.example.demo.controller;
+package com.jd.iot.admin.controller;
 
-import com.example.demo.entity.Organization;
-import com.example.demo.service.OrganizationService;
 import com.google.gson.Gson;
+import com.jd.iot.admin.entity.Organization;
+import com.jd.iot.admin.service.OrganizationService;
+
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

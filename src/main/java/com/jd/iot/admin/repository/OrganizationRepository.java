@@ -1,9 +1,10 @@
-package com.example.demo.repository;
+package com.jd.iot.admin.repository;
 
-import com.example.demo.entity.Organization;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import com.jd.iot.admin.entity.Organization;
 
 //Repository for 组织实体
 @Repository

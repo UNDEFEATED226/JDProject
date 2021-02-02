@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.jd.iot.admin;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

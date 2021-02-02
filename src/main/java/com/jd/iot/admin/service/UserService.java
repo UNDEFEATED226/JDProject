@@ -1,10 +1,11 @@
-package com.example.demo.service;
+package com.jd.iot.admin.service;
 
-import com.example.demo.entity.Organization;
-import com.example.demo.entity.Role;
-import com.example.demo.entity.User;
-import com.example.demo.passwordencrypt.PassEncrypt;
-import com.example.demo.repository.UserRepository;
+import com.jd.iot.admin.entity.Organization;
+import com.jd.iot.admin.entity.Role;
+import com.jd.iot.admin.entity.User;
+import com.jd.iot.admin.passwordencrypt.PassEncrypt;
+import com.jd.iot.admin.repository.UserRepository;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.sql.Timestamp;

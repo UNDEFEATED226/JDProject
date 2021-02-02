@@ -1,9 +1,10 @@
-package com.example.demo.repository;
+package com.jd.iot.admin.repository;
 
-import com.example.demo.entity.Role;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import com.jd.iot.admin.entity.Role;
 
 //Repository for 角色实体
 @Repository

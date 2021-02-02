@@ -1,4 +1,4 @@
-package com.example.demo.passwordencrypt;
+package com.jd.iot.admin.passwordencrypt;
 
 /*
  * Copyright 2002-2016 the original author or authors.

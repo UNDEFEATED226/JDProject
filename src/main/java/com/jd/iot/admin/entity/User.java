@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.jd.iot.admin.entity;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;

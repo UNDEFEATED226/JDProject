@@ -21,7 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 
 @ActiveProfiles({ "integration" })
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OrganizationControllerIntegrationTest {
@@ -46,9 +45,9 @@ public class OrganizationControllerIntegrationTest {
         this.restTemplate.getForObject("http://localhost:" + port + "/organization/findallorganization", List.class);
     }
 
+    // 验证返回公司示例是否是预期值
     @Test
     @Sql({ "classpath:sql/integration-test-organization.sql" })
-    // 验证返回公司示例是否是预期值
     public void compareOrganizationEntity_Test() {
         OrganizationVO o = organizationservice.findById(1L);
         OrganizationVO f = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findbyid?id={id}",
@@ -56,9 +55,9 @@ public class OrganizationControllerIntegrationTest {
         assertEquals(o.getId().longValue(), f.getId().longValue());
     }
 
+    // 是否可以正确添加新公司并且赋值正确
     @Test
     @Sql({ "classpath:sql/integration-test-organization.sql" })
-    // 是否可以正确添加新公司并且赋值正确
     public void addNewOrganization_Test() {
         OrganizationVO org = new OrganizationVO();
         org.setOrgname("org");
@@ -68,27 +67,27 @@ public class OrganizationControllerIntegrationTest {
         assertEquals(o.getTenantid(), "335");
     }
 
+    // 处理不存在参数
     @Test
     @Sql({ "classpath:sql/integration-test-organization.sql" })
-    // 处理不存在参数
     public void findById_Test() {
         Assertions.assertThrows(ResponseStatusException.class, () -> {
             organizationservice.findById(900L);
         });
     }
 
+    // 处理非法参数，期待数字输入字符
     @Test
     @Sql({ "classpath:sql/integration-test-organization.sql" })
-    // 处理非法参数，期待数字输入字符
     public void findById_Test2() {
         OrganizationVO u = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findbyid?id={id}",
                 OrganizationVO.class, "abc");
         assertEquals(u.getId(), null);
     }
 
+    // 检查是否可以成功修改指定组织
     @Test
     @Sql({ "classpath:sql/integration-test-organization.sql" })
-    // 检查是否可以成功修改指定组织
     public void editOrganization_test() {
         OrganizationVO temp = new OrganizationVO();
         temp.setId(1L);
@@ -100,9 +99,9 @@ public class OrganizationControllerIntegrationTest {
         assertEquals(o.getFullparentid(), "N/A");
     }
 
+    // 检查是否可以成功删除指定组织
     @Test
     @Sql({ "classpath:sql/integration-test-organization.sql" })
-    // 检查是否可以成功删除指定组织
     public void deleteOrganization_test() {
         this.restTemplate.getForObject("http://localhost:" + port + "/organization/deleteorganization?id={id}",
                 void.class, 1);

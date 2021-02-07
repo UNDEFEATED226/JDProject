@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 
 @ActiveProfiles({ "integration" })
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IotCoreApplication.class,
 webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -1,58 +1,36 @@
-package com.jd.iot.admin.entity;
+package com.jd.iot.admin.vo;
 
+import com.jd.iot.admin.entity.Tenant;
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-import com.jd.iot.admin.vo.TenantVO;
+public class TenantVO {
 
-@Entity
-@Table(name = "iot_hub_rbac_tenant")
-public class Tenant {
-
-    @Id
-    @NotNull
-    @Digits(integer = 20, fraction = 0)
     private Long id;
 
-    @Size(max = 255)
     private String name;
 
-    @Size(max = 255)
-    @Column(name = "business_assignment")
     private String businessassignment;
 
-    @Digits(integer = 1, fraction = 0)
-    @Column(name = "is_deleted")
     private Integer isdeleted;
 
-    @Column(name = "create_time", nullable = false)
     private Timestamp createtime;
 
-    @Column(name = "update_time", nullable = false)
     private Timestamp updatetime;
 
-    @Digits(integer = 11, fraction = 0)
-    @Column(name = "admin_user_id")
     private Long adminuserid;
 
-    public Tenant() {
+    public TenantVO() {
 
     }
 
-    public Tenant(TenantVO tenantvo) {
-        id = tenantvo.getId();
-        name = tenantvo.getName();
-        businessassignment = tenantvo.getBusinessassignment();
-        isdeleted = tenantvo.getIsdeleted();
-        createtime = tenantvo.getCreatetime();
-        updatetime = tenantvo.getUpdatetime();
-        adminuserid = tenantvo.getAdminuserid();
+    public TenantVO(Tenant tenant) {
+        id = tenant.getId();
+        name = tenant.getName();
+        businessassignment = tenant.getBusinessassignment();
+        isdeleted = tenant.getIsdeleted();
+        createtime = tenant.getCreatetime();
+        updatetime = tenant.getUpdatetime();
+        adminuserid = tenant.getAdminuserid();
     }
 
     public Long getId() {

@@ -72,7 +72,7 @@ public class UserService {
      * 
      * @param id 需查找用户的id
      * 
-     * @return 指定用户实体
+     * @return 指定用户
      */
     public UserVO findById(Long id) {
         try {

@@ -21,7 +21,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 
-@Slf4j
 @ActiveProfiles({ "integration" })
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,8 +34,6 @@ public class ResourceControllerIntegrationTest {
 
     @Autowired
     private ResourceService resourceservice;
-
-    Gson gson = new Gson();
 
     // 测试是否能成功返回所有资源实体
     @Test

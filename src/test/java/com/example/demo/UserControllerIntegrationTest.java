@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 
 @ActiveProfiles({ "integration" })
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerIntegrationTest {
@@ -46,18 +45,18 @@ public class UserControllerIntegrationTest {
         this.restTemplate.getForObject("http://localhost:" + port + "/user/findalluser", List.class);
     }
 
+    // 验证返回用户示例是否是预期值
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql" })
-    // 验证返回用户示例是否是预期值
     public void compareUserEntity_Test() {
         UserVO g = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", UserVO.class,
                 107);
         assertEquals(107L, g.getId().longValue());
     }
 
+    // 是否可以正确添加新用户并且赋值正确
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql", "classpath:sql/integration-test-organization.sql" })
-    // 是否可以正确添加新用户并且赋值正确
     public void addNewUser_Test() {
         UserVO u = new UserVO();
         u.setLoginname("user");
@@ -70,27 +69,27 @@ public class UserControllerIntegrationTest {
         assertEquals(user.getOrgid(), "1");
     }
 
+    // 处理不存在参数
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql" })
-    // 处理不存在参数
     public void findById_Test() {
         Assertions.assertThrows(ResponseStatusException.class, () -> {
             userservice.findById(900L);
         });
     }
 
+    // 处理非法参数，期待数字输入字符
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql" })
-    // 处理非法参数，期待数字输入字符
     public void findById_Test2() {
         UserVO u = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", UserVO.class,
                 "abc");
         assertEquals(u.getId(), null);
     }
 
+    // 检查是否可以成功修改指定用户
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql", "classpath:sql/integration-test-organization.sql" })
-    // 检查是否可以成功修改指定用户
     public void editUser_Test() {
         UserVO u = userservice.findById(107L);
         u.setLoginname("gbaj");
@@ -102,9 +101,9 @@ public class UserControllerIntegrationTest {
         assertEquals(user.getPassword(), "5069bb29f369b7fdd96737f029c2d659");
     }
 
+    // 检查是否可以成功删除指定用户
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql" })
-    // 检查是否可以成功删除指定用户
     public void deleteUser_test() {
         this.restTemplate.getForObject("http://localhost:" + port + "/user/deleteuser?id={id}", void.class, 107);
         assertSame(userservice.findById(107L).getIsdeleted(), 1);

@@ -1,5 +1,7 @@
 package com.jd.iot.admin.passwordencrypt;
 
+import java.io.UnsupportedEncodingException;
+
 /*
  * Copyright 2002-2016 the original author or authors.
  *
@@ -56,8 +58,8 @@ public abstract class DigestUtils {
 	 * @param bytes the bytes to calculate the digest over
 	 * @return a hexadecimal digest string
 	 */
-	public static String md5DigestAsHex(byte[] bytes) {
-		return digestAsHexString(MD5_ALGORITHM_NAME, bytes);
+	public static String md5DigestAsHex(byte[] bytes){
+		    return digestAsHexString(MD5_ALGORITHM_NAME, bytes);
 	}
 
 	/**

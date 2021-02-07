@@ -1,95 +1,57 @@
-package com.jd.iot.admin.entity;
+package com.jd.iot.admin.vo;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-import com.jd.iot.admin.vo.OrganizationVO;
+import com.jd.iot.admin.entity.Organization;
 
-//Organization Entity
-@Entity
-@Table(name = "iot_hub_rbac_organization")
-public class Organization {
+public class OrganizationVO {
 
-    @NotNull
-    @Id
-    @Digits(integer = 11, fraction = 0)
     private Long id;
 
-    @NotNull
-    @Size(max = 64)
-    @Column(name = "org_name")
     private String orgname;
 
-    @Digits(integer = 11, fraction = 0)
-    @Column(name = "parent_org_id")
     private Long parentorgid;
 
-    @Digits(integer = 11, fraction = 0)
-    @Column(name = "org_level")
     private Long orglevel;
 
-    @Digits(integer = 11, fraction = 0)
-    @Column(name = "org_type")
     private Long orgtype;
 
-    @Size(max = 64)
-    @Column(name = "org_type_name")
     private String orgtypename;
 
-    @Digits(integer = 11, fraction = 0)
-    @Column(name = "org_catlog")
     private Long orgcatlog;
 
-    @Size(max = 64)
-    @Column(name = "base_org_code")
     private String baseorgcode;
 
-    @Size(max = 64)
-    @Column(name = "tenant_id")
     private String tenantid;
 
-    @Column(name = "update_time")
     private Timestamp updatetime;
 
-    @Column(name = "create_time")
     private Timestamp createtime;
 
-    @Digits(integer = 4, fraction = 0)
-    @Column(name = "is_deleted")
     private Integer isdeleted;
 
-    @Size(max = 255)
-    @Column(name = "full_parent_id")
     private String fullparentid;
 
-    @Digits(integer = 1, fraction = 0)
-    @Column(name = "is_have_child")
     private Integer ishavechild;
 
-    public Organization() {
+    public OrganizationVO() {
     }
 
-    public Organization(OrganizationVO organizationvo) {
-        id = organizationvo.getId();
-        orgname = organizationvo.getOrgname();
-        parentorgid = organizationvo.getParentorgid();
-        orglevel = organizationvo.getOrglevel();
-        orgtype = organizationvo.getOrgtype();
-        orgtypename = organizationvo.getOrgtypename();
-        orgcatlog = organizationvo.getOrgcatlog();
-        baseorgcode = organizationvo.getBaseorgcode();
-        tenantid = organizationvo.getTenantid();
-        createtime = organizationvo.getCreatetime();
-        updatetime = organizationvo.getUpdatetime();
-        isdeleted = organizationvo.getIsdeleted();
-        fullparentid = organizationvo.getFullparentid();
-        ishavechild = organizationvo.getIshavechild();
+    public OrganizationVO(Organization organization) {
+        id = organization.getId();
+        orgname = organization.getOrgname();
+        parentorgid = organization.getParentorgid();
+        orglevel = organization.getOrglevel();
+        orgtype = organization.getOrgtype();
+        orgtypename = organization.getOrgtypename();
+        orgcatlog = organization.getOrgcatlog();
+        baseorgcode = organization.getBaseorgcode();
+        tenantid = organization.getTenantid();
+        createtime = organization.getCreatetime();
+        updatetime = organization.getUpdatetime();
+        isdeleted = organization.getIsdeleted();
+        fullparentid = organization.getFullparentid();
+        ishavechild = organization.getIshavechild();
     }
 
     public Long getId() {

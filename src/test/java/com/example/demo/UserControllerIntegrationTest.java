@@ -1,13 +1,12 @@
 package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import com.google.gson.Gson;
 import com.jd.iot.admin.IotCoreApplication;
-import com.jd.iot.admin.entity.User;
 import com.jd.iot.admin.service.UserService;
-
-import java.math.BigInteger;
+import com.jd.iot.admin.vo.UserVO;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -25,13 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 @ActiveProfiles({ "integration" })
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = IotCoreApplication.class, 
-webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerIntegrationTest {
     @LocalServerPort
     private int port;
-
-    Gson gson = new Gson();
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -54,20 +50,20 @@ public class UserControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-user.sql" })
     // 验证返回用户示例是否是预期值
     public void compareUserEntity_Test() {
-        User g = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", User.class, 107);
+        UserVO g = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", UserVO.class,
+                107);
         assertEquals(107L, g.getId().longValue());
     }
 
     @Test
-    @Sql({ "classpath:sql/integration-test-user.sql", 
-        "classpath:sql/integration-test-organization.sql" })
+    @Sql({ "classpath:sql/integration-test-user.sql", "classpath:sql/integration-test-organization.sql" })
     // 是否可以正确添加新用户并且赋值正确
     public void addNewUser_Test() {
-        User u = new User();
+        UserVO u = new UserVO();
         u.setLoginname("user");
         u.setPassword("password");
         u.setOrgid("1");
-        User user = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser", u, User.class);
+        UserVO user = this.restTemplate.postForObject("http://localhost:" + port + "/user/adduser", u, UserVO.class);
         assertEquals(user.getId().longValue(), 108L);
         assertEquals(user.getLoginname(), "user");
         assertEquals(user.getPassword(), "8eeef9c3377e87dbd9adbeac247363e5");
@@ -87,25 +83,30 @@ public class UserControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-user.sql" })
     // 处理非法参数，期待数字输入字符
     public void findById_Test2() {
-        User u = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", User.class,
+        UserVO u = this.restTemplate.getForObject("http://localhost:" + port + "/user/findbyid?id={id}", UserVO.class,
                 "abc");
         assertEquals(u.getId(), null);
     }
 
     @Test
-    @Sql({ "classpath:sql/integration-test-user.sql",
-        "classpath:sql/integration-test-organization.sql" })
+    @Sql({ "classpath:sql/integration-test-user.sql", "classpath:sql/integration-test-organization.sql" })
     // 检查是否可以成功修改指定用户
     public void editUser_Test() {
-        User u = userservice.findById(107L);
+        UserVO u = userservice.findById(107L);
         u.setLoginname("gbaj");
         u.setPassword("gbaj1234");
         u.setOrgid("2");
-        User user = this.restTemplate.postForObject("http://localhost:" + port + "/user/edituser/{id}", u, User.class,
-                107);
-        System.out.println(user.getPassword());
-        System.out.println(user.getTenantid());
-        assertEquals(user.getTenantid(), BigInteger.valueOf(334L));
+        UserVO user = this.restTemplate.postForObject("http://localhost:" + port + "/user/edituser/{id}", u,
+                UserVO.class, 107);
+        assertEquals(user.getTenantid().longValue(), 334L);
         assertEquals(user.getPassword(), "5069bb29f369b7fdd96737f029c2d659");
+    }
+
+    @Test
+    @Sql({ "classpath:sql/integration-test-user.sql" })
+    // 检查是否可以成功删除指定用户
+    public void deleteUser_test() {
+        this.restTemplate.getForObject("http://localhost:" + port + "/user/deleteuser?id={id}", void.class, 107);
+        assertSame(userservice.findById(107L).getIsdeleted(), 1);
     }
 }

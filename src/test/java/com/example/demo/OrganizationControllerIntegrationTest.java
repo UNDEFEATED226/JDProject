@@ -1,11 +1,11 @@
 package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import com.jd.iot.admin.IotCoreApplication;
-import com.jd.iot.admin.entity.Organization;
 import com.jd.iot.admin.service.OrganizationService;
-
+import com.jd.iot.admin.vo.OrganizationVO;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -23,8 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 @ActiveProfiles({ "integration" })
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = IotCoreApplication.class,
-webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OrganizationControllerIntegrationTest {
 
     @LocalServerPort
@@ -51,9 +50,9 @@ public class OrganizationControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-organization.sql" })
     // 验证返回公司示例是否是预期值
     public void compareOrganizationEntity_Test() {
-        Organization o = organizationservice.findById(1L);
-        Organization f = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findbyid?id={id}",
-                Organization.class, 1L);
+        OrganizationVO o = organizationservice.findById(1L);
+        OrganizationVO f = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findbyid?id={id}",
+                OrganizationVO.class, 1L);
         assertEquals(o.getId().longValue(), f.getId().longValue());
     }
 
@@ -61,10 +60,10 @@ public class OrganizationControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-organization.sql" })
     // 是否可以正确添加新公司并且赋值正确
     public void addNewOrganization_Test() {
-        Organization org = new Organization();
+        OrganizationVO org = new OrganizationVO();
         org.setOrgname("org");
-        Organization o = this.restTemplate.postForObject("http://localhost:" + port + "/organization/addorganization",
-                org, Organization.class);
+        OrganizationVO o = this.restTemplate.postForObject("http://localhost:" + port + "/organization/addorganization",
+                org, OrganizationVO.class);
         assertEquals(o.getId().longValue(), 3L);
         assertEquals(o.getTenantid(), "335");
     }
@@ -82,8 +81,8 @@ public class OrganizationControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-organization.sql" })
     // 处理非法参数，期待数字输入字符
     public void findById_Test2() {
-        Organization u = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findbyid?id={id}",
-                Organization.class, "abc");
+        OrganizationVO u = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findbyid?id={id}",
+                OrganizationVO.class, "abc");
         assertEquals(u.getId(), null);
     }
 
@@ -91,15 +90,22 @@ public class OrganizationControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-organization.sql" })
     // 检查是否可以成功修改指定组织
     public void editOrganization_test() {
-        Organization temp = new Organization();
+        OrganizationVO temp = new OrganizationVO();
         temp.setId(1L);
         temp.setOrgname("上海无名企业");
         temp.setFullparentid("N/A");
-        Organization o = this.restTemplate.postForObject(
-                "http://localhost:" + port + "/organization/editorganization/{id}", temp, Organization.class, 1);
-        System.out.println(o.getOrgname());
-        System.out.println(o.getFullparentid());
+        OrganizationVO o = this.restTemplate.postForObject(
+                "http://localhost:" + port + "/organization/editorganization/{id}", temp, OrganizationVO.class, 1);
         assertEquals(o.getOrgname(), "上海无名企业");
         assertEquals(o.getFullparentid(), "N/A");
+    }
+
+    @Test
+    @Sql({ "classpath:sql/integration-test-organization.sql" })
+    // 检查是否可以成功删除指定组织
+    public void deleteOrganization_test() {
+        this.restTemplate.getForObject("http://localhost:" + port + "/organization/deleteorganization?id={id}",
+                void.class, 1);
+        assertSame(organizationservice.findById(1L).getIsdeleted(), 1);
     }
 }

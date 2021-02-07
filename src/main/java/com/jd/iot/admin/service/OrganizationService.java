@@ -2,10 +2,13 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Organization;
 import com.jd.iot.admin.repository.OrganizationRepository;
+import com.jd.iot.admin.vo.OrganizationVO;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,104 +22,93 @@ public class OrganizationService {
     OrganizationRepository organizationrepository;
 
     /**
-     * . 查找所有组织实体
+     * 查询组织列表
      * 
-     * @return 所有组织实体
+     * @return 组织列表
      */
-    public List<Organization> findAllOrganization() {
+    public List<OrganizationVO> findAllOrganization() {
         List<Organization> l = new ArrayList<Organization>();
         organizationrepository.findAll().forEach(l::add);
-        return l;
+        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
+        l.stream().filter(o -> o.getIsdeleted() != 1 ).map(o -> lv.add(new OrganizationVO(o)))
+                .collect(Collectors.toList());
+        return lv;
     }
 
     /**
-     * . 查找最大id值
-     * 
-     * @return 最大id值
-     */
-    public Long maxId() {
-        return organizationrepository.maxId();
-    }
-
-    /**
-     * . 查找最大租户id值
-     * 
-     * @return 最大租户id值
-     */
-    public String maxTenantid() {
-        return organizationrepository.maxTenantid();
-    }
-
-    /**
-     * . 通过id删除指定组织
+     * 删除组织
      * 
      * @param id 需删除组织的id
      */
     public void deleteOrganization(Long id) {
         try {
-            organizationrepository.findById(id);
+            Organization organization = organizationrepository.findById(id).get();
+            organization.setIsdeleted(1);
+            organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            organizationrepository.save(organization);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, " ORGANIZATION NOT FOUND");
         }
-        organizationrepository.deleteById(id);
     }
 
     /**
-     * 添加单个组织实体
+     * 添加组织
      * 
-     * @param 单个组织实体
+     * @param 需添加的组织
      * 
-     * @return 成功添加的组织实体
+     * @return 成功添加的组织
      */
-    public Organization addOrganization(Organization organization) {
-        Long id = maxId();
+    public OrganizationVO addOrganization(OrganizationVO organizationvo) {
+        Organization organization = new Organization(organizationvo);
+        Long id = organizationrepository.maxId();
         if (id == null) {
             organization.setId(1L);
         } else {
             organization.setId(id + 1);
         }
-        String t = maxTenantid();
+        String t = organizationrepository.maxTenantid();
         if (t == null) {
             organization.setTenantid("1");
         } else {
-            Long max = Long.parseLong(maxTenantid());
+            Long max = Long.parseLong(organizationrepository.maxTenantid());
             organization.setTenantid(String.valueOf(max + 1));
         }
         organization.setCreatetime(new Timestamp(System.currentTimeMillis()));
         organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return organizationrepository.save(organization);
+        return new OrganizationVO(organizationrepository.save(organization));
     }
 
     /**
-     * . 通过id查找指定组织
+     * 通过id查找指定组织
      * 
      * @param id 需查找组织的id
      * 
      * @return 指定组织实体
      */
-    public Organization findById(Long id) {
+    public OrganizationVO findById(Long id) {
         try {
-            return organizationrepository.findById(id).get();
+            return new OrganizationVO(organizationrepository.findById(id).get());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
         }
     }
 
     /**
-     * . 修改指定组织实体
+     * 修改组织
      * 
-     * @param id           所需修改组织的id
-     * @param organization 修改后的组织实体
+     * @param id           需修改组织的id
+     * @param organization 修改过的组织
      * 
-     * @return 成功修改后的组织实体
+     * @return 成功修改的组织
      */
-    public Organization editOrganization(Long id, Organization organization) {
+    public OrganizationVO editOrganization(Long id, OrganizationVO organizationvo) {
         try {
-            organizationrepository.findById(id);
+            organizationrepository.findById(id).get();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, " ORGANIZATION NOT FOUND");
         }
+        Organization organization = new Organization(organizationvo);
         organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return organizationrepository.save(organization);
+        return new OrganizationVO(organizationrepository.save(organization));
     }
 }

@@ -1,83 +1,51 @@
-package com.jd.iot.admin.entity;
+package com.jd.iot.admin.vo;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import com.jd.iot.admin.entity.Role;
 
-import com.jd.iot.admin.vo.RoleVO;
+public class RoleVO {
 
-@Entity
-@Table(name = "iot_hub_rbac_role")
-public class Role {
-
-    @Id
-    @NotNull
-    @Digits(integer = 11, fraction = 0)
     private Long id;
 
-    @Size(max = 64)
-    @Column(name = "role_name")
     private String rolename;
 
-    @Column(name = "role_type")
-    @Digits(integer = 11, fraction = 0)
     private Long roletype;
 
-    @Size(max = 256)
     private String description;
 
-    @Digits(integer = 20, fraction = 0)
-    @Column(name = "tenant_id")
     private Long tenantid;
 
-    @Digits(integer = 1, fraction = 0)
-    @Column(name = "is_deleted")
     private Integer isdeleted;
 
-    @Digits(integer = 1, fraction = 0)
-    @Column(name = "is_system")
     private Integer issystem;
 
-    @Column(name = "create_time")
     private Timestamp createtime;
 
-    @Column(name = "update_time", nullable = false)
     private Timestamp updatetime;
 
-    @Column(name = "role_code")
-    @Size(max = 100)
     private String rolecode;
 
-    @Column(name = "is_forbidden")
-    @Digits(integer = 1, fraction = 0)
     private Integer isforbidden;
 
-    @Column(name = "is_default")
-    @Digits(integer = 1, fraction = 0)
     private Integer isdefault;
 
-    public Role() {
+    public RoleVO() {
     }
 
-    public Role(RoleVO rolevo) {
-        id = rolevo.getId();
-        rolename = rolevo.getRolename();
-        roletype = rolevo.getRoletype();
-        description = rolevo.getDescription();
-        tenantid = rolevo.getTenantid();
-        isdeleted=rolevo.getIsdeleted();
-        issystem = rolevo.getIssystem();
-        createtime = rolevo.getCreatetime();
-        updatetime = rolevo.getUpdatetime();
-        rolecode = rolevo.getRolecode();
-        isforbidden = rolevo.getIsforbidden();
-        isdefault = rolevo.getIsdefault();
+    public RoleVO(Role role) {
+        id = role.getId();
+        rolename = role.getRolename();
+        roletype = role.getRoletype();
+        description = role.getDescription();
+        tenantid = role.getTenantid();
+        isdeleted = role.getIsdeleted();
+        issystem = role.getIssystem();
+        createtime = role.getCreatetime();
+        updatetime = role.getUpdatetime();
+        rolecode = role.getRolecode();
+        isforbidden = role.getIsforbidden();
+        isdefault = role.getIsdefault();
     }
 
     public Long getId() {

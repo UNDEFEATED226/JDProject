@@ -1,16 +1,17 @@
 package com.jd.iot.admin.service;
 
-import com.jd.iot.admin.entity.Organization;
-import com.jd.iot.admin.entity.Role;
+import com.jd.iot.admin.entity.UserRole;
 import com.jd.iot.admin.entity.User;
 import com.jd.iot.admin.passwordencrypt.PassEncrypt;
 import com.jd.iot.admin.repository.UserRepository;
+import com.jd.iot.admin.vo.OrganizationVO;
+import com.jd.iot.admin.vo.UserVO;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class UserService {
     UserRepository userrepository;
 
     @Autowired
-    RoleService roleservice;
+    UserRoleService userroleservice;
 
     @Autowired
     OrganizationService organizationservice;
@@ -54,14 +55,16 @@ public class UserService {
     }
 
     /**
-     * 查找所有用户实体
+     * 查询用户列表
      * 
-     * @return 所有用户实体
+     * @return 用户列表
      */
-    public List<User> findAllUser() {
+    public List<UserVO> findAllUser() {
         List<User> l = new ArrayList<User>();
+        List<UserVO> lv = new ArrayList<UserVO>();
         userrepository.findAll().forEach(l::add);
-        return l;
+        l.stream().filter(u -> u.getIsdeleted() != 1).map(u -> lv.add(new UserVO(u))).collect(Collectors.toList());
+        return lv;
     }
 
     /**
@@ -71,44 +74,48 @@ public class UserService {
      * 
      * @return 指定用户实体
      */
-    public User findById(Long id) {
+    public UserVO findById(Long id) {
         try {
-            return userrepository.findById(id).get();
+            return new UserVO(userrepository.findById(id).get());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
     }
 
     /**
-     * 通过id删除指定用户
+     * 删除用户
      * 
      * @param id 需删除用户的id
      */
     public void deleteUser(Long id) {
         try {
-            userrepository.findById(id);
+            User user = userrepository.findById(id).get();
+            user.setIsdeleted(1);
+            user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            userrepository.save(user);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
-        userrepository.deleteById(id);
     }
 
     /**
-     * 添加单个用户
+     * 添加用户
      * 
-     * @param user
+     * @param user 需添加的用户
      * 
-     * @return
+     * @return 成功添加的用户
+     * 
      */
-    public User addUser(User user) {
-        Organization organization;
+    public UserVO addUser(UserVO uservo) {
+        OrganizationVO organizationvo;
         try {
-            organization = organizationservice.findById(Long.parseLong(user.getOrgid()));
+            organizationvo = organizationservice.findById(Long.parseLong(uservo.getOrgid()));
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
         }
-        user.setTenantid(BigInteger.valueOf(Long.parseLong(organization.getTenantid())));
-        Long max = maxId();
+        User user = new User(uservo);
+        user.setTenantid(Long.parseLong(organizationvo.getTenantid()));
+        Long max = userrepository.maxId();
         if (max == null) {
             user.setId(1l);
             user.setUserid("jd-iot-" + getMd5(String.valueOf(1L)));
@@ -116,51 +123,41 @@ public class UserService {
             user.setId(max + 1);
             user.setUserid("jd-iot-" + getMd5(String.valueOf(max + 1)));
         }
-        user.setPassword(PassEncrypt.getMd5(user.getPassword()));
-        user.setIsforbidden(0);
-        user.setIstenantadmin(0);
+        user.setPassword(PassEncrypt.getMd5(uservo.getPassword()));
         user.setCreatetime(new Timestamp(System.currentTimeMillis()));
         user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        User u = userrepository.save(user);
-        Role r = new Role();
-        r.setUserid(u.getId());
+        UserRole r = new UserRole();
+        r.setUserid(user.getId());
         r.setRoleid(1L);
-        roleservice.addRole(r);
-        return u;
+        userroleservice.addUserRole(r);
+        return new UserVO(userrepository.save(user));
     }
 
     /**
-     * 修改指定用户
+     * 修改用户
      * 
-     * @param id   所需修改用户的id
-     * @param user 修改后的用户实体
+     * @param id   需修改用户的id
+     * @param user 修改过的用户
      * 
-     * @return 成功修改后的用户实体
+     * @return 成功修改的用户
+     * 
      */
-    public User editUser(Long id, User user) {
-        Organization organization;
+    public UserVO editUser(Long id, UserVO uservo) {
+        OrganizationVO organizationvo;
         try {
-            organization = organizationservice.findById(Long.parseLong(user.getOrgid()));
+            organizationvo = organizationservice.findById(Long.parseLong(uservo.getOrgid()));
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
         }
         try {
-            userrepository.findById(id);
+            userrepository.findById(id).get();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
-        user.setTenantid(BigInteger.valueOf(Long.parseLong(organization.getTenantid())));
-        user.setPassword(PassEncrypt.getMd5(user.getPassword()));
+        User user = new User(uservo);
+        user.setTenantid(Long.parseLong(organizationvo.getTenantid()));
+        user.setPassword(PassEncrypt.getMd5(uservo.getPassword()));
         user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return userrepository.save(user);
-    }
-
-    /**
-     * 查找最大id值
-     * 
-     * @return 最大id值
-     */
-    public Long maxId() {
-        return userrepository.maxId();
+        return new UserVO(userrepository.save(user));
     }
 }

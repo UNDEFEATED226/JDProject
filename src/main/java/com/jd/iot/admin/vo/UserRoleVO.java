@@ -1,54 +1,34 @@
-package com.jd.iot.admin.entity;
+package com.jd.iot.admin.vo;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 
-import com.jd.iot.admin.vo.UserRoleVO;
+import com.jd.iot.admin.entity.UserRole;
 
-//Role Entity
-@Entity
-@Table(name = "iot_hub_rbac_user_role")
-public class UserRole {
+public class UserRoleVO {
 
-    @Digits(integer = 11, fraction = 0)
-    @NotNull
-    @Id
     private Long id;
 
-    @Digits(integer = 11, fraction = 0)
-    @Column(name = "user_id")
     private Long userid;
 
-    @Digits(integer = 11, fraction = 0)
-    @Column(name = "role_id")
     private Long roleid;
 
-    @Digits(integer = 1, fraction = 0)
-    @Column(name = "is_deleted")
     private Integer isdeleted;
 
-    @Column(name = "create_time", nullable = false)
     private Timestamp createtime;
 
-    @Column(name = "update_time", nullable = false)
     private Timestamp updatetime;
 
-    public UserRole() {
+    public UserRoleVO() {
 
     }
 
-    public UserRole(UserRoleVO userrolevo) {
-        id = userrolevo.getId();
-        userid = userrolevo.getUserid();
-        roleid = userrolevo.getRoleid();
-        isdeleted = userrolevo.getIsdeleted();
-        createtime = userrolevo.getCreatetime();
-        updatetime = userrolevo.getUpdatetime();
+    public UserRoleVO(UserRole userrole) {
+        id = userrole.getId();
+        userid = userrole.getUserid();
+        roleid = userrole.getRoleid();
+        isdeleted = userrole.getIsdeleted();
+        createtime = userrole.getCreatetime();
+        updatetime = userrole.getUpdatetime();
     }
 
     public Long getId() {

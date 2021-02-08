@@ -2,15 +2,19 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.UserRole;
 import com.jd.iot.admin.repository.UserRoleRepository;
+import com.jd.iot.admin.vo.UserRoleVO;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 用户角色实体
+//Service for 用户角色
 @Service
 public class UserRoleService {
 
@@ -18,14 +22,16 @@ public class UserRoleService {
     UserRoleRepository userrolerepository;
 
     /**
-     * . 查询用户角色列表
+     * 查询用户角色列表
      * 
      * @return 用户角色列表
      */
-    public List<UserRole> findAllUserRole() {
-        List<UserRole> e = new ArrayList<UserRole>();
-        userrolerepository.findAll().forEach(e::add);
-        return e;
+    public List<UserRoleVO> findAllUserRole() {
+        List<UserRole> l = new ArrayList<UserRole>();
+        List<UserRoleVO> lv = new ArrayList<UserRoleVO>();
+        userrolerepository.findAll().forEach(l::add);
+        l.stream().filter(u -> u.getIsdeleted() != 1).map(u -> lv.add(new UserRoleVO(u))).collect(Collectors.toList());
+        return lv;
     }
 
     /**
@@ -35,7 +41,8 @@ public class UserRoleService {
      * 
      * @return 成功添加的用户角色
      */
-    public UserRole addUserRole(UserRole userrole) {
+    public UserRoleVO addUserRole(UserRoleVO userrolevo) {
+        UserRole userrole = new UserRole(userrolevo);
         Long max = userrolerepository.maxId();
         if (max == null) {
             userrole.setId(1L);
@@ -44,21 +51,37 @@ public class UserRoleService {
         }
         userrole.setCreatetime(new Timestamp(System.currentTimeMillis()));
         userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return userrolerepository.save(userrole);
+        return new UserRoleVO(userrolerepository.save(userrole));
     }
 
     /**
-     * . 通过id查找指定角色
+     * 通过id查找指定用户角色
      * 
-     * @param id 需查找角色的id
+     * @param id 需查找用户角色的id
      * 
-     * @return 指定角色实体
+     * @return 指定用户角色
      */
-    public UserRole findById(Long id) {
+    public UserRoleVO findById(Long id) {
         try {
-            return userrolerepository.findById(id).get();
+            return new UserRoleVO(userrolerepository.findById(id).get());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLE NOT FOUND");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
+        }
+    }
+
+    /**
+     * 删除用户角色
+     * 
+     * @param id 需删除用户角色的id
+     */
+    public void deleteUserRole(Long id) {
+        try {
+            UserRole userrole = userrolerepository.findById(id).get();
+            userrole.setIsdeleted(1);
+            userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            userrolerepository.save(userrole);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
         }
     }
 }

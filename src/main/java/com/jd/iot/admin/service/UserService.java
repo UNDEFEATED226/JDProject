@@ -126,10 +126,6 @@ public class UserService {
         user.setPassword(PassEncrypt.getMd5(uservo.getPassword()));
         user.setCreatetime(new Timestamp(System.currentTimeMillis()));
         user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        UserRole r = new UserRole();
-        r.setUserid(user.getId());
-        r.setRoleid(1L);
-        userroleservice.addUserRole(r);
         return new UserVO(userrepository.save(user));
     }
 

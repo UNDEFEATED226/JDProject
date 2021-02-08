@@ -1,10 +1,13 @@
 package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import com.jd.iot.admin.IotCoreApplication;
 import com.jd.iot.admin.entity.UserRole;
 import com.jd.iot.admin.service.UserRoleService;
+import com.jd.iot.admin.vo.UserRoleVO;
+
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -21,8 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @ActiveProfiles({ "integration" })
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = IotCoreApplication.class,
-webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserRoleControllerIntegrationTest {
 
     @LocalServerPort
@@ -43,29 +45,48 @@ public class UserRoleControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-userrole.sql" })
     public void getAllRole_Test() {
-        this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findalluserrole", List.class);
+        String res = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findalluserrole",
+                String.class);
+        System.out.println("***");
+        System.out.println(res);
+        System.out.println("***");
     }
 
     // 验证返回角色示例是否是预期值
     @Test
     @Sql({ "classpath:sql/integration-test-userrole.sql" })
     public void compareUserEntity_Test() {
-        UserRole r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}", UserRole.class, 8);
+        UserRoleVO r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
+                UserRoleVO.class, 8);
         assertEquals(8L, r.getId().longValue());
+        assertEquals(108L, r.getUserid().longValue());
     }
 
     // 是否可以正确添加新角色并且赋值正确
     @Test
     @Sql({ "classpath:sql/integration-test-userrole.sql" })
     public void addNewUser_Test() {
-        UserRole r = this.restTemplate.postForObject("http://localhost:" + port + "/userrole/adduserrole", new UserRole(), UserRole.class);
-        assertEquals(r.getId().longValue(), 9L);
+        UserRoleVO userrolevo = new UserRoleVO();
+        userrolevo.setUserid(169L);
+        userrolevo.setRoleid(3L);
+        UserRoleVO u = this.restTemplate.postForObject("http://localhost:" + port + "/userrole/adduserrole", userrolevo,
+                UserRoleVO.class);
+        assertEquals(u.getId().longValue(), 10L);
+    }
+
+    // 是否能够成功查找指定用户角色
+    @Test
+    @Sql({ "classpath:sql/integration-test-userrole.sql" })
+    public void findById_Test() {
+        UserRoleVO u = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
+                UserRoleVO.class, 8L);
+        assertEquals(108L, u.getUserid().longValue());
     }
 
     // 处理不存在参数
     @Test
     @Sql({ "classpath:sql/integration-test-userrole.sql" })
-    public void findById_Test() {
+    public void findById_Test1() {
         Assertions.assertThrows(ResponseStatusException.class, () -> {
             userroleservice.findById(100L);
         });
@@ -75,8 +96,17 @@ public class UserRoleControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-userrole.sql" })
     public void findById_Test2() {
-        UserRole r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}", UserRole.class,
-                "abc");
+        UserRoleVO r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
+                UserRoleVO.class, "abc");
         assertEquals(r.getId(), null);
+    }
+
+    @Test
+    @Sql({ "classpath:sql/integration-test-userrole.sql" })
+    public void deleteUserRole_test() {
+        this.restTemplate.getForObject("http://localhost:" + port + "/userrole/deleteuserrole?id={id}", void.class, 8L);
+        UserRoleVO r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
+                UserRoleVO.class, 8L);
+        assertSame(r.getIsdeleted(), 1);
     }
 }

@@ -3,6 +3,8 @@ package com.jd.iot.admin.controller;
 import com.google.gson.Gson;
 import com.jd.iot.admin.entity.UserRole;
 import com.jd.iot.admin.service.UserRoleService;
+import com.jd.iot.admin.vo.UserRoleVO;
+
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -34,7 +36,7 @@ public class UserRoleController {
      * @return
      */
     @GetMapping("/findalluserrole")
-    public List<UserRole> findAllRole() {
+    public List<UserRoleVO> findAllUserRole() {
         log.info("查找所有用户角色:[{}]", gson.toJson(userroleservice.findAllUserRole()));
         return userroleservice.findAllUserRole();
     }
@@ -47,7 +49,7 @@ public class UserRoleController {
      * @return 指定用户实体
      */
     @GetMapping("/findbyid")
-    public UserRole findById(Long id) {
+    public UserRoleVO findById(Long id) {
         try {
             log.info("查找用户角色id:[{}],角色:{}", id, gson.toJson(userroleservice.findById(id)));
             return userroleservice.findById(id);
@@ -65,8 +67,24 @@ public class UserRoleController {
      * @return
      */
     @PostMapping("/adduserrole")
-    public UserRole addRole(@RequestBody UserRole userrole) {
-        log.info("添加用户角色:[{}]", gson.toJson(userrole));
-        return userroleservice.addUserRole(userrole);
+    public UserRoleVO addUserRole(@RequestBody UserRoleVO userrolevo) {
+        log.info("添加用户角色:[{}]", gson.toJson(userrolevo));
+        return userroleservice.addUserRole(userrolevo);
+    }
+
+    /**
+     * 删除用户角色
+     * 
+     * @param id 需删除用户角色的id
+     */
+    @GetMapping("/deleteuserrole")
+    public void deleteUserRole(Long id) {
+        try {
+            log.info("删除用户角色id:[{}]", id);
+            userroleservice.deleteUserRole(id);
+        } catch (Exception e) {
+            log.error("删除用户角色id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
+        }
     }
 }

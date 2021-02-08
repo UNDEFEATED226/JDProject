@@ -30,7 +30,7 @@ public class OrganizationService {
         List<Organization> l = new ArrayList<Organization>();
         organizationrepository.findAll().forEach(l::add);
         List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
-        l.stream().filter(o -> o.getIsdeleted() != 1 ).map(o -> lv.add(new OrganizationVO(o)))
+        l.stream().filter(o -> o.getIsdeleted() != 1).map(o -> lv.add(new OrganizationVO(o)))
                 .collect(Collectors.toList());
         return lv;
     }
@@ -65,13 +65,6 @@ public class OrganizationService {
             organization.setId(1L);
         } else {
             organization.setId(id + 1);
-        }
-        String t = organizationrepository.maxTenantid();
-        if (t == null) {
-            organization.setTenantid("1");
-        } else {
-            Long max = Long.parseLong(organizationrepository.maxTenantid());
-            organization.setTenantid(String.valueOf(max + 1));
         }
         organization.setCreatetime(new Timestamp(System.currentTimeMillis()));
         organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));

@@ -1,7 +1,9 @@
 package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Resource;
+import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.repository.ResourceRepository;
+import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.ResourceVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -47,6 +49,35 @@ public class ResourceService {
         l.stream().filter(r -> r.getIsdeleted() != 1).map(r -> lv.add(new ResourceVO(r))).collect(Collectors.toList());
         return lv;
 
+    }
+
+    /**
+     * 添加资源
+     * 
+     * @param resourcevo 需添加的资源
+     * 
+     * @return 成功添加的资源
+     */
+    public ResourceVO addResource(ResourceVO resourcevo) {
+        Resource resource = new Resource(resourcevo);
+        Long max;
+        if (resource.getRestypeid() == 1L || resource.getRestypeid() == 2L) {
+            max = resourcerepository.maxId1();
+        } else {
+            max = resourcerepository.maxId2();
+        }
+        if (max == null) {
+            if (resource.getRestypeid() == 1L || resource.getRestypeid() == 2L) {
+                resource.setId(1L);
+            } else {
+                resource.setId(1000001L);
+            }
+        } else {
+            resource.setId(max + 1);
+        }
+        resource.setCreatetime(new Timestamp(System.currentTimeMillis()));
+        resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        return new ResourceVO(resourcerepository.save(resource));
     }
 
     /**
@@ -97,5 +128,13 @@ public class ResourceService {
         Resource resource = new Resource(resourcevo);
         resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
         return new ResourceVO(resourcerepository.save(resource));
+    }
+    
+    public Long maxId1() {
+        return resourcerepository.maxId1();
+    }
+    
+    public Long maxId2() {
+        return resourcerepository.maxId2();
     }
 }

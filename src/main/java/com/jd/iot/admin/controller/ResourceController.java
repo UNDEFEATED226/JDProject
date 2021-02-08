@@ -48,6 +48,19 @@ public class ResourceController {
     }
 
     /**
+     * 添加资源
+     * 
+     * @param resourcevo 需添加的资源
+     * 
+     * @return 成功添加的资源
+     */
+    @PostMapping("/addresource")
+    public ResourceVO addResource(@RequestBody ResourceVO resourcevo) {
+        log.info("添加资源:[{}]", gson.toJson(resourcevo));
+        return resourceservice.addResource(resourcevo);
+    }
+
+    /**
      * 查找所有资源实体
      * 
      * @return 所有资源VO

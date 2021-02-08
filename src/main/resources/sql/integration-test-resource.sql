@@ -23,9 +23,10 @@ CREATE TABLE iot_hub_rbac_resource(
 )
 ;
 
-INSERT INTO iot_hub_rbac_resource VALUES (1,null,null,'资源',null,0,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
-INSERT INTO iot_hub_rbac_resource VALUES (2,null,null,'资源',null,0,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
-INSERT INTO iot_hub_rbac_resource VALUES (3,null,null,'资源',null,0,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
-INSERT INTO iot_hub_rbac_resource VALUES (4,null,null,'资源',null,0,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
-INSERT INTO iot_hub_rbac_resource VALUES (5,null,null,'资源',null,0,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
-INSERT INTO iot_hub_rbac_resource VALUES (6,null,null,'资源',null,0,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
+INSERT INTO iot_hub_rbac_resource VALUES (1,null,null,'资源',null,1,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
+INSERT INTO iot_hub_rbac_resource VALUES (2,null,null,'资源',null,1,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
+INSERT INTO iot_hub_rbac_resource VALUES (3,null,null,'资源',null,1,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
+INSERT INTO iot_hub_rbac_resource VALUES (4,null,null,'资源',null,2,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
+INSERT INTO iot_hub_rbac_resource VALUES (5,null,null,'资源',null,2,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
+INSERT INTO iot_hub_rbac_resource VALUES (1000,null,null,'资源',null,3,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');
+INSERT INTO iot_hub_rbac_resource VALUES (2000,null,null,'资源',null,6,null,null,null,null,null,null,null,null,null,null,0,null,'2021-02-4 10:30:01');

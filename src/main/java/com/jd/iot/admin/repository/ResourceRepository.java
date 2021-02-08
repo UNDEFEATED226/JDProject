@@ -11,8 +11,12 @@ import com.jd.iot.admin.entity.Resource;
 //Repository for 资源实体
 @Repository
 public interface ResourceRepository extends CrudRepository<Resource, Long> {
-    @Query(value = "SELECT max(id) FROM Resource")
-    public Long maxId();
+
+    @Query(value = "SELECT max(id) FROM Resource WHERE restypeid IN (1,2)")
+    public Long maxId1();
+
+    @Query(value = "SELECT max(id) FROM Resource WHERE restypeid IN (3,4,5,6)")
+    public Long maxId2();
 
     public List<Resource> findAllByRestypeid(Long restypeid);
 }

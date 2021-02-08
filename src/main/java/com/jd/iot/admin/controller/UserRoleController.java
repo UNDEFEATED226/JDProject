@@ -3,14 +3,12 @@ package com.jd.iot.admin.controller;
 import com.google.gson.Gson;
 import com.jd.iot.admin.entity.UserRole;
 import com.jd.iot.admin.service.UserRoleService;
-
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

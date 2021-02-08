@@ -48,20 +48,17 @@ public class ResourceControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-resource.sql" })
     public void IotMenuResource_test() {
-        String res = this.restTemplate.getForObject("http://localhost:" + port + "/resource/resourcemenu?resourcetypeid=3",
-                String.class);
+        String res = this.restTemplate
+                .getForObject("http://localhost:" + port + "/resource/resourcemenu?resourcetypeid=3", String.class);
         System.out.println(res);
     }
 
-   
     // 测试能否成功软删指定资源实体
     @Test
     @Sql({ "classpath:sql/integration-test-resource.sql" })
     public void deleteResource_test() {
-        System.out.println("是否删除:"+resourceservice.findById(1L).getIsdeleted());
         this.restTemplate.getForObject("http://localhost:" + port + "/resource/deleteresource?id=1", void.class);
         ResourceVO r = resourceservice.findById(1L);
-        System.out.println("是否删除2:"+resourceservice.findById(1L).getIsdeleted());
         assertSame(r.getIsdeleted(), 1);
     }
 
@@ -105,5 +102,23 @@ public class ResourceControllerIntegrationTest {
                 ResourceVO.class, 1);
         assertEquals(r.getResname(), "资资源源");
         assertEquals(r.getId().longValue(), 1L);
+    }
+
+    // 测试能否成功添加资源
+    @Test
+    @Sql({ "classpath:sql/integration-test-resource.sql" })
+    public void addResource_test() {
+        ResourceVO temp = new ResourceVO();
+        temp.setResname("添加1");
+        temp.setRestypeid(1L);
+        ResourceVO temp1 = new ResourceVO();
+        temp1.setResname("添加2");
+        temp1.setRestypeid(6L);
+        ResourceVO r1 = this.restTemplate.postForObject("http://localhost:" + port + "/resource/addresource", temp,
+                ResourceVO.class);
+        ResourceVO r2 = this.restTemplate.postForObject("http://localhost:" + port + "/resource/addresource", temp1,
+                ResourceVO.class);
+        assertEquals(r1.getId().longValue(), 6L);
+        assertEquals(r2.getId().longValue(), 2001L);
     }
 }

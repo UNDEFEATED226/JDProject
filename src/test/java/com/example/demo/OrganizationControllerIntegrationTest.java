@@ -64,7 +64,6 @@ public class OrganizationControllerIntegrationTest {
         OrganizationVO o = this.restTemplate.postForObject("http://localhost:" + port + "/organization/addorganization",
                 org, OrganizationVO.class);
         assertEquals(o.getId().longValue(), 3L);
-        assertEquals(o.getTenantid(), "335");
     }
 
     // 处理不存在参数

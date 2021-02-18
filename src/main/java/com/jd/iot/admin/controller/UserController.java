@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class UserController {
      * @return 添加成功的用户实体
      */
     @PostMapping("/adduser")
-    public UserVO addUser(@RequestBody UserVO uservo) {
+    public UserVO addUser(@RequestBody @Validated UserVO uservo) {
         try {
             log.info("添加用户:{}", gson.toJson(uservo));
             return userservice.addUser(uservo);
@@ -87,7 +88,7 @@ public class UserController {
      * @return 成功修改后的用户实体
      */
     @PostMapping("/edituser/{id}")
-    public UserVO editUser(@PathVariable Long id, @RequestBody UserVO uservo) {
+    public UserVO editUser(@PathVariable Long id, @RequestBody @Validated UserVO uservo) {
         try {
             log.info("修改用户id:[{}],用户:{}", id, gson.toJson(uservo));
             return userservice.editUser(id, uservo);

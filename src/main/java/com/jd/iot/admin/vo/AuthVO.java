@@ -1,15 +1,16 @@
 package com.jd.iot.admin.vo;
 
-import java.sql.Timestamp;
-
 import com.jd.iot.admin.entity.Auth;
+import java.sql.Timestamp;
+import javax.validation.constraints.Size;
 
 public class AuthVO {
-
+    
     private Long id;
-
+    
     private String authname;
 
+    @Size(max = 256)
     private String description;
 
     private Long resid;

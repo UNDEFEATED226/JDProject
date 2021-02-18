@@ -1,27 +1,36 @@
 package com.jd.iot.admin.vo;
 
-import java.sql.Timestamp;
-
 import com.jd.iot.admin.entity.Organization;
+import java.sql.Timestamp;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 
 public class OrganizationVO {
 
     private Long id;
 
+    @Size(max = 64)
     private String orgname;
 
+    @Digits(integer = 11, fraction = 0)
     private Long parentorgid;
 
+    @Digits(integer = 11, fraction = 0)
     private Long orglevel;
 
+    @Digits(integer = 11, fraction = 0)
     private Long orgtype;
 
+    @Size(max = 64)
     private String orgtypename;
 
+    @Digits(integer = 11, fraction = 0)
     private Long orgcatlog;
 
+    @Size(max = 64)
     private String baseorgcode;
 
+    @Size(max = 64)
     private String tenantid;
 
     private Timestamp updatetime;
@@ -30,6 +39,7 @@ public class OrganizationVO {
 
     private Integer isdeleted;
 
+    @Size(max = 255)
     private String fullparentid;
 
     private Integer ishavechild;

@@ -129,12 +129,4 @@ public class ResourceService {
         resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
         return new ResourceVO(resourcerepository.save(resource));
     }
-    
-    public Long maxId1() {
-        return resourcerepository.maxId1();
-    }
-    
-    public Long maxId2() {
-        return resourcerepository.maxId2();
-    }
 }

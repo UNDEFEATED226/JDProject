@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jd.iot.admin.entity.Organization;
 
-//Repository for 组织实体
+//Repository for 组织
 @Repository
 public interface OrganizationRepository extends CrudRepository<Organization, Long> {
     @Query(value = "SELECT max(id) FROM Organization")

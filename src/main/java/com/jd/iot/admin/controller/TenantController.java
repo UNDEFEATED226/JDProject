@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +47,7 @@ public class TenantController {
      * @return 成功添加的租户
      */
     @PostMapping("/addtenant")
-    public TenantVO addTenant(@RequestBody TenantVO tenantvo) {
+    public TenantVO addTenant(@RequestBody @Validated TenantVO tenantvo) {
         log.info("添加租户:[{}]", gson.toJson(tenantvo));
         return tenantservice.addTenant(tenantvo);
     }
@@ -60,7 +61,7 @@ public class TenantController {
      * @return 成功修改的租户
      */
     @PostMapping("/edittenant/{id}")
-    public TenantVO editTenant(@PathVariable Long id, @RequestBody TenantVO tenantvo) {
+    public TenantVO editTenant(@PathVariable Long id, @RequestBody @Validated TenantVO tenantvo) {
         try {
             log.info("修改租户id:[{}],租户:{}", id, gson.toJson(tenantvo));
             return tenantservice.editTenant(id, tenantvo);

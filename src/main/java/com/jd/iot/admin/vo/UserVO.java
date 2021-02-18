@@ -1,7 +1,11 @@
 package com.jd.iot.admin.vo;
 
-import java.sql.Timestamp;
 import com.jd.iot.admin.entity.User;
+import java.sql.Timestamp;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UserVO {
 
@@ -9,38 +13,56 @@ public class UserVO {
 
     private String userid;
 
+    @NotNull
+    @Size(min = 1, max = 64)
     private String loginname;
 
+    @NotNull
+    @Size(min = 8, max = 256)
     private String password;
 
+    @Size(max = 64)
     private String realname;
 
+    @Size(max = 256)
     private String orgid;
 
+    @Digits(integer = 4, fraction = 0)
     private Integer isdeleted;
 
+    @Size(max = 64)
+    @Email
     private String email;
 
+    @Digits(integer = 4, fraction = 0)
     private Integer sex;
 
+    @Size(max = 256)
     private String comment;
 
     private Timestamp createtime;
 
     private Timestamp updatetime;
 
+    @Size(max = 64)
     private String userstatus;
 
+    @Digits(integer = 20, fraction = 0)
     private Long usergroupid;
 
+    @Digits(integer = 20, fraction = 0)
     private Long tenantid;
 
+    @Digits(integer = 1, fraction = 0)
     private Integer istenantadmin;
 
+    @Digits(integer = 1, fraction = 0)
     private Integer isforbidden;
 
+    @Size(max = 256)
     private String fullparentid;
 
+    @Size(max = 20)
     private String mobile;
 
     public UserVO() {

@@ -1,55 +1,39 @@
-package com.jd.iot.admin.entity;
+package com.jd.iot.admin.vo;
 
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
-import com.jd.iot.admin.vo.RoleAuthVO;
+import com.jd.iot.admin.entity.RoleAuth;
 
-@Entity
-@Table(name = "iot_hub_rbac_role_auth")
-public class RoleAuth {
+public class RoleAuthVO {
 
-    @Id
-    @NotNull
-    @Digits(integer = 11, fraction = 0)
     private Long id;
-
-    @Column(name = "role_id")
-    @Digits(integer = 11, fraction = 0)
+    
     private Long roleid;
 
-    @Column(name = "auth_id")
-    @Digits(integer = 11, fraction = 0)
     private Long authid;
 
-    @Column(name = "is_deleted")
-    @Digits(integer = 1, fraction = 0)
     private Integer isdeleted;
 
-    @Column(name = "create_time")
     private Timestamp createtime;
 
-    @Column(name = "update_time", nullable = false)
     private Timestamp updatetime;
 
-    public RoleAuth() {
+    public RoleAuthVO() {
 
     }
 
-    public RoleAuth(RoleAuthVO roleauthvo) {
-        id = roleauthvo.getId();
-        roleid = roleauthvo.getRoleid();
-        authid = roleauthvo.getAuthid();
-        isdeleted = roleauthvo.getIsdeleted();
-        createtime = roleauthvo.getCreatetime();
-        updatetime = roleauthvo.getUpdatetime();
-
+    public RoleAuthVO(RoleAuth roleauth) {
+        id = roleauth.getId();
+        roleid = roleauth.getRoleid();
+        authid = roleauth.getAuthid();
+        isdeleted = roleauth.getIsdeleted();
+        createtime = roleauth.getCreatetime();
+        updatetime = roleauth.getUpdatetime();
     }
 
     public Long getId() {

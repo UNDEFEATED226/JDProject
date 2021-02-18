@@ -2,32 +2,46 @@ package com.jd.iot.admin.vo;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.jd.iot.admin.entity.Role;
 
 public class RoleVO {
 
     private Long id;
 
+    @Size(max = 64)
     private String rolename;
 
+    @Digits(integer = 11, fraction = 0)
     private Long roletype;
 
+    @Size(max = 256)
     private String description;
 
+    @Digits(integer = 20, fraction = 0)
     private Long tenantid;
 
     private Integer isdeleted;
 
+    @Digits(integer = 1, fraction = 0)
     private Integer issystem;
 
     private Timestamp createtime;
 
     private Timestamp updatetime;
 
+    @Size(max = 100)
     private String rolecode;
-
+    
+    @Digits(integer = 1, fraction = 0)
     private Integer isforbidden;
 
+    @Digits(integer = 1, fraction = 0)
     private Integer isdefault;
 
     public RoleVO() {

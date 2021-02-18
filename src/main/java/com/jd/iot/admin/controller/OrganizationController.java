@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +67,7 @@ public class OrganizationController {
      * @return 添加的组织实体
      */
     @PostMapping("/addorganization")
-    public OrganizationVO addOrganization(@RequestBody OrganizationVO organizationvo) {
+    public OrganizationVO addOrganization(@RequestBody @Validated OrganizationVO organizationvo) {
         log.info("添加组织:[{}]", gson.toJson(organizationvo));
         return organizationservice.addOrganization(organizationvo);
     }
@@ -79,7 +80,7 @@ public class OrganizationController {
      * @return 成功修改完的组织
      */
     @PostMapping("/editorganization/{id}")
-    public OrganizationVO editOrganization(@PathVariable Long id, @RequestBody OrganizationVO organizationvo) {
+    public OrganizationVO editOrganization(@PathVariable Long id, @RequestBody @Validated OrganizationVO organizationvo) {
         try {
             log.info("修改组织id:[{}],组织:{}", id, gson.toJson(organizationvo));
             return organizationservice.editOrganization(id, organizationvo);

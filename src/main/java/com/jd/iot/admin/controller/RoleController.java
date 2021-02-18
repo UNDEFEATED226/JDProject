@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,7 +63,7 @@ public class RoleController {
      * @return 成功添加的角色
      */
     @PostMapping("/addrole")
-    public RoleVO addRole(@RequestBody RoleVO rolevo) {
+    public RoleVO addRole(@RequestBody @Validated RoleVO rolevo) {
         log.info("添加角色:[{}]", gson.toJson(rolevo));
         return roleservice.addRole(rolevo);
     }
@@ -76,7 +77,7 @@ public class RoleController {
      * @return 成功修改的角色
      */
     @PostMapping("/editrole/{id}")
-    public RoleVO editRole(@PathVariable Long id, @RequestBody RoleVO rolevo) {
+    public RoleVO editRole(@PathVariable Long id, @RequestBody @Validated RoleVO rolevo) {
         try {
             log.info("修改角色id:[{}],角色:{}", id, gson.toJson(roleservice.findAllRole()));
             return roleservice.editRole(id, rolevo);

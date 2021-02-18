@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jd.iot.admin.entity.Resource;
 
-//Repository for 资源实体
+//Repository for 资源
 @Repository
 public interface ResourceRepository extends CrudRepository<Resource, Long> {
 

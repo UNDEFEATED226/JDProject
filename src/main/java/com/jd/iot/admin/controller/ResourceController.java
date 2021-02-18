@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +56,7 @@ public class ResourceController {
      * @return 成功添加的资源
      */
     @PostMapping("/addresource")
-    public ResourceVO addResource(@RequestBody ResourceVO resourcevo) {
+    public ResourceVO addResource(@RequestBody @Validated ResourceVO resourcevo) {
         log.info("添加资源:[{}]", gson.toJson(resourcevo));
         return resourceservice.addResource(resourcevo);
     }
@@ -92,7 +93,7 @@ public class ResourceController {
      * @return 成功修改的资源VO
      */
     @PostMapping("/editresource/{id}")
-    public ResourceVO editResouce(@PathVariable Long id, @RequestBody ResourceVO resourcevo) {
+    public ResourceVO editResouce(@PathVariable Long id, @RequestBody @Validated ResourceVO resourcevo) {
         try {
             log.info("修改资源id:[{}],资源:{}", id, gson.toJson(resourcevo));
             return resourceservice.editResource(id, resourcevo);

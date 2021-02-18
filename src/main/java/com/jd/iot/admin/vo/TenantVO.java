@@ -2,13 +2,17 @@ package com.jd.iot.admin.vo;
 
 import com.jd.iot.admin.entity.Tenant;
 import java.sql.Timestamp;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 
 public class TenantVO {
 
     private Long id;
 
+    @Size(max = 255)
     private String name;
 
+    @Size(max = 255)
     private String businessassignment;
 
     private Integer isdeleted;
@@ -17,6 +21,7 @@ public class TenantVO {
 
     private Timestamp updatetime;
 
+    @Digits(integer = 11, fraction = 0)
     private Long adminuserid;
 
     public TenantVO() {

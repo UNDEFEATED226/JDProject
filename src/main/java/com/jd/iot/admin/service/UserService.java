@@ -1,6 +1,5 @@
 package com.jd.iot.admin.service;
 
-import com.jd.iot.admin.entity.UserRole;
 import com.jd.iot.admin.entity.User;
 import com.jd.iot.admin.passwordencrypt.PassEncrypt;
 import com.jd.iot.admin.repository.UserRepository;
@@ -123,7 +122,7 @@ public class UserService {
             user.setId(max + 1);
             user.setUserid("jd-iot-" + getMd5(String.valueOf(max + 1)));
         }
-        user.setPassword(PassEncrypt.getMd5(uservo.getPassword()));
+        user.setPassword(PassEncrypt.getMd5(user.getPassword()));
         user.setCreatetime(new Timestamp(System.currentTimeMillis()));
         user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
         return new UserVO(userrepository.save(user));

@@ -2,7 +2,6 @@ package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-
 import com.jd.iot.admin.IotCoreApplication;
 import com.jd.iot.admin.service.AuthService;
 import com.jd.iot.admin.vo.AuthVO;
@@ -17,10 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
-import lombok.extern.slf4j.Slf4j;
 
 @ActiveProfiles({ "integration" })
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IotCoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthControllerIntegrationTest {

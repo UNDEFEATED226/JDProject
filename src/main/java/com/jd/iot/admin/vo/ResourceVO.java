@@ -2,42 +2,65 @@ package com.jd.iot.admin.vo;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.jd.iot.admin.entity.Resource;
 
 public class ResourceVO {
 
     private Long id;
 
+    @Size(max = 64)
     private String modulename;
 
+    @Size(max = 64)
     private String rescode;
 
+    @Size(max = 512)
     private String resname;
 
+    @Size(max = 512)
     private String resuri;
 
+    @Digits(integer = 11, fraction = 0)
     private Long restypeid;
 
+    @Digits(integer = 11, fraction = 0)
     private Long parentid;
 
+    @Digits(integer = 11, fraction = 0)
     private Long level;
 
+    @Digits(integer = 4, fraction = 0)
     private Integer haschild;
 
+    @Size(max = 256)
     private String description;
 
+    @Size(max = 255)
     private String routecode;
 
+    @Size(max = 255)
     private String fullname;
 
-    /*private Long orderBy;*/
+    /*@Column(name = "`ORDER`")
+    @Digits(integer = 255, fraction = 0)
+    private Long orderBy;*/
 
+    @Digits(integer = 1, fraction = 0)
     private Integer selected;
 
+    @Digits(integer = 1, fraction = 0)
     private Integer isshow;
 
+    @Size(max = 255)
     private String title;
 
+    @Digits(integer = 1, fraction = 0)
     private Integer isdeleted;
 
     private Timestamp createtime;

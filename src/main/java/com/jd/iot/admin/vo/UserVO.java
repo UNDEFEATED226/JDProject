@@ -53,10 +53,8 @@ public class UserVO {
     @Digits(integer = 20, fraction = 0)
     private Long tenantid;
 
-    @Digits(integer = 1, fraction = 0)
     private Integer istenantadmin;
 
-    @Digits(integer = 1, fraction = 0)
     private Integer isforbidden;
 
     @Size(max = 256)

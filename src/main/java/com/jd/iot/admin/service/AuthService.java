@@ -1,11 +1,8 @@
 package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Auth;
-import com.jd.iot.admin.entity.Resource;
 import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.vo.AuthVO;
-import com.jd.iot.admin.vo.ResourceVO;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;

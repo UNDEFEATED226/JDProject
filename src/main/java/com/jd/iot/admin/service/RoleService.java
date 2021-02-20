@@ -2,6 +2,7 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Role;
 import com.jd.iot.admin.repository.RoleRepository;
+import com.jd.iot.admin.vo.OrganizationVO;
 import com.jd.iot.admin.vo.RoleVO;
 
 import java.sql.Timestamp;
@@ -9,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,11 +31,24 @@ public class RoleService {
      * @return 角色列表
      */
     public List<RoleVO> findAllRole() {
-        List<Role> l = new ArrayList<Role>();
         List<RoleVO> lv = new ArrayList<RoleVO>();
-        rolerepository.findAll().forEach(l::add);
-        l.stream().filter(r -> r.getIsdeleted()!=1).map(r -> lv.add(new RoleVO(r))).collect(Collectors.toList());
+        rolerepository.findAllRole().stream().map(r -> lv.add(new RoleVO(r))).collect(Collectors.toList());
         return lv;
+    }
+
+    /**
+     * 查询指定页号的角色列表
+     * 
+     * @param pageNo 指定页号
+     * 
+     * @return 指定页号的角色列表
+     */
+    public Page<RoleVO> findAllRolePaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo-1, 20);
+        List<RoleVO> lv = new ArrayList<RoleVO>();
+        rolerepository.findAllRolePaginated(pageable).stream().map(r -> lv.add(new RoleVO(r)))
+                .collect(Collectors.toList());
+        return new PageImpl<RoleVO>(lv);
     }
 
     /**
@@ -41,10 +59,48 @@ public class RoleService {
      * @return 所有指定角色种类的角色
      */
     public List<RoleVO> roleMenu(Long roletype) {
-        List<Role> l = rolerepository.findAllByRoletype(roletype);
         List<RoleVO> lv = new ArrayList<RoleVO>();
-        l.stream().filter(r -> r.getIsdeleted() != 1).map(r -> lv.add(new RoleVO(r))).collect(Collectors.toList());
+        rolerepository.findAllByRoletype(roletype).stream().map(r -> lv.add(new RoleVO(r)))
+                .collect(Collectors.toList());
         return lv;
+    }
+
+    /**
+     * 查询指定角色种类和指定页号的角色列表
+     * 
+     * @param roletype 指定角色种类
+     * @param pageNo 指定页号
+     * 
+     * @return 指定角色种类和指定页号的角色列表
+     */
+    public Page<RoleVO> roleMenuPaginated(Long roletype, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo-1, 20);
+        List<RoleVO> lv = new ArrayList<RoleVO>();
+        rolerepository.findAllByRoletypePaginated(roletype, pageable).stream().map(r -> lv.add(new RoleVO(r)))
+                .collect(Collectors.toList());
+        return new PageImpl<RoleVO>(lv);
+    }
+
+    /**
+     * 查询总角色数量
+     * 
+     * @return 总角色数量
+     */
+    public long count() {
+        return rolerepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (rolerepository.count() % 20 != 0) {
+            return rolerepository.count() / 20 + 1;
+        } else {
+            return rolerepository.count() / 20;
+        }
     }
 
     /**

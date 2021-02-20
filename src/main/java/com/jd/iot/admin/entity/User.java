@@ -69,7 +69,6 @@ public class User {
     @Column(name = "user_group_id")
     private Long usergroupid;
 
-    @NotNull
     @Digits(integer = 20, fraction = 0)
     @Column(name = "tenant_id")
     private Long tenantid;

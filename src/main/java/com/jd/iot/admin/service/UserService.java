@@ -15,6 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -59,11 +63,46 @@ public class UserService {
      * @return 用户列表
      */
     public List<UserVO> findAllUser() {
-        List<User> l = new ArrayList<User>();
         List<UserVO> lv = new ArrayList<UserVO>();
-        userrepository.findAll().forEach(l::add);
-        l.stream().filter(u -> u.getIsdeleted() != 1).map(u -> lv.add(new UserVO(u))).collect(Collectors.toList());
+        userrepository.findAllUser().stream().map(u -> lv.add(new UserVO(u))).collect(Collectors.toList());
         return lv;
+    }
+
+    /**
+     * 查询指定页号的用户列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定页号的用户列表
+     */
+    public Page<UserVO> findAllUserPaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        List<UserVO> lv = new ArrayList<UserVO>();
+        userrepository.findAllUserPaginated(pageable).stream().map(u -> lv.add(new UserVO(u)))
+                .collect(Collectors.toList());
+        return new PageImpl<UserVO>(lv);
+    }
+
+    /**
+     * 查询总用户数量
+     * 
+     * @return 总用户数量
+     */
+    public long count() {
+        return userrepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (userrepository.count() % 20 != 0) {
+            return userrepository.count() / 20 + 1;
+        } else {
+            return userrepository.count() / 20;
+        }
     }
 
     /**
@@ -113,7 +152,11 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
         }
         User user = new User(uservo);
-        user.setTenantid(Long.parseLong(organizationvo.getTenantid()));
+        if (organizationvo.getTenantid().equals("") || organizationvo.getTenantid() == null) {
+            user.setTenantid(null);
+        } else {
+            user.setTenantid(Long.parseLong(organizationvo.getTenantid()));
+        }
         Long max = userrepository.maxId();
         if (max == null) {
             user.setId(1l);

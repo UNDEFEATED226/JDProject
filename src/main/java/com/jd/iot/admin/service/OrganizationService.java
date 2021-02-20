@@ -3,14 +3,10 @@ package com.jd.iot.admin.service;
 import com.jd.iot.admin.entity.Organization;
 import com.jd.iot.admin.repository.OrganizationRepository;
 import com.jd.iot.admin.vo.OrganizationVO;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,8 +35,15 @@ public class OrganizationService {
         return lv;
     }
 
+    /**
+     * 查询指定页号的组织列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定页号的组织列表
+     */
     public Page<OrganizationVO> findAllOrganizationPaginated(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo - 1, 25);
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
         List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
         organizationrepository.findAllOrganizationPaginated(pageable).stream().map(o -> lv.add(new OrganizationVO(o)))
                 .collect(Collectors.toList());
@@ -132,10 +135,10 @@ public class OrganizationService {
      * @return 总页数
      */
     public long page() {
-        if (organizationrepository.count() % 25 != 0) {
-            return organizationrepository.count() / 25 + 1;
-        } else {
-            return organizationrepository.count() / 25;
+        if (organizationrepository.count() % 20 != 0) {
+            return organizationrepository.count() / 20 + 1;
+        }else {
+            return organizationrepository.count() / 20;
         }
     }
 }

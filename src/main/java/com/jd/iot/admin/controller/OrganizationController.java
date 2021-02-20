@@ -52,6 +52,7 @@ public class OrganizationController {
      */
     @GetMapping("/findallorganizationpaginated")
     public Page<OrganizationVO> findAllOrganizationPaginated(int pageNo) {
+        log.info("查询第{}页组织列表:[{}]", pageNo, gson.toJson(organizationservice.findAllOrganizationPaginated(pageNo)));
         return organizationservice.findAllOrganizationPaginated(pageNo);
     }
 
@@ -62,6 +63,7 @@ public class OrganizationController {
      */
     @GetMapping("/count")
     public long count() {
+        log.info("查询总组织数量:[{}]", organizationservice.count());
         return organizationservice.count();
     }
 
@@ -72,6 +74,7 @@ public class OrganizationController {
      */
     @GetMapping("/page")
     public long page() {
+        log.info("查询组织页数:[{}]", organizationservice.page());
         return organizationservice.page();
     }
 

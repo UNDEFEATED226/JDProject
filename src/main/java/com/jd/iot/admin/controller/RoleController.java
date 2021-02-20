@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,16 @@ public class RoleController {
         return roleservice.findAllRole();
     }
 
+    @GetMapping("/findallrolepaginated")
+    public Page<RoleVO> findAllRolePaginated(int pageNo) {
+        return roleservice.findAllRolePaginated(pageNo);
+    }
+
+    @GetMapping("/rolemenupaginated")
+    public Page<RoleVO> roleMenuPaginated(Long roletype, int pageNo) {
+        return roleservice.roleMenuPaginated(roletype, pageNo);
+    }
+
     /**
      * 查询所有指定角色种类的角色
      * 
@@ -53,6 +64,27 @@ public class RoleController {
     public List<RoleVO> roleMenu(Long roletype) {
         log.info("查询角色种类为{}的列表:[{}]", roletype, gson.toJson(roleservice.roleMenu(roletype)));
         return roleservice.roleMenu(roletype);
+    }
+
+    /**
+     * 查询总角色数量
+     * 
+     * @return 总角色数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        return roleservice.count();
+
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        return roleservice.page();
     }
 
     /**

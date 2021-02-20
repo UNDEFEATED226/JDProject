@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,41 @@ public class UserController {
     public List<UserVO> findAllUser() {
         log.info("查找所有用户:[{}]", gson.toJson(userservice.findAllUser()));
         return userservice.findAllUser();
+    }
+
+    /**
+     * 查询指定页号的用户列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定页号的用户列表
+     */
+    @GetMapping("/findalluserpaginated")
+    public Page<UserVO> findAllUserPaginated(int pageNo) {
+        log.info("查询第{}页用户列表:[{}]", pageNo, gson.toJson(userservice.findAllUserPaginated(pageNo)));
+        return userservice.findAllUserPaginated(pageNo);
+    }
+
+    /**
+     * 查询总用户数量
+     * 
+     * @return 总用户数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        log.info("查询总用户数量:[{}]", userservice.count());
+        return userservice.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        log.info("查询用户页数:[{}]", userservice.page());
+        return userservice.page();
     }
 
     /**

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +33,9 @@ public class OrganizationController {
     Gson gson = new Gson();
 
     /**
-     * 查找所有组织实体
+     * 查询组织列表
      * 
-     * @return
+     * @return 组织列表
      */
     @GetMapping("/findallorganization")
     public List<OrganizationVO> findAllOrganization() {
@@ -43,11 +44,43 @@ public class OrganizationController {
     }
 
     /**
-     * 用id查找指定组织实体
+     * 查询指定页号的组织列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定页号的组织列表
+     */
+    @GetMapping("/findallorganizationpaginated")
+    public Page<OrganizationVO> findAllOrganizationPaginated(int pageNo) {
+        return organizationservice.findAllOrganizationPaginated(pageNo);
+    }
+
+    /**
+     * 查询总组织数量
+     * 
+     * @return 总组织数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        return organizationservice.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        return organizationservice.page();
+    }
+
+    /**
+     * 用id查找指定组织
      * 
      * @param id
      * 
-     * @return 组织实体
+     * @return 组织
      */
     @GetMapping("/findbyid")
     public OrganizationVO findById(Long id) {
@@ -60,11 +93,11 @@ public class OrganizationController {
     }
 
     /**
-     * 添加单个组织实体
+     * 添加组织
      * 
-     * @param organization 单个组织实体
+     * @param organization 需添加的组织
      * 
-     * @return 添加的组织实体
+     * @return 成功添加的组织
      */
     @PostMapping("/addorganization")
     public OrganizationVO addOrganization(@RequestBody @Validated OrganizationVO organizationvo) {
@@ -73,14 +106,15 @@ public class OrganizationController {
     }
 
     /**
-     * 修改指定组织
+     * 修改组织
      * 
      * @param id           需修改组织的id
-     * @param organization 修改完的组织
-     * @return 成功修改完的组织
+     * @param organization 修改过的组织
+     * @return 成功修改的组织
      */
     @PostMapping("/editorganization/{id}")
-    public OrganizationVO editOrganization(@PathVariable Long id, @RequestBody @Validated OrganizationVO organizationvo) {
+    public OrganizationVO editOrganization(@PathVariable Long id,
+            @RequestBody @Validated OrganizationVO organizationvo) {
         try {
             log.info("修改组织id:[{}],组织:{}", id, gson.toJson(organizationvo));
             return organizationservice.editOrganization(id, organizationvo);
@@ -91,7 +125,7 @@ public class OrganizationController {
     }
 
     /**
-     * 软删组织
+     * 删除组织
      * 
      * @param id 需删除组织的id
      */

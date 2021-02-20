@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -105,5 +106,16 @@ public class OrganizationControllerIntegrationTest {
         this.restTemplate.getForObject("http://localhost:" + port + "/organization/deleteorganization?id={id}",
                 void.class, 1);
         assertSame(organizationservice.findById(1L).getIsdeleted(), 1);
+    }
+    
+    //检查是否可以成功分页
+    @Test
+    @Sql({ "classpath:sql/integration-test-organization.sql" })
+    public void pagination_test() {
+        String res = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findallorganizationpaginated?pageNo={pageNo}",
+                String.class, 1);
+        System.out.println("***");
+        System.out.println(res);
+        System.out.println("***");
     }
 }

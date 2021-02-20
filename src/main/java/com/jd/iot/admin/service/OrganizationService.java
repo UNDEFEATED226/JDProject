@@ -9,7 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,12 +33,18 @@ public class OrganizationService {
      * @return 组织列表
      */
     public List<OrganizationVO> findAllOrganization() {
-        List<Organization> l = new ArrayList<Organization>();
-        organizationrepository.findAll().forEach(l::add);
         List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
-        l.stream().filter(o -> o.getIsdeleted() != 1).map(o -> lv.add(new OrganizationVO(o)))
+        organizationrepository.findAllOrganization().stream().map(o -> lv.add(new OrganizationVO(o)))
                 .collect(Collectors.toList());
         return lv;
+    }
+
+    public Page<OrganizationVO> findAllOrganizationPaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 25);
+        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
+        organizationrepository.findAllOrganizationPaginated(pageable).stream().map(o -> lv.add(new OrganizationVO(o)))
+                .collect(Collectors.toList());
+        return new PageImpl<OrganizationVO>(lv);
     }
 
     /**
@@ -103,5 +115,27 @@ public class OrganizationService {
         Organization organization = new Organization(organizationvo);
         organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
         return new OrganizationVO(organizationrepository.save(organization));
+    }
+
+    /**
+     * 查询总组织数量
+     * 
+     * @return 总组织数量
+     */
+    public long count() {
+        return organizationrepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (organizationrepository.count() % 25 != 0) {
+            return organizationrepository.count() / 25 + 1;
+        } else {
+            return organizationrepository.count() / 25;
+        }
     }
 }

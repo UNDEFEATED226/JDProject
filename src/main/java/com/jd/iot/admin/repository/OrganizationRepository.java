@@ -1,14 +1,24 @@
 package com.jd.iot.admin.repository;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import com.jd.iot.admin.entity.Organization;
+import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 //Repository for 组织
 @Repository
-public interface OrganizationRepository extends CrudRepository<Organization, Long> {
+public interface OrganizationRepository extends JpaRepository<Organization, Long> {
     @Query(value = "SELECT max(id) FROM Organization")
     public Long maxId();
+
+    @Query(value = "SELECT o FROM Organization o WHERE isdeleted=0")
+    public List<Organization> findAllOrganization();
+
+    @Query(value = "SELECT o FROM Organization o WHERE isdeleted=0")
+    public List<Organization> findAllOrganizationPaginated(Pageable pageable);
+
+    @Query(value = "SELECT COUNT(o) FROM Organization o WHERE isdeleted=0")
+    public long count();
 }

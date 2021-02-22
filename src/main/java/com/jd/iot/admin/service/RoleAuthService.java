@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,11 +29,46 @@ public class RoleAuthService {
      * @return 角色权限列表
      */
     public List<RoleAuthVO> findAllRoleAuth() {
-        List<RoleAuth> l = new ArrayList<RoleAuth>();
         List<RoleAuthVO> lv = new ArrayList<RoleAuthVO>();
-        roleauthrepository.findAll().forEach(l::add);
-        l.stream().filter(r -> r.getIsdeleted() != 1).map(r -> lv.add(new RoleAuthVO(r))).collect(Collectors.toList());
+        roleauthrepository.findAllRoleAuth().stream().map(r -> lv.add(new RoleAuthVO(r))).collect(Collectors.toList());
         return lv;
+    }
+
+    /**
+     * 根据页号查询指定角色权限列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定角色权限列表
+     */
+    public Page<RoleAuthVO> findAllRoleAuthPaginated(int pageNo) {
+        List<RoleAuthVO> lv = new ArrayList<RoleAuthVO>();
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        roleauthrepository.findAllRoleAuthPaginated(pageable).stream().map(r -> lv.add(new RoleAuthVO(r)))
+                .collect(Collectors.toList());
+        return new PageImpl<RoleAuthVO>(lv);
+    }
+
+    /**
+     * 查询总角色权限数量
+     * 
+     * @return 总角色权限数量
+     */
+    public long count() {
+        return roleauthrepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (roleauthrepository.count() % 20 != 0) {
+            return roleauthrepository.count() / 20 + 1;
+        } else {
+            return roleauthrepository.count() / 20;
+        }
     }
 
     /**

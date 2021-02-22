@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,39 @@ public class RoleAuthController {
     public List<RoleAuthVO> findAllRoleAuth() {
         log.info("查询角色权限列表:[{}]", gson.toJson(roleauthservice.findAllRoleAuth()));
         return roleauthservice.findAllRoleAuth();
+    }
+
+    /**
+     * 根据页号查询指定角色权限列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定角色权限列表
+     */
+    @GetMapping("/findallroleauthpaginated")
+    public Page<RoleAuthVO> findAllRoleAuthPaginated(int pageNo) {
+        log.info("查询第{}页角色权限列表:[{}]", pageNo, gson.toJson(roleauthservice.findAllRoleAuthPaginated(pageNo)));
+        return roleauthservice.findAllRoleAuthPaginated(pageNo);
+    }
+    
+    /**
+     * 查询总角色权限数量
+     * 
+     * @return 总角色权限数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        return roleauthservice.count();
+    }
+    
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        return roleauthservice.page();
     }
 
     /**

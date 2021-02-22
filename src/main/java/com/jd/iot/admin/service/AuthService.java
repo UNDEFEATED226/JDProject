@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,11 +30,46 @@ public class AuthService {
      * @return 权限列表
      */
     public List<AuthVO> findAllAuth() {
-        List<Auth> l = new ArrayList<Auth>();
         List<AuthVO> lv = new ArrayList<AuthVO>();
-        authrepository.findAll().forEach(l::add);
-        l.stream().filter(a -> a.getIsdeleted() != 1).map(b -> lv.add(new AuthVO(b))).collect(Collectors.toList());
+        authrepository.findAllAuth().stream().map(a -> lv.add(new AuthVO(a))).collect(Collectors.toList());
         return lv;
+    }
+
+    /**
+     * 根据页号查询指定权限列表
+     *
+     * @param pageNo 页号
+     * 
+     * @return 指定权限列表
+     */
+    public Page<AuthVO> findAllAuthPaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        List<AuthVO> lv = new ArrayList<AuthVO>();
+        authrepository.findAllAuthPaginated(pageable).stream().map(a -> lv.add(new AuthVO(a)))
+                .collect(Collectors.toList());
+        return new PageImpl<AuthVO>(lv);
+    }
+
+    /**
+     * 查询总权限刷量
+     * 
+     * @return 总权限数量
+     */
+    public long count() {
+        return authrepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (authrepository.count() % 20 != 0) {
+            return authrepository.count() / 20 + 1;
+        } else {
+            return authrepository.count() / 20;
+        }
     }
 
     /**

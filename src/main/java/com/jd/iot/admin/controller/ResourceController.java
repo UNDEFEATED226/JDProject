@@ -62,6 +62,7 @@ public class ResourceController {
      */
     @GetMapping("/count")
     public long count() {
+        log.info("查询总资源数量:{}", resourceservice.count());
         return resourceservice.count();
     }
 
@@ -72,6 +73,7 @@ public class ResourceController {
      */
     @GetMapping("/page")
     public long page() {
+        log.info("查询总资源页数:{}", resourceservice.page());
         return resourceservice.page();
     }
 

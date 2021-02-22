@@ -14,7 +14,7 @@ public interface RoleRepository extends CrudRepository<Role, Long> {
     @Query(value = "SELECT max(id) FROM Role")
     public Long maxId();
 
-    @Query(value = "SELECT r FROM Role r WHERE isdeleted=0")
+    @Query(value = "SELECT r FROM Role r WHERE isdeleted = 0")
     public List<Role> findAllRole();
 
     @Query(value = "SELECT r FROM Role r WHERE isdeleted=0 AND roletype = :roletype")
@@ -23,7 +23,7 @@ public interface RoleRepository extends CrudRepository<Role, Long> {
     @Query(value = "SELECT r FROM Role r WHERE isdeleted=0 AND roletype = :roletype")
     public List<Role> findAllByRoletypePaginated(@Param(value = "roletype") Long roletype, Pageable pageable);
 
-    @Query(value = "SELECT r FROM Role r WHERE isdeleted=0")
+    @Query(value = "SELECT r FROM Role r WHERE isdeleted = 0")
     public List<Role> findAllRolePaginated(Pageable pageable);
 
     @Query(value = "SELECT COUNT(r) FROM Role r WHERE isdeleted=0")

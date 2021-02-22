@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,34 @@ public class AuthController {
     public List<AuthVO> findAllAuth() {
         log.info("查询权限列表:[{}]", gson.toJson(authservice.findAllAuth()));
         return authservice.findAllAuth();
+    }
+
+    @GetMapping("/findallauthpaginated")
+    public Page<AuthVO> findAllAuth(int pageNo) {
+        log.info("查询第{}页权限列表:[{}]", pageNo, gson.toJson(authservice.findAllAuthPaginated(pageNo)));
+        return authservice.findAllAuthPaginated(pageNo);
+    }
+
+    /**
+     * 查询总权限数量
+     * 
+     * @return 总权限数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        log.info("查询总权限数量:{}", authservice.count());
+        return authservice.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        log.info("查询总权限页数:{}", authservice.page());
+        return authservice.page();
     }
 
     /**

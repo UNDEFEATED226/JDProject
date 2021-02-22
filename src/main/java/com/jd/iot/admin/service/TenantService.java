@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,11 +29,46 @@ public class TenantService {
      * @return 租户列表
      */
     public List<TenantVO> findAllTenant() {
-        List<Tenant> l = new ArrayList<Tenant>();
         List<TenantVO> lv = new ArrayList<TenantVO>();
-        tenantrepository.findAll().forEach(l::add);
-        l.stream().filter(t -> t.getIsdeleted() != 1).map(t -> lv.add(new TenantVO(t))).collect(Collectors.toList());
+        tenantrepository.findAllTenant().stream().map(t -> lv.add(new TenantVO(t))).collect(Collectors.toList());
         return lv;
+    }
+
+    /**
+     * 根据页号查询指定租户列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定租户列表
+     */
+    public Page<TenantVO> findAllTenantPaginated(int pageNo) {
+        List<TenantVO> lv = new ArrayList<TenantVO>();
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        tenantrepository.findAllTenantPaginated(pageable).stream().map(t -> lv.add(new TenantVO(t)))
+                .collect(Collectors.toList());
+        return new PageImpl<TenantVO>(lv);
+    }
+
+    /**
+     * 查询总租户数量
+     * 
+     * @return 总租户数量
+     */
+    public long count() {
+        return tenantrepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (tenantrepository.count() % 20 != 0) {
+            return tenantrepository.count() / 20 + 1;
+        } else {
+            return tenantrepository.count() / 20;
+        }
     }
 
     /**

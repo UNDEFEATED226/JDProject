@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,41 @@ public class TenantController {
         return tenantservice.findAllTenant();
     }
 
+    /**
+     * 根据页号查询指定租户列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定租户列表
+     */
+    @GetMapping("/findalltenantpaginated")
+    public Page<TenantVO> findAllTenantPaginated(int pageNo) {
+        log.info("查询第{}页租户列表:[{}]", pageNo, gson.toJson(tenantservice.findAllTenantPaginated(pageNo)));
+        return tenantservice.findAllTenantPaginated(pageNo);
+    }
+
+    /**
+     * 查询总租户数量
+     * 
+     * @return 总租户数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        log.info("查询总租户数量:{}",gson.toJson(tenantservice.count()));
+        return tenantservice.count();
+    }
+    
+    /**
+     * 查询总租户页数
+     * 
+     * @return 总租户页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        log.info("查询总租户页数:{}",gson.toJson(tenantservice.page()));
+        return tenantservice.page();
+    }
+    
     /**
      * 添加租户
      * 

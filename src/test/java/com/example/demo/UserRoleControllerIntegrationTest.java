@@ -2,7 +2,6 @@ package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-
 import com.jd.iot.admin.IotCoreApplication;
 import com.jd.iot.admin.service.UserRoleService;
 import com.jd.iot.admin.vo.UserRoleVO;

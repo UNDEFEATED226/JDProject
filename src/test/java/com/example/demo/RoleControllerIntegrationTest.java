@@ -101,4 +101,31 @@ public class RoleControllerIntegrationTest {
         this.restTemplate.getForObject("http://localhost:" + port + "/role/deleterole?id={id}", void.class, 1);
         assertSame(roleservice.findById(1L).getIsdeleted(), 1);
     }
+
+    // 检查是否可以成功分页
+    @Test
+    @Sql({ "classpath:sql/integration-test-role.sql" })
+    public void pagination_test() {
+        String res = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/role/findallrolepaginated?pageNo={pageNo}", String.class, 1);
+        System.out.println("***");
+        System.out.println(res);
+        System.out.println("***");
+    }
+
+    // 检查是否可以成功查询角色总数
+    @Test
+    @Sql({ "classpath:sql/integration-test-role.sql" })
+    public void count_test() {
+        Long count = this.restTemplate.getForObject("http://localhost:" + port + "/role/count", long.class);
+        assertEquals(count.longValue(), 2L);
+    }
+
+    // 检查是否可以成功查询总页数
+    @Test
+    @Sql({ "classpath:sql/integration-test-role.sql" })
+    public void page_test() {
+        Long page = this.restTemplate.getForObject("http://localhost:" + port + "/role/page", long.class);
+        assertEquals(page.longValue(), 1L);
+    }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +32,55 @@ public class ResourceController {
     Gson gson = new Gson();
 
     /**
+     * 查询资源列表
+     * 
+     * @return 资源列表
+     */
+    @GetMapping("/findallresource")
+    public List<ResourceVO> findAllResource() {
+        log.info("查找所有资源:{}", gson.toJson(resourceservice.findAllResource()));
+        return resourceservice.findAllResource();
+    }
+
+    /**
+     * 根绝页号查询指定资源列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定资源列表
+     */
+    @GetMapping("/findallresourcepaginated")
+    public Page<ResourceVO> findAllResourcePaginated(int pageNo) {
+        log.info("查询第{}页资源列表:[{}]", pageNo, gson.toJson(resourceservice.findAllResourcePaginated(pageNo)));
+        return resourceservice.findAllResourcePaginated(pageNo);
+    }
+
+    /**
+     * 查询资源总数
+     * 
+     * @return 资源总数
+     */
+    @GetMapping("/count")
+    public long count() {
+        return resourceservice.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        return resourceservice.page();
+    }
+
+    /**
      * 通过id查找指定资源
      * 
      * @param id 需查找资源的id
      * 
-     * @return 资源VO
+     * @return 资源
      */
     @GetMapping("/findbyid")
     public ResourceVO findById(Long id) {
@@ -62,20 +107,9 @@ public class ResourceController {
     }
 
     /**
-     * 查找所有资源实体
+     * 根据资源type id查询资源列表
      * 
-     * @return 所有资源VO
-     */
-    @GetMapping("/findallresource")
-    public List<ResourceVO> findAllResource() {
-        log.info("查找所有资源:{}", gson.toJson(resourceservice.findAllResource()));
-        return resourceservice.findAllResource();
-    }
-
-    /**
-     * 根据资源type id查找不同平台的所有资源
-     * 
-     * @return 指定平台的所有资源
+     * @return 指定type id的资源列表
      */
     @GetMapping("/resourcemenu")
     public List<ResourceVO> resourceMenu(Long resourcetypeid) {
@@ -87,10 +121,9 @@ public class ResourceController {
      * 修改指定资源实体
      * 
      * @param id         需修改资源的id
+     * @param resourcevo 修改过的资源
      * 
-     * @param resourcevo 修改完的资源VO
-     * 
-     * @return 成功修改的资源VO
+     * @return 成功修改的资源
      */
     @PostMapping("/editresource/{id}")
     public ResourceVO editResouce(@PathVariable Long id, @RequestBody @Validated ResourceVO resourcevo) {

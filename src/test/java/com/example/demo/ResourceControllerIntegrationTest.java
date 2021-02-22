@@ -121,4 +121,32 @@ public class ResourceControllerIntegrationTest {
         assertEquals(r1.getId().longValue(), 6L);
         assertEquals(r2.getId().longValue(), 2001L);
     }
+
+    // 检查是否可以成功分页
+    @Test
+    @Sql({ "classpath:sql/integration-test-resource.sql" })
+    public void pagination_test() {
+        String res = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/resource/findallresourcepaginated?pageNo={pageNo}", String.class,
+                1);
+        System.out.println("***");
+        System.out.println(res);
+        System.out.println("***");
+    }
+
+    // 检查是否可以成功查询组织总数
+    @Test
+    @Sql({ "classpath:sql/integration-test-resource.sql" })
+    public void count_test() {
+        Long count = this.restTemplate.getForObject("http://localhost:"+port+"/resource/count", long.class);
+        assertEquals(count.longValue(), 7L);
+    }
+
+    // 检查是否可以成功查询总页数
+    @Test
+    @Sql({ "classpath:sql/integration-test-resource.sql" })
+    public void page_test() {
+        Long page = this.restTemplate.getForObject("http://localhost:"+port+"/resource/page", long.class);   
+        assertEquals(page.longValue(), 1L);
+    }
 }

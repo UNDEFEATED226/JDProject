@@ -107,15 +107,32 @@ public class OrganizationControllerIntegrationTest {
                 void.class, 1);
         assertSame(organizationservice.findById(1L).getIsdeleted(), 1);
     }
-    
-    //检查是否可以成功分页
+
+    // 检查是否可以成功分页
     @Test
     @Sql({ "classpath:sql/integration-test-organization.sql" })
     public void pagination_test() {
-        String res = this.restTemplate.getForObject("http://localhost:" + port + "/organization/findallorganizationpaginated?pageNo={pageNo}",
-                String.class, 1);
+        String res = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/organization/findallorganizationpaginated?pageNo={pageNo}", String.class,
+                1);
         System.out.println("***");
         System.out.println(res);
         System.out.println("***");
+    }
+
+    // 检查是否可以成功查询组织总数
+    @Test
+    @Sql({ "classpath:sql/integration-test-organization.sql" })
+    public void count_test() {
+        Long count = this.restTemplate.getForObject("http://localhost:" + port + "/organization/count", long.class);
+        assertEquals(count.longValue(), 2L);
+    }
+
+    // 检查是否可以成功查询总页数
+    @Test
+    @Sql({ "classpath:sql/integration-test-organization.sql" })
+    public void page_test() {
+        Long page = this.restTemplate.getForObject("http://localhost:" + port + "/organization/page", long.class);
+        assertEquals(page.longValue(), 1L);
     }
 }

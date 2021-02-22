@@ -2,6 +2,7 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Resource;
 import com.jd.iot.admin.repository.ResourceRepository;
+import com.jd.iot.admin.vo.OrganizationVO;
 import com.jd.iot.admin.vo.ResourceVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -10,6 +11,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,17 +34,52 @@ public class ResourceService {
      * @return 资源列表
      */
     public List<ResourceVO> findAllResource() {
-        List<Resource> l = new ArrayList<Resource>();
         List<ResourceVO> lv = new ArrayList<ResourceVO>();
-        resourcerepository.findAll().forEach(l::add);
-        l.stream().filter(r -> r.getIsdeleted() != 1).map(s -> lv.add(new ResourceVO(s))).collect(Collectors.toList());
+        resourcerepository.findAllResource().stream().map(s -> lv.add(new ResourceVO(s))).collect(Collectors.toList());
         return lv;
     }
 
     /**
-     * 根据资源type id查找不同平台的所有资源
+     * 根据页号查询指定资源列表
      * 
-     * @return 指定平台的所有资源
+     * @param pageable 页号
+     * 
+     * @return 指定资源列表
+     */
+    public Page<ResourceVO> findAllResourcePaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        List<ResourceVO> lv = new ArrayList<ResourceVO>();
+        resourcerepository.findAllResourcePaginated(pageable).stream().map(r -> lv.add(new ResourceVO(r)))
+                .collect(Collectors.toList());
+        return new PageImpl<ResourceVO>(lv);
+    }
+
+    /**
+     * 查询总资源数量
+     * 
+     * @return 总资源数量
+     */
+    public long count() {
+        return resourcerepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (resourcerepository.count() % 20 != 0) {
+            return resourcerepository.count() / 20 + 1;
+        } else {
+            return resourcerepository.count() / 20;
+        }
+    }
+
+    /**
+     * 根据资源type id查询资源列表
+     * 
+     * @return 指定type id的资源列表
      */
     public List<ResourceVO> resourceMenu(Long resourcetypeid) {
         List<Resource> l = resourcerepository.findAllByRestypeid(resourcetypeid);
@@ -83,7 +123,7 @@ public class ResourceService {
      * 
      * @param id 需查找资源的id
      * 
-     * @return 资源VO
+     * @return 资源
      */
     public ResourceVO findById(Long id) {
         try {

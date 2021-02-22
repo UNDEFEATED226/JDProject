@@ -105,4 +105,31 @@ public class UserControllerIntegrationTest {
         this.restTemplate.getForObject("http://localhost:" + port + "/user/deleteuser?id={id}", void.class, 107);
         assertSame(userservice.findById(107L).getIsdeleted(), 1);
     }
+
+    // 检查是否可以成功分页
+    @Test
+    @Sql({ "classpath:sql/integration-test-user.sql" })
+    public void pagination_test() {
+        String res = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/user/findalluserpaginated?pageNo={pageNo}", String.class, 1);
+        System.out.println("***");
+        System.out.println(res);
+        System.out.println("***");
+    }
+
+    // 检查是否可以成功查询用户总数
+    @Test
+    @Sql({ "classpath:sql/integration-test-user.sql" })
+    public void count_test() {
+        Long count = this.restTemplate.getForObject("http://localhost:"+port+"/user/count", long.class);
+        assertEquals(count.longValue(), 1L);
+    }
+
+    // 检查是否可以成功查询总页数
+    @Test
+    @Sql({ "classpath:sql/integration-test-user.sql" })
+    public void page_test() {
+        Long page = this.restTemplate.getForObject("http://localhost:"+port+"/user/page", long.class);
+        assertEquals(page.longValue(), 1L);
+    }
 }

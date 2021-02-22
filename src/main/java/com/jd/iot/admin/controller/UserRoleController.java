@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +33,49 @@ public class UserRoleController {
     Gson gson = new Gson();
 
     /**
-     * 返回所有用户角色实体
+     * 查询用户角色列表
      * 
-     * @return
+     * @return 用户角色列表
      */
     @GetMapping("/findalluserrole")
     public List<UserRoleVO> findAllUserRole() {
         log.info("查找所有用户角色:[{}]", gson.toJson(userroleservice.findAllUserRole()));
         return userroleservice.findAllUserRole();
+    }
+
+    /**
+     * 根据页号查询指定用户角色列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定用户角色列表
+     */
+    @GetMapping("/findalluserrolepaginated")
+    public Page<UserRoleVO> findAllUserRolePaginated(int pageNo) {
+        log.info("查询第{}页用户角色列表:[{}]", pageNo, gson.toJson(userroleservice.findAllUserRolePaginated(pageNo)));
+        return userroleservice.findAllUserRolePaginated(pageNo);
+    }
+
+    /**
+     * 查询总用户角色数量
+     * 
+     * @return 总用户角色数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        log.info("查询总用户角色数量:{}", gson.toJson(userroleservice.count()));
+        return userroleservice.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        log.info("查询总页数:{}", gson.toJson(userroleservice.page()));
+        return userroleservice.page();
     }
 
     /**

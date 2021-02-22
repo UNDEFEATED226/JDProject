@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,11 +31,46 @@ public class UserRoleService {
      * @return 用户角色列表
      */
     public List<UserRoleVO> findAllUserRole() {
-        List<UserRole> l = new ArrayList<UserRole>();
         List<UserRoleVO> lv = new ArrayList<UserRoleVO>();
-        userrolerepository.findAll().forEach(l::add);
-        l.stream().filter(u -> u.getIsdeleted() != 1).map(u -> lv.add(new UserRoleVO(u))).collect(Collectors.toList());
+        userrolerepository.findAllUserRole().stream().map(u -> lv.add(new UserRoleVO(u))).collect(Collectors.toList());
         return lv;
+    }
+
+    /**
+     * 根据页号查询指定用户角色列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定用户角色列表
+     */
+    public Page<UserRoleVO> findAllUserRolePaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        List<UserRoleVO> lv = new ArrayList<UserRoleVO>();
+        userrolerepository.findAllUserRolePaginated(pageable).stream().map(u -> lv.add(new UserRoleVO(u)))
+                .collect(Collectors.toList());
+        return new PageImpl<UserRoleVO>(lv);
+    }
+
+    /**
+     * 查询总用户角色数量
+     * 
+     * @return 总用户角色数量
+     */
+    public long count() {
+        return userrolerepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (userrolerepository.count() % 20 != 0) {
+            return userrolerepository.count() / 20 + 1;
+        } else {
+            return userrolerepository.count() / 20;
+        }
     }
 
     /**

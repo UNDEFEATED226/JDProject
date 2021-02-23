@@ -77,6 +77,11 @@ public class RoleController {
 
     }
 
+    @GetMapping("/countbyroletype")
+    public long countByRoletype(Long roletype) {
+        return roleservice.countByRoletype(roletype);
+    }
+
     /**
      * 查询总页数
      * 
@@ -85,6 +90,11 @@ public class RoleController {
     @GetMapping("/page")
     public long page() {
         return roleservice.page();
+    }
+
+    @GetMapping("/pagebyroletype")
+    public long pageByRoletype(Long roletype) {
+        return roleservice.pageByRoletype(roletype);
     }
 
     /**

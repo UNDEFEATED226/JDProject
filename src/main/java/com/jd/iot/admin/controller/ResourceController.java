@@ -67,6 +67,19 @@ public class ResourceController {
     }
 
     /**
+     * 根据res type id查询总资源数量
+     * 
+     * @param restypeid 指定res type id
+     * 
+     * @return 总资源数量
+     */
+    @GetMapping("/countbyrestypeid")
+    public long countByRestype(Long restypeid) {
+        log.info("查询res type id为{}的总资源数量:{}", restypeid, resourceservice.countByRestypeid(restypeid));
+        return resourceservice.countByRestypeid(restypeid);
+    }
+
+    /**
      * 查询总页数
      * 
      * @return 总页数
@@ -75,6 +88,19 @@ public class ResourceController {
     public long page() {
         log.info("查询总资源页数:{}", resourceservice.page());
         return resourceservice.page();
+    }
+
+    /**
+     * 根据指定res type id查询总页数
+     * 
+     * @param restypeid 指定res type id
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/pagebyrestypeid")
+    public long pageByRestypeid(Long restypeid) {
+        log.info("查询res type id为{}的总资源页数:{}", restypeid, resourceservice.pageByRestypeid(restypeid));
+        return resourceservice.pageByRestypeid(restypeid);
     }
 
     /**
@@ -114,9 +140,23 @@ public class ResourceController {
      * @return 指定type id的资源列表
      */
     @GetMapping("/resourcemenu")
-    public List<ResourceVO> resourceMenu(Long resourcetypeid) {
-        log.info("查找所有物管平台资源:{}", gson.toJson(resourceservice.resourceMenu(resourcetypeid)));
-        return resourceservice.resourceMenu(resourcetypeid);
+    public List<ResourceVO> resourceMenu(Long restypeid) {
+        log.info("查找所有物管平台资源:{}", gson.toJson(resourceservice.resourceMenu(restypeid)));
+        return resourceservice.resourceMenu(restypeid);
+    }
+
+    /**
+     * 根据页号和指定res type id查询资源列表
+     * 
+     * @param restypeid 指定res type id
+     * @param pageNo 页号
+     * 
+     * @return 资源列表
+     */
+    @GetMapping("/resourcemenupaginated")
+    public Page<ResourceVO> resourceMenuPaginated(Long restypeid, int pageNo) {
+        log.info("查找第{}页res type id为{}的资源列表:{}", pageNo,restypeid,gson.toJson(resourceservice.resourceMenuPaginated(restypeid, pageNo)));
+        return resourceservice.resourceMenuPaginated(restypeid, pageNo);
     }
 
     /**

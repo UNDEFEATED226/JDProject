@@ -128,4 +128,34 @@ public class RoleControllerIntegrationTest {
         Long page = this.restTemplate.getForObject("http://localhost:" + port + "/role/page", long.class);
         assertEquals(page.longValue(), 1L);
     }
+
+    // 检查指定role type角色列表是否可以成功分页
+    @Test
+    @Sql({ "classpath:sql/integration-test-role.sql" })
+    public void pagination1_test() {
+        String res = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/role/rolemenupaginated?roletype={roletype}&pageNo={pageNo}",
+                String.class, 1L, 1L);
+        System.out.println("***");
+        System.out.println(res);
+        System.out.println("***");
+    }
+
+    // 检查是否可以成功查询指定role type角色总数
+    @Test
+    @Sql({ "classpath:sql/integration-test-role.sql" })
+    public void count1_test() {
+        Long count = this.restTemplate
+                .getForObject("http://localhost:" + port + "/role/countbyroletype?roletype={roletype}", long.class, 1L);
+        assertEquals(count.longValue(), 1L);
+    }
+
+    // 检查是否可以成功查询指定role type总页数
+    @Test
+    @Sql({ "classpath:sql/integration-test-role.sql" })
+    public void page1_test() {
+        Long page = this.restTemplate
+                .getForObject("http://localhost:" + port + "/role/pagebyroletype?roletype={roletype}", long.class, 2L);
+        assertEquals(page.longValue(), 1L);
+    }
 }

@@ -44,7 +44,7 @@ public class RoleService {
      * @return 指定页号的角色列表
      */
     public Page<RoleVO> findAllRolePaginated(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo-1, 20);
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
         List<RoleVO> lv = new ArrayList<RoleVO>();
         rolerepository.findAllRolePaginated(pageable).stream().map(r -> lv.add(new RoleVO(r)))
                 .collect(Collectors.toList());
@@ -69,12 +69,12 @@ public class RoleService {
      * 查询指定角色种类和指定页号的角色列表
      * 
      * @param roletype 指定角色种类
-     * @param pageNo 指定页号
+     * @param pageNo   指定页号
      * 
      * @return 指定角色种类和指定页号的角色列表
      */
     public Page<RoleVO> roleMenuPaginated(Long roletype, int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo-1, 20);
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
         List<RoleVO> lv = new ArrayList<RoleVO>();
         rolerepository.findAllByRoletypePaginated(roletype, pageable).stream().map(r -> lv.add(new RoleVO(r)))
                 .collect(Collectors.toList());
@@ -91,6 +91,17 @@ public class RoleService {
     }
 
     /**
+     * 根据指定role type查询总角色数量
+     * 
+     * @param roletype 指定role type
+     * 
+     * @return 总角色数量
+     */
+    public long countByRoletype(Long roletype) {
+        return rolerepository.countByRoletype(roletype);
+    }
+
+    /**
      * 查询总页数
      * 
      * @return 总页数
@@ -100,6 +111,21 @@ public class RoleService {
             return rolerepository.count() / 20 + 1;
         } else {
             return rolerepository.count() / 20;
+        }
+    }
+
+    /**
+     * 根据role type查询总页数
+     * 
+     * @param roletype 指定role type
+     * 
+     * @return 总页数
+     */
+    public long pageByRoletype(Long roletype) {
+        if (rolerepository.countByRoletype(roletype) % 20 != 0) {
+            return rolerepository.countByRoletype(roletype) / 20 + 1;
+        } else {
+            return rolerepository.countByRoletype(roletype) / 20;
         }
     }
 

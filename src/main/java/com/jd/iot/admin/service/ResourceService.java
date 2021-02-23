@@ -2,7 +2,6 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Resource;
 import com.jd.iot.admin.repository.ResourceRepository;
-import com.jd.iot.admin.vo.OrganizationVO;
 import com.jd.iot.admin.vo.ResourceVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -64,6 +63,17 @@ public class ResourceService {
     }
 
     /**
+     * 根据指定res type id查询总资源数量
+     * 
+     * @param restypeid 指定res type id
+     * 
+     * @return 总资源数量
+     */
+    public long countByRestypeid(Long restypeid) {
+        return resourcerepository.countByRestypeid(restypeid);
+    }
+
+    /**
      * 查询总页数
      * 
      * @return 总页数
@@ -76,17 +86,46 @@ public class ResourceService {
         }
     }
 
+    /**根据指定res type id查询总页数
+     * 
+     * @param restypeid 指定res type id 
+     *  
+     * @return 总页数
+     */
+    public long pageByRestypeid(Long restypeid) {
+        if (resourcerepository.countByRestypeid(restypeid) % 20 != 0) {
+            return resourcerepository.countByRestypeid(restypeid) / 20 + 1;
+        } else {
+            return resourcerepository.countByRestypeid(restypeid) / 20;
+        }
+    }
+
     /**
      * 根据资源type id查询资源列表
      * 
      * @return 指定type id的资源列表
      */
-    public List<ResourceVO> resourceMenu(Long resourcetypeid) {
-        List<Resource> l = resourcerepository.findAllByRestypeid(resourcetypeid);
+    public List<ResourceVO> resourceMenu(Long restypeid) {
         List<ResourceVO> lv = new ArrayList<ResourceVO>();
-        l.stream().filter(r -> r.getIsdeleted() != 1).map(r -> lv.add(new ResourceVO(r))).collect(Collectors.toList());
+        resourcerepository.findAllByRestypeid(restypeid).stream().map(r -> lv.add(new ResourceVO(r)))
+                .collect(Collectors.toList());
         return lv;
+    }
 
+    /**
+     * 根据页号和指定res type id查询资源列表
+     * 
+     * @param restypeid 指定res type id
+     * @param pageNo 页号
+     * 
+     * @return 资源列表
+     */
+    public Page<ResourceVO> resourceMenuPaginated(Long restypeid, int pageNo) {
+        List<ResourceVO> lv = new ArrayList<ResourceVO>();
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        resourcerepository.findAllByRestypeidPaginated(restypeid, pageable).stream().map(r -> lv.add(new ResourceVO(r)))
+                .collect(Collectors.toList());
+        return new PageImpl<ResourceVO>(lv);
     }
 
     /**

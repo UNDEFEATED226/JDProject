@@ -123,8 +123,7 @@ public class ResourceControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-resource.sql" })
     public void pagination_test() {
         String res = this.restTemplate.getForObject(
-                "http://localhost:" + port + "/resource/findallresourcepaginated?pageNo={pageNo}", String.class,
-                1);
+                "http://localhost:" + port + "/resource/findallresourcepaginated?pageNo={pageNo}", String.class, 1);
         System.out.println("***");
         System.out.println(res);
         System.out.println("***");
@@ -134,7 +133,7 @@ public class ResourceControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-resource.sql" })
     public void count_test() {
-        Long count = this.restTemplate.getForObject("http://localhost:"+port+"/resource/count", long.class);
+        Long count = this.restTemplate.getForObject("http://localhost:" + port + "/resource/count", long.class);
         assertEquals(count.longValue(), 7L);
     }
 
@@ -142,7 +141,37 @@ public class ResourceControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-resource.sql" })
     public void page_test() {
-        Long page = this.restTemplate.getForObject("http://localhost:"+port+"/resource/page", long.class);   
+        Long page = this.restTemplate.getForObject("http://localhost:" + port + "/resource/page", long.class);
+        assertEquals(page.longValue(), 1L);
+    }
+
+    // 检查指定res type id资源列表是否可以成功分页
+    @Test
+    @Sql({ "classpath:sql/integration-test-resource.sql" })
+    public void pagination1_test() {
+        String res = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/resource/resourcemenupaginated?restypeid={restypeid}&pageNo={pageNo}",
+                String.class, 2L, 1L);
+        System.out.println("***");
+        System.out.println(res);
+        System.out.println("***");
+    }
+
+    // 检查是否可以成功查询指定res type id组织总数
+    @Test
+    @Sql({ "classpath:sql/integration-test-resource.sql" })
+    public void count1_test() {
+        Long count = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/resource/countbyrestypeid?restypeid={restypeid}", long.class, 1L);
+        assertEquals(count.longValue(), 3L);
+    }
+
+    // 检查是否可以成功查询指定res type id总页数
+    @Test
+    @Sql({ "classpath:sql/integration-test-resource.sql" })
+    public void page1_test() {
+        Long page = this.restTemplate.getForObject(
+                "http://localhost:" + port + "/resource/pagebyrestypeid?restypeid={restypeid}", long.class, 2L);
         assertEquals(page.longValue(), 1L);
     }
 }

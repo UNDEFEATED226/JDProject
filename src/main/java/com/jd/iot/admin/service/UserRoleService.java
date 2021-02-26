@@ -1,14 +1,14 @@
 package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.UserRole;
+import com.jd.iot.admin.repository.RoleRepository;
+import com.jd.iot.admin.repository.UserRepository;
 import com.jd.iot.admin.repository.UserRoleRepository;
 import com.jd.iot.admin.vo.UserRoleVO;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +25,68 @@ public class UserRoleService {
     @Autowired
     UserRoleRepository userrolerepository;
 
+    @Autowired
+    RoleRepository rolerepository;
+
+    @Autowired
+    UserRepository userrepository;
+
+    /**
+     * 添加用户角色
+     * 
+     * @param role 需添加的用户角色
+     * 
+     * @return 成功添加的用户角色
+     */
+    public UserRoleVO addUserRole(UserRoleVO userrolevo) {
+        UserRole userrole = new UserRole(userrolevo);
+        userrole.setCreatetime(new Timestamp(System.currentTimeMillis()));
+        userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        return new UserRoleVO(userrolerepository.save(userrole));
+    }
+
+    /**
+     * 删除用户角色
+     * 
+     * @param id 需删除用户角色的id
+     */
+    public void deleteUserRole(Long id) {
+        try {
+            UserRole userrole = userrolerepository.findById(id).get();
+            userrole.setIsdeleted(1);
+            userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            userrolerepository.save(userrole);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
+        }
+    }
+
+    /**
+     * 通过id查找指定用户角色
+     * 
+     * @param id 需查找用户角色的id
+     * 
+     * @return 指定用户角色
+     */
+    public UserRoleVO findById(Long id) {
+        try {
+            UserRoleVO u = new UserRoleVO(userrolerepository.findById(id).get());
+            try {
+                u.setRolename(rolerepository.getRolename(u.getRoleid()));
+            } catch (Exception e) {
+                u.setRolename("角色不存在或已删除");
+            }
+            try {
+                u.setUsername(userrepository.getUsername(u.getUserid()));
+            } catch (Exception e) {
+                u.setUsername("用户不存在或已删除");
+            }
+            return u;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
+        }
+    }
+
     /**
      * 查询用户角色列表
      * 
@@ -32,7 +94,20 @@ public class UserRoleService {
      */
     public List<UserRoleVO> findAllUserRole() {
         List<UserRoleVO> lv = new ArrayList<UserRoleVO>();
-        userrolerepository.findAllUserRole().stream().map(u -> lv.add(new UserRoleVO(u))).collect(Collectors.toList());
+        userrolerepository.findAllUserRole().stream().forEach(u -> {
+            UserRoleVO ur = new UserRoleVO(u);
+            try {
+                ur.setRolename(rolerepository.getRolename(ur.getRoleid()));
+            } catch (Exception e) {
+                ur.setRolename("角色不存在或已删除");
+            }
+            try {
+                ur.setUsername(userrepository.getUsername(ur.getUserid()));
+            } catch (Exception e) {
+                ur.setUsername("用户不存在或已删除");
+            }
+            lv.add(ur);
+        });
         return lv;
     }
 
@@ -46,8 +121,20 @@ public class UserRoleService {
     public Page<UserRoleVO> findAllUserRolePaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
         List<UserRoleVO> lv = new ArrayList<UserRoleVO>();
-        userrolerepository.findAllUserRolePaginated(pageable).stream().map(u -> lv.add(new UserRoleVO(u)))
-                .collect(Collectors.toList());
+        userrolerepository.findAllUserRolePaginated(pageable).stream().forEach(u -> {
+            UserRoleVO ur = new UserRoleVO(u);
+            try {
+                ur.setRolename(rolerepository.getRolename(ur.getRoleid()));
+            } catch (Exception e) {
+                ur.setRolename("角色不存在或已删除");
+            }
+            try {
+                ur.setUsername(userrepository.getUsername(ur.getUserid()));
+            } catch (Exception e) {
+                ur.setUsername("用户不存在或已删除");
+            }
+            lv.add(ur);
+        });
         return new PageImpl<UserRoleVO>(lv);
     }
 
@@ -70,57 +157,6 @@ public class UserRoleService {
             return userrolerepository.count() / 20 + 1;
         } else {
             return userrolerepository.count() / 20;
-        }
-    }
-
-    /**
-     * 添加用户角色
-     * 
-     * @param role 需添加的用户角色
-     * 
-     * @return 成功添加的用户角色
-     */
-    public UserRoleVO addUserRole(UserRoleVO userrolevo) {
-        UserRole userrole = new UserRole(userrolevo);
-        Long max = userrolerepository.maxId();
-        if (max == null) {
-            userrole.setId(1L);
-        } else {
-            userrole.setId(max + 1);
-        }
-        userrole.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return new UserRoleVO(userrolerepository.save(userrole));
-    }
-
-    /**
-     * 通过id查找指定用户角色
-     * 
-     * @param id 需查找用户角色的id
-     * 
-     * @return 指定用户角色
-     */
-    public UserRoleVO findById(Long id) {
-        try {
-            return new UserRoleVO(userrolerepository.findById(id).get());
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
-        }
-    }
-
-    /**
-     * 删除用户角色
-     * 
-     * @param id 需删除用户角色的id
-     */
-    public void deleteUserRole(Long id) {
-        try {
-            UserRole userrole = userrolerepository.findById(id).get();
-            userrole.setIsdeleted(1);
-            userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-            userrolerepository.save(userrole);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
         }
     }
 }

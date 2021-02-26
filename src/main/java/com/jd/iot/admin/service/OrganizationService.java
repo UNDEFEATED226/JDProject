@@ -2,6 +2,7 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Organization;
 import com.jd.iot.admin.repository.OrganizationRepository;
+import com.jd.iot.admin.repository.TenantRepository;
 import com.jd.iot.admin.vo.OrganizationVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -23,31 +24,21 @@ public class OrganizationService {
     @Autowired
     OrganizationRepository organizationrepository;
 
-    /**
-     * 查询组织列表
-     * 
-     * @return 组织列表
-     */
-    public List<OrganizationVO> findAllOrganization() {
-        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
-        organizationrepository.findAllOrganization().stream().map(o -> lv.add(new OrganizationVO(o)))
-                .collect(Collectors.toList());
-        return lv;
-    }
+    @Autowired
+    TenantRepository tenantrepository;
 
     /**
-     * 查询指定页号的组织列表
+     * 添加组织
      * 
-     * @param pageNo 页号
+     * @param 需添加的组织
      * 
-     * @return 指定页号的组织列表
+     * @return 成功添加的组织
      */
-    public Page<OrganizationVO> findAllOrganizationPaginated(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
-        organizationrepository.findAllOrganizationPaginated(pageable).stream().map(o -> lv.add(new OrganizationVO(o)))
-                .collect(Collectors.toList());
-        return new PageImpl<OrganizationVO>(lv);
+    public OrganizationVO addOrganization(OrganizationVO organizationvo) {
+        Organization organization = new Organization(organizationvo);
+        organization.setCreatetime(new Timestamp(System.currentTimeMillis()));
+        organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        return new OrganizationVO(organizationrepository.save(organization));
     }
 
     /**
@@ -63,41 +54,6 @@ public class OrganizationService {
             organizationrepository.save(organization);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, " ORGANIZATION NOT FOUND");
-        }
-    }
-
-    /**
-     * 添加组织
-     * 
-     * @param 需添加的组织
-     * 
-     * @return 成功添加的组织
-     */
-    public OrganizationVO addOrganization(OrganizationVO organizationvo) {
-        Organization organization = new Organization(organizationvo);
-        Long id = organizationrepository.maxId();
-        if (id == null) {
-            organization.setId(1L);
-        } else {
-            organization.setId(id + 1);
-        }
-        organization.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return new OrganizationVO(organizationrepository.save(organization));
-    }
-
-    /**
-     * 通过id查找指定组织
-     * 
-     * @param id 需查找组织的id
-     * 
-     * @return 指定组织实体
-     */
-    public OrganizationVO findById(Long id) {
-        try {
-            return new OrganizationVO(organizationrepository.findById(id).get());
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
         }
     }
 
@@ -121,6 +77,68 @@ public class OrganizationService {
     }
 
     /**
+     * 通过id查找指定组织
+     * 
+     * @param id 需查找组织的id
+     * 
+     * @return 指定组织实体
+     */
+    public OrganizationVO findById(Long id) {
+        try {
+            OrganizationVO o = new OrganizationVO(organizationrepository.findById(id).get());
+            try {
+                o.setTenantname(tenantrepository.getTenantname(Long.parseLong(o.getTenantid())));
+            }catch(Exception e) {
+                o.setTenantname(null);
+            }
+            return o;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
+        }
+    }
+
+    /**
+     * 查询组织列表
+     * 
+     * @return 组织列表
+     */
+    public List<OrganizationVO> findAllOrganization() {
+        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
+        organizationrepository.findAllOrganization().stream().forEach(o -> {
+            OrganizationVO ov = new OrganizationVO(o);
+            try {
+                ov.setTenantname(tenantrepository.getTenantname(Long.parseLong(ov.getTenantid())));
+            } catch (Exception e) {
+                ov.setTenantname("租户不存在或已删除");
+            }
+            lv.add(ov);
+        });
+        return lv;
+    }
+
+    /**
+     * 查询指定页号的组织列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定页号的组织列表
+     */
+    public Page<OrganizationVO> findAllOrganizationPaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
+        organizationrepository.findAllOrganizationPaginated(pageable).stream().forEach(o -> {
+            OrganizationVO ov = new OrganizationVO(o);
+            try {
+                ov.setTenantname(tenantrepository.getTenantname(Long.parseLong(ov.getTenantid())));
+            } catch (Exception e) {
+                ov.setTenantname("租户不存在或已删除");
+            }
+            lv.add(ov);
+        });
+        return new PageImpl<OrganizationVO>(lv);
+    }
+
+    /**
      * 查询总组织数量
      * 
      * @return 总组织数量
@@ -137,7 +155,7 @@ public class OrganizationService {
     public long page() {
         if (organizationrepository.count() % 20 != 0) {
             return organizationrepository.count() / 20 + 1;
-        }else {
+        } else {
             return organizationrepository.count() / 20;
         }
     }

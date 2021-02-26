@@ -1,6 +1,7 @@
 package com.jd.iot.admin.controller;
 
 import com.jd.iot.admin.service.RoleAuthService;
+import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleAuthVO;
 import java.util.List;
 import org.slf4j.Logger;
@@ -52,7 +53,19 @@ public class RoleAuthController {
         log.info("查询第{}页角色权限列表:[{}]", pageNo, gson.toJson(roleauthservice.findAllRoleAuthPaginated(pageNo)));
         return roleauthservice.findAllRoleAuthPaginated(pageNo);
     }
-    
+
+    /**
+     * 根据指定role id查询权限列表
+     * 
+     * @param roleid 指定role id
+     * 
+     * @return 权限列表
+     */
+    @GetMapping("/findbyroleid")
+    public List<RoleAuthVO> findByRoleid(Long roleid) {
+        return roleauthservice.findByRoleid(roleid);
+    }
+
     /**
      * 查询总角色权限数量
      * 
@@ -62,7 +75,7 @@ public class RoleAuthController {
     public long count() {
         return roleauthservice.count();
     }
-    
+
     /**
      * 查询总页数
      * 

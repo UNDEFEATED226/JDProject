@@ -23,6 +23,8 @@ public class TenantVO {
 
     @Digits(integer = 11, fraction = 0)
     private Long adminuserid;
+    
+    private String adminname;
 
     public TenantVO() {
 
@@ -92,5 +94,13 @@ public class TenantVO {
 
     public void setAdminuserid(Long adminuserid) {
         this.adminuserid = adminuserid;
+    }
+
+    public String getAdminname() {
+        return adminname;
+    }
+
+    public void setAdminname(String adminname) {
+        this.adminname = adminname;
     }
 }

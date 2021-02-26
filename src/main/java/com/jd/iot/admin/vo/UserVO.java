@@ -2,6 +2,8 @@ package com.jd.iot.admin.vo;
 
 import com.jd.iot.admin.entity.User;
 import java.sql.Timestamp;
+
+import javax.persistence.Column;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -13,8 +15,8 @@ public class UserVO {
 
     private String userid;
 
-    @NotNull
     @Size(min = 1, max = 64)
+    @Column(name = "login_name", nullable = false)
     private String loginname;
 
     @NotNull
@@ -27,14 +29,14 @@ public class UserVO {
     @Size(max = 256)
     private String orgid;
 
-    @Digits(integer = 4, fraction = 0)
+    private String orgname;
+
     private Integer isdeleted;
 
     @Size(max = 64)
     @Email
     private String email;
 
-    @Digits(integer = 4, fraction = 0)
     private Integer sex;
 
     @Size(max = 256)
@@ -135,6 +137,14 @@ public class UserVO {
 
     public void setOrgid(String orgid) {
         this.orgid = orgid;
+    }
+
+    public String getOrgname() {
+        return orgname;
+    }
+
+    public void setOrgname(String orgname) {
+        this.orgname = orgname;
     }
 
     public Integer getIsdeleted() {

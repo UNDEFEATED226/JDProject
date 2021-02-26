@@ -4,6 +4,8 @@ import com.jd.iot.admin.vo.UserVO;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
@@ -16,9 +18,9 @@ import javax.validation.constraints.Size;
 @Table(name = "iot_hub_rbac_user")
 public class User {
 
-    @NotNull
     @Id
     @Digits(integer = 11, fraction = 0)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(max = 64)
@@ -89,9 +91,9 @@ public class User {
     private String mobile;
 
     public User() {
-        
+
     }
-    
+
     public User(UserVO uservo) {
         this.id = uservo.getId();
         this.userid = uservo.getUserid();

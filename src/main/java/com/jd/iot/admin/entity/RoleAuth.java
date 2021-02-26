@@ -1,9 +1,10 @@
 package com.jd.iot.admin.entity;
 
 import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
@@ -16,8 +17,8 @@ import com.jd.iot.admin.vo.RoleAuthVO;
 public class RoleAuth {
 
     @Id
-    @NotNull
     @Digits(integer = 11, fraction = 0)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "role_id")

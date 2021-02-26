@@ -1,8 +1,7 @@
 package com.jd.iot.admin.vo;
 
-import java.sql.Timestamp;
-
 import com.jd.iot.admin.entity.UserRole;
+import java.sql.Timestamp;
 
 public class UserRoleVO {
 
@@ -11,6 +10,10 @@ public class UserRoleVO {
     private Long userid;
 
     private Long roleid;
+
+    private String username;
+    
+    private String rolename;
 
     private Integer isdeleted;
 
@@ -29,6 +32,14 @@ public class UserRoleVO {
         isdeleted = userrole.getIsdeleted();
         createtime = userrole.getCreatetime();
         updatetime = userrole.getUpdatetime();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getId() {
@@ -53,6 +64,15 @@ public class UserRoleVO {
 
     public void setRoleid(Long roleid) {
         this.roleid = roleid;
+    }
+
+    
+    public String getRolename() {
+        return rolename;
+    }
+
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
     }
 
     public Integer getIsdeleted() {

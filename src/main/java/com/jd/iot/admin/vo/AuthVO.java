@@ -14,6 +14,8 @@ public class AuthVO {
     private String description;
 
     private Long resid;
+    
+    private String resname;
 
     private Integer isdeleted;
 
@@ -41,6 +43,14 @@ public class AuthVO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getResname() {
+        return resname;
+    }
+
+    public void setResname(String resname) {
+        this.resname = resname;
     }
 
     public String getAuthname() {

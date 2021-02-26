@@ -32,6 +32,8 @@ public class OrganizationVO {
 
     @Size(max = 64)
     private String tenantid;
+    
+    private String tenantname;
 
     private Timestamp updatetime;
 
@@ -134,6 +136,14 @@ public class OrganizationVO {
 
     public void setTenantid(String tenantid) {
         this.tenantid = tenantid;
+    }
+
+    public String getTenantname() {
+        return tenantname;
+    }
+
+    public void setTenantname(String tenantname) {
+        this.tenantname = tenantname;
     }
 
     public Timestamp getUpdatetime() {

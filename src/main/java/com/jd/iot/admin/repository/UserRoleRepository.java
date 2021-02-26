@@ -10,9 +10,6 @@ import org.springframework.stereotype.Repository;
 //Repository for 用户角色
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
-    @Query(value = "SELECT max(id) FROM UserRole")
-    public Long maxId();
-
     @Query(value = "SELECT u FROM UserRole u WHERE isdeleted = 0")
     public List<UserRole> findAllUserRole();
 

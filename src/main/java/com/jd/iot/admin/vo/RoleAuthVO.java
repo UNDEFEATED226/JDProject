@@ -2,20 +2,19 @@ package com.jd.iot.admin.vo;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-
 import com.jd.iot.admin.entity.RoleAuth;
 
 public class RoleAuthVO {
 
     private Long id;
-    
+
     private Long roleid;
 
+    private String rolename;
+
     private Long authid;
+
+    private String authname;
 
     private Integer isdeleted;
 
@@ -82,5 +81,21 @@ public class RoleAuthVO {
 
     public void setUpdatetime(Timestamp updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getRolename() {
+        return rolename;
+    }
+
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
+    }
+
+    public String getAuthname() {
+        return authname;
+    }
+
+    public void setAuthname(String authname) {
+        this.authname = authname;
     }
 }

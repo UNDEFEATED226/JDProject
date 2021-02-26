@@ -40,6 +40,11 @@ public class AuthController {
         return authservice.findAllAuth();
     }
 
+    @GetMapping("/findallauthorderbyresid")
+    public List<AuthVO> findAllAuthOrderbyResid() {
+        return authservice.findAllAuthOrderbyResid();
+    }
+
     @GetMapping("/findallauthpaginated")
     public Page<AuthVO> findAllAuth(int pageNo) {
         log.info("查询第{}页权限列表:[{}]", pageNo, gson.toJson(authservice.findAllAuthPaginated(pageNo)));

@@ -1,14 +1,9 @@
 package com.jd.iot.admin.vo;
 
-import java.sql.Timestamp;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import com.jd.iot.admin.entity.Role;
+import java.sql.Timestamp;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 
 public class RoleVO {
 

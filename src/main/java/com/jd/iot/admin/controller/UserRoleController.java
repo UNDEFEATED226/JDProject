@@ -1,10 +1,8 @@
 package com.jd.iot.admin.controller;
 
 import com.google.gson.Gson;
-import com.jd.iot.admin.entity.UserRole;
 import com.jd.iot.admin.service.UserRoleService;
 import com.jd.iot.admin.vo.UserRoleVO;
-
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

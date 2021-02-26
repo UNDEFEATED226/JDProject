@@ -11,12 +11,9 @@ import org.springframework.stereotype.Repository;
 //Repository for 角色
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    @Query(value = "SELECT max(id) FROM Role")
-    public Long maxId();
-
     @Query(value = "SELECT r FROM Role r WHERE isdeleted = 0")
     public List<Role> findAllRole();
-    
+
     @Query(value = "SELECT r FROM Role r WHERE isdeleted = 0")
     public List<Role> findAllRolePaginated(Pageable pageable);
 
@@ -28,7 +25,10 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query(value = "SELECT COUNT(r) FROM Role r WHERE isdeleted=0")
     public long count();
-    
+
     @Query(value = "SELECT COUNT(r) FROM Role r WHERE isdeleted=0 AND roletype = :roletype")
-    public long countByRoletype(@Param(value="roletype") Long roletype);
+    public long countByRoletype(@Param(value = "roletype") Long roletype);
+
+    @Query(value = "SELECT r.rolename FROM Role r WHERE isdeleted=0 AND id = :id")
+    public String getRolename(@Param(value = "id") Long id);
 }

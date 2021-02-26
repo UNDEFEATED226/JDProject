@@ -1,13 +1,13 @@
 package com.jd.iot.admin.entity;
 
 import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.jd.iot.admin.vo.RoleVO;
@@ -17,8 +17,8 @@ import com.jd.iot.admin.vo.RoleVO;
 public class Role {
 
     @Id
-    @NotNull
     @Digits(integer = 11, fraction = 0)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(max = 64)
@@ -71,7 +71,7 @@ public class Role {
         roletype = rolevo.getRoletype();
         description = rolevo.getDescription();
         tenantid = rolevo.getTenantid();
-        isdeleted=rolevo.getIsdeleted();
+        isdeleted = rolevo.getIsdeleted();
         issystem = rolevo.getIssystem();
         createtime = rolevo.getCreatetime();
         updatetime = rolevo.getUpdatetime();

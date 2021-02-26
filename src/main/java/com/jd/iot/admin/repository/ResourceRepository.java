@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 //Repository for 资源
 @Repository
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
-
     @Query(value = "SELECT max(id) FROM Resource WHERE restypeid IN (1,2)")
     public Long maxId1();
 
@@ -35,4 +34,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
     @Query(value = "SELECT COUNT(r) FROM Resource r WHERE isdeleted = 0 AND restypeid = :restypeid")
     public long countByRestypeid(@Param(value = "restypeid") Long restypeid);
+
+    @Query(value = "SELECT r.resname FROM Resource r WHERE isdeleted = 0 AND id = :id")
+    public String getResname(@Param(value = "id") Long id);
 }

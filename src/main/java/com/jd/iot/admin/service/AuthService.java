@@ -2,12 +2,12 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Auth;
 import com.jd.iot.admin.repository.AuthRepository;
+import com.jd.iot.admin.repository.ResourceRepository;
 import com.jd.iot.admin.vo.AuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,60 +17,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 授权
+//Service for 权限
 @Service
 public class AuthService {
 
     @Autowired
     AuthRepository authrepository;
 
-    /**
-     * 查询权限列表
-     * 
-     * @return 权限列表
-     */
-    public List<AuthVO> findAllAuth() {
-        List<AuthVO> lv = new ArrayList<AuthVO>();
-        authrepository.findAllAuth().stream().map(a -> lv.add(new AuthVO(a))).collect(Collectors.toList());
-        return lv;
-    }
-
-    /**
-     * 根据页号查询指定权限列表
-     *
-     * @param pageNo 页号
-     * 
-     * @return 指定权限列表
-     */
-    public Page<AuthVO> findAllAuthPaginated(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<AuthVO> lv = new ArrayList<AuthVO>();
-        authrepository.findAllAuthPaginated(pageable).stream().map(a -> lv.add(new AuthVO(a)))
-                .collect(Collectors.toList());
-        return new PageImpl<AuthVO>(lv);
-    }
-
-    /**
-     * 查询总权限刷量
-     * 
-     * @return 总权限数量
-     */
-    public long count() {
-        return authrepository.count();
-    }
-
-    /**
-     * 查询总页数
-     * 
-     * @return 总页数
-     */
-    public long page() {
-        if (authrepository.count() % 20 != 0) {
-            return authrepository.count() / 20 + 1;
-        } else {
-            return authrepository.count() / 20;
-        }
-    }
+    @Autowired
+    ResourceRepository resourcerepository;
 
     /**
      * 添加权限
@@ -81,12 +36,6 @@ public class AuthService {
      */
     public AuthVO addAuth(AuthVO authvo) {
         Auth auth = new Auth(authvo);
-        Long max = authrepository.maxId();
-        if (max.equals(null)) {
-            auth.setId(1L);
-        } else {
-            auth.setId(max + 1);
-        }
         auth.setCreatetime(new Timestamp(System.currentTimeMillis()));
         auth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
         return new AuthVO(authrepository.save(auth));
@@ -136,9 +85,97 @@ public class AuthService {
      */
     public AuthVO findById(Long id) {
         try {
-            return new AuthVO(authrepository.findById(id).get());
+            AuthVO av = new AuthVO(authrepository.findById(id).get());
+            try {
+                av.setResname(resourcerepository.getResname(av.getResid()));
+            } catch (Exception e) {
+                av.setResname("资源不存在或已删除");
+            }
+            return av;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AUTH NOT FOUND");
+        }
+    }
+
+    /**
+     * 查询权限列表
+     * 
+     * @return 权限列表
+     */
+    public List<AuthVO> findAllAuth() {
+        List<AuthVO> lv = new ArrayList<AuthVO>();
+        authrepository.findAllAuth().stream().forEach(a -> {
+            AuthVO av = new AuthVO(a);
+            try {
+                av.setResname(resourcerepository.getResname(av.getResid()));
+            } catch (Exception e) {
+                av.setResname("资源不存在或已删除");
+            }
+            lv.add(av);
+        });
+        return lv;
+    }
+
+    /**
+     * 查询权限列表并以res id排序
+     * 
+     * @return 以res id排序的权限列表
+     */
+    public List<AuthVO> findAllAuthOrderbyResid() {
+        List<AuthVO> lv = new ArrayList<AuthVO>();
+        authrepository.findAllAuthOrderbyResid().stream().forEach(a -> {
+            AuthVO av = new AuthVO(a);
+            try {
+                av.setResname(resourcerepository.getResname(av.getResid()));
+            } catch (Exception e) {
+                av.setResname("资源不存在或已删除");
+            }
+            lv.add(av);
+        });
+        return lv;
+    }
+
+    /**
+     * 根据页号查询指定权限列表
+     *
+     * @param pageNo 页号
+     * 
+     * @return 指定权限列表
+     */
+    public Page<AuthVO> findAllAuthPaginated(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 20);
+        List<AuthVO> lv = new ArrayList<AuthVO>();
+        authrepository.findAllAuthPaginated(pageable).stream().forEach(a -> {
+            AuthVO av = new AuthVO(a);
+            try {
+                av.setResname(resourcerepository.getResname(av.getResid()));
+            } catch (Exception e) {
+                av.setResname("资源不存在或已删除");
+            }
+            lv.add(av);
+        });
+        return new PageImpl<AuthVO>(lv);
+    }
+
+    /**
+     * 查询总权限刷量
+     * 
+     * @return 总权限数量
+     */
+    public long count() {
+        return authrepository.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    public long page() {
+        if (authrepository.count() % 20 != 0) {
+            return authrepository.count() / 20 + 1;
+        } else {
+            return authrepository.count() / 20;
         }
     }
 }

@@ -87,9 +87,14 @@ public class OrganizationService {
         try {
             OrganizationVO o = new OrganizationVO(organizationrepository.findById(id).get());
             try {
-                o.setTenantname(tenantrepository.getTenantname(Long.parseLong(o.getTenantid())));
-            }catch(Exception e) {
-                o.setTenantname(null);
+                String r = tenantrepository.getTenantname(Long.parseLong(o.getTenantid()));
+                if (r == null) {
+                    o.setTenantname("租户不存在或已删除");
+                } else {
+                    o.setTenantname(r);
+                }
+            } catch (Exception e) {
+                o.setTenantname("租户不存在或已删除");
             }
             return o;
         } catch (Exception e) {
@@ -107,7 +112,12 @@ public class OrganizationService {
         organizationrepository.findAllOrganization().stream().forEach(o -> {
             OrganizationVO ov = new OrganizationVO(o);
             try {
-                ov.setTenantname(tenantrepository.getTenantname(Long.parseLong(ov.getTenantid())));
+                String r = tenantrepository.getTenantname(Long.parseLong(o.getTenantid()));
+                if (r == null) {
+                    ov.setTenantname("租户不存在或已删除");
+                } else {
+                    ov.setTenantname(r);
+                }
             } catch (Exception e) {
                 ov.setTenantname("租户不存在或已删除");
             }
@@ -129,7 +139,12 @@ public class OrganizationService {
         organizationrepository.findAllOrganizationPaginated(pageable).stream().forEach(o -> {
             OrganizationVO ov = new OrganizationVO(o);
             try {
-                ov.setTenantname(tenantrepository.getTenantname(Long.parseLong(ov.getTenantid())));
+                String r = tenantrepository.getTenantname(Long.parseLong(o.getTenantid()));
+                if (r == null) {
+                    ov.setTenantname("租户不存在或已删除");
+                } else {
+                    ov.setTenantname(r);
+                }
             } catch (Exception e) {
                 ov.setTenantname("租户不存在或已删除");
             }

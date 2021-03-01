@@ -124,9 +124,14 @@ public class UserService {
         try {
             UserVO u = new UserVO(userrepository.findById(id).get());
             try {
-                u.setOrgname(organizationrepository.getOrgname(Long.parseLong(u.getOrgid())));
+                String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
+                if( r == null) {
+                    u.setOrgname("公司不存在或已删除");
+                }else {
+                    u.setOrgname(r);
+                }
             } catch (Exception e) {
-                u.setOrgname(null);
+                u.setOrgname("公司不存在或已删除");
             }
             return u;
         } catch (Exception e) {
@@ -161,7 +166,12 @@ public class UserService {
         userrepository.findAllUser().stream().forEach(u -> {
             UserVO uv = new UserVO(u);
             try {
-                uv.setOrgname(organizationrepository.getOrgname(Long.parseLong(uv.getOrgid())));
+                String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
+                if( r == null) {
+                    uv.setOrgname("公司不存在或已删除");
+                }else {
+                    uv.setOrgname(r);
+                }
             } catch (Exception e) {
                 uv.setOrgname(null);
             }
@@ -183,7 +193,12 @@ public class UserService {
         userrepository.findAllUserPaginated(pageable).stream().forEach(u -> {
             UserVO uv = new UserVO(u);
             try {
-                uv.setOrgname(organizationrepository.getOrgname(Long.parseLong(uv.getOrgid())));
+                String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
+                if( r == null) {
+                    uv.setOrgname("公司不存在或已删除");
+                }else {
+                    uv.setOrgname(r);
+                }
             } catch (Exception e) {
                 uv.setOrgname(null);
             }

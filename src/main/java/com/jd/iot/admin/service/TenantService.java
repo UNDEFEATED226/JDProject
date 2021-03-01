@@ -87,9 +87,14 @@ public class TenantService {
         try {
             TenantVO t = new TenantVO(tenantrepository.findById(id).get());
             try {
-                t.setAdminname(userrepository.getUsername(t.getAdminuserid()));
+                String r = userrepository.getUsername(t.getAdminuserid());
+                if (r == null) {
+                    t.setAdminname("租户管理员用户不存在或已删除");
+                } else {
+                    t.setAdminname(r);
+                }
             } catch (Exception e) {
-                t.setAdminname(null);
+                t.setAdminname("租户管理员用户不存在或已删除");
             }
             return t;
         } catch (Exception e) {
@@ -107,9 +112,14 @@ public class TenantService {
         tenantrepository.findAllTenant().stream().forEach(t -> {
             TenantVO tv = new TenantVO(t);
             try {
-                tv.setAdminname(userrepository.getUsername(tv.getAdminuserid()));
+                String r = userrepository.getUsername(t.getAdminuserid());
+                if (r == null) {
+                    tv.setAdminname("租户管理员用户不存在或已删除");
+                } else {
+                    tv.setAdminname(r);
+                }
             } catch (Exception e) {
-                tv.setAdminname(null);
+                tv.setAdminname("租户管理员用户不存在或已删除");
             }
             lv.add(tv);
         });
@@ -129,9 +139,14 @@ public class TenantService {
         tenantrepository.findAllTenantPaginated(pageable).stream().forEach(t -> {
             TenantVO tv = new TenantVO(t);
             try {
-                tv.setAdminname(userrepository.getUsername(tv.getAdminuserid()));
+                String r = userrepository.getUsername(t.getAdminuserid());
+                if (r == null) {
+                    tv.setAdminname("租户管理员用户不存在或已删除");
+                } else {
+                    tv.setAdminname(r);
+                }
             } catch (Exception e) {
-                tv.setAdminname(null);
+                tv.setAdminname("租户管理员用户不存在或已删除");
             }
             lv.add(tv);
         });

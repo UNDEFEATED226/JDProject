@@ -7,7 +7,6 @@ import com.jd.iot.admin.vo.AuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -87,7 +86,12 @@ public class AuthService {
         try {
             AuthVO av = new AuthVO(authrepository.findById(id).get());
             try {
-                av.setResname(resourcerepository.getResname(av.getResid()));
+                String r = resourcerepository.getResname(av.getResid());
+                if(r == null) {
+                    av.setResname("资源不存在或已删除");
+                }else {
+                    av.setResname(r);
+                }
             } catch (Exception e) {
                 av.setResname("资源不存在或已删除");
             }
@@ -107,7 +111,12 @@ public class AuthService {
         authrepository.findAllAuth().stream().forEach(a -> {
             AuthVO av = new AuthVO(a);
             try {
-                av.setResname(resourcerepository.getResname(av.getResid()));
+                String r = resourcerepository.getResname(av.getResid());
+                if(r == null) {
+                    av.setResname("资源不存在或已删除");
+                }else {
+                    av.setResname(r);
+                }
             } catch (Exception e) {
                 av.setResname("资源不存在或已删除");
             }
@@ -126,7 +135,12 @@ public class AuthService {
         authrepository.findAllAuthOrderbyResid().stream().forEach(a -> {
             AuthVO av = new AuthVO(a);
             try {
-                av.setResname(resourcerepository.getResname(av.getResid()));
+                String r = resourcerepository.getResname(av.getResid());
+                if(r == null) {
+                    av.setResname("资源不存在或已删除");
+                }else {
+                    av.setResname(r);
+                }
             } catch (Exception e) {
                 av.setResname("资源不存在或已删除");
             }
@@ -148,7 +162,12 @@ public class AuthService {
         authrepository.findAllAuthPaginated(pageable).stream().forEach(a -> {
             AuthVO av = new AuthVO(a);
             try {
-                av.setResname(resourcerepository.getResname(av.getResid()));
+                String r = resourcerepository.getResname(av.getResid());
+                if(r == null) {
+                    av.setResname("资源不存在或已删除");
+                }else {
+                    av.setResname(r);
+                }
             } catch (Exception e) {
                 av.setResname("资源不存在或已删除");
             }

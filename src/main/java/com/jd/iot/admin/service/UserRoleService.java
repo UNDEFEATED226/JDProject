@@ -72,12 +72,22 @@ public class UserRoleService {
         try {
             UserRoleVO u = new UserRoleVO(userrolerepository.findById(id).get());
             try {
-                u.setRolename(rolerepository.getRolename(u.getRoleid()));
+                String r = rolerepository.getRolename(u.getRoleid());
+                if (r == null) {
+                    u.setRolename("角色不存在或已删除");
+                } else {
+                    u.setRolename(r);
+                }
             } catch (Exception e) {
                 u.setRolename("角色不存在或已删除");
             }
             try {
-                u.setUsername(userrepository.getUsername(u.getUserid()));
+                String r = userrepository.getUsername(u.getUserid());
+                if (r == null) {
+                    u.setUsername("用户不存在或已删除");
+                } else {
+                    u.setUsername(r);
+                }
             } catch (Exception e) {
                 u.setUsername("用户不存在或已删除");
             }
@@ -97,12 +107,22 @@ public class UserRoleService {
         userrolerepository.findAllUserRole().stream().forEach(u -> {
             UserRoleVO ur = new UserRoleVO(u);
             try {
-                ur.setRolename(rolerepository.getRolename(ur.getRoleid()));
+                String r = rolerepository.getRolename(u.getRoleid());
+                if (r == null) {
+                    ur.setRolename("角色不存在或已删除");
+                } else {
+                    ur.setRolename(r);
+                }
             } catch (Exception e) {
                 ur.setRolename("角色不存在或已删除");
             }
             try {
-                ur.setUsername(userrepository.getUsername(ur.getUserid()));
+                String r = userrepository.getUsername(u.getUserid());
+                if (r == null) {
+                    ur.setUsername("用户不存在或已删除");
+                } else {
+                    ur.setUsername(r);
+                }
             } catch (Exception e) {
                 ur.setUsername("用户不存在或已删除");
             }
@@ -124,12 +144,22 @@ public class UserRoleService {
         userrolerepository.findAllUserRolePaginated(pageable).stream().forEach(u -> {
             UserRoleVO ur = new UserRoleVO(u);
             try {
-                ur.setRolename(rolerepository.getRolename(ur.getRoleid()));
+                String r = rolerepository.getRolename(u.getRoleid());
+                if (r == null) {
+                    ur.setRolename("角色不存在或已删除");
+                } else {
+                    ur.setRolename(r);
+                }
             } catch (Exception e) {
                 ur.setRolename("角色不存在或已删除");
             }
             try {
-                ur.setUsername(userrepository.getUsername(ur.getUserid()));
+                String r = userrepository.getUsername(u.getUserid());
+                if (r == null) {
+                    ur.setUsername("用户不存在或已删除");
+                } else {
+                    ur.setUsername(r);
+                }
             } catch (Exception e) {
                 ur.setUsername("用户不存在或已删除");
             }

@@ -15,6 +15,8 @@ public class RoleAuthVO {
     private Long authid;
 
     private String authname;
+    
+    private String resname;
 
     private Integer isdeleted;
 
@@ -57,6 +59,14 @@ public class RoleAuthVO {
 
     public void setAuthid(Long authid) {
         this.authid = authid;
+    }
+
+    public String getResname() {
+        return resname;
+    }
+
+    public void setResname(String resname) {
+        this.resname = resname;
     }
 
     public Integer getIsdeleted() {

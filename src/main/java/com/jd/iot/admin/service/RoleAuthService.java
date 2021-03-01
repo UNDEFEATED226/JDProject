@@ -2,6 +2,7 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.RoleAuth;
 import com.jd.iot.admin.repository.AuthRepository;
+import com.jd.iot.admin.repository.ResourceRepository;
 import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.repository.RoleRepository;
 import com.jd.iot.admin.vo.AuthVO;
@@ -31,6 +32,9 @@ public class RoleAuthService {
 
     @Autowired
     AuthRepository authrepository;
+
+    @Autowired
+    ResourceRepository resourcerepository;
 
     /**
      * 添加角色权限
@@ -90,7 +94,38 @@ public class RoleAuthService {
      */
     public RoleAuthVO findById(Long id) {
         try {
-            return new RoleAuthVO(roleauthrepository.findById(id).get());
+            RoleAuthVO rv = new RoleAuthVO(roleauthrepository.findById(id).get());
+            try {
+                String str = rolerepository.getRolename(rv.getRoleid());
+                if (str == null) {
+                    rv.setRolename("角色不存在或已删除");
+                } else {
+                    rv.setRolename(str);
+                }
+            } catch (Exception e) {
+                rv.setRolename("角色不存在或已删除");
+            }
+            try {
+                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
+                if (str == null) {
+                    rv.setResname("资源不存在或已删除");
+                } else {
+                    rv.setResname(str);
+                }
+            } catch (Exception e) {
+                rv.setResname("资源不存在或已删除");
+            }
+            try {
+                String str = authrepository.getAuthname(rv.getAuthid());
+                if (str == null) {
+                    rv.setAuthname("权限不存在或已删除");
+                } else {
+                    rv.setAuthname(str);
+                }
+            } catch (Exception e) {
+                rv.setAuthname("权限不存在或已删除");
+            }
+            return rv;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
         }
@@ -106,12 +141,32 @@ public class RoleAuthService {
         roleauthrepository.findAllRoleAuth().stream().forEach(r -> {
             RoleAuthVO rv = new RoleAuthVO(r);
             try {
-                rv.setRolename(rolerepository.getRolename(rv.getRoleid()));
+                String str = rolerepository.getRolename(rv.getRoleid());
+                if (str == null) {
+                    rv.setRolename("角色不存在或已删除");
+                } else {
+                    rv.setRolename(str);
+                }
             } catch (Exception e) {
                 rv.setRolename("角色不存在或已删除");
             }
             try {
-                rv.setAuthname(authrepository.getAuthname(rv.getAuthid()));
+                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
+                if (str == null) {
+                    rv.setResname("资源不存在或已删除");
+                } else {
+                    rv.setResname(str);
+                }
+            } catch (Exception e) {
+                rv.setResname("资源不存在或已删除");
+            }
+            try {
+                String str = authrepository.getAuthname(rv.getAuthid());
+                if (str == null) {
+                    rv.setAuthname("权限不存在或已删除");
+                } else {
+                    rv.setAuthname(str);
+                }
             } catch (Exception e) {
                 rv.setAuthname("权限不存在或已删除");
             }
@@ -133,12 +188,32 @@ public class RoleAuthService {
         roleauthrepository.findAllRoleAuthPaginated(pageable).stream().forEach(r -> {
             RoleAuthVO rv = new RoleAuthVO(r);
             try {
-                rv.setRolename(rolerepository.getRolename(rv.getRoleid()));
+                String str = rolerepository.getRolename(rv.getRoleid());
+                if (str == null) {
+                    rv.setRolename("角色不存在或已删除");
+                } else {
+                    rv.setRolename(str);
+                }
             } catch (Exception e) {
                 rv.setRolename("角色不存在或已删除");
             }
             try {
-                rv.setAuthname(authrepository.getAuthname(rv.getAuthid()));
+                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
+                if (str == null) {
+                    rv.setResname("资源不存在或已删除");
+                } else {
+                    rv.setResname(str);
+                }
+            } catch (Exception e) {
+                rv.setResname("资源不存在或已删除");
+            }
+            try {
+                String str = authrepository.getAuthname(rv.getAuthid());
+                if (str == null) {
+                    rv.setAuthname("权限不存在或已删除");
+                } else {
+                    rv.setAuthname(str);
+                }
             } catch (Exception e) {
                 rv.setAuthname("权限不存在或已删除");
             }
@@ -159,12 +234,32 @@ public class RoleAuthService {
         roleauthrepository.findByRoleid(roleid).stream().forEach(r -> {
             RoleAuthVO rv = new RoleAuthVO(r);
             try {
-                rv.setRolename(rolerepository.getRolename(rv.getRoleid()));
+                String str = rolerepository.getRolename(rv.getRoleid());
+                if (str == null) {
+                    rv.setRolename("角色不存在或已删除");
+                } else {
+                    rv.setRolename(str);
+                }
             } catch (Exception e) {
                 rv.setRolename("角色不存在或已删除");
             }
             try {
-                rv.setAuthname(authrepository.getAuthname(rv.getAuthid()));
+                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
+                if (str == null) {
+                    rv.setResname("资源不存在或已删除");
+                } else {
+                    rv.setResname(str);
+                }
+            } catch (Exception e) {
+                rv.setResname("资源不存在或已删除");
+            }
+            try {
+                String str = authrepository.getAuthname(rv.getAuthid());
+                if (str == null) {
+                    rv.setAuthname("权限不存在或已删除");
+                } else {
+                    rv.setAuthname(str);
+                }
             } catch (Exception e) {
                 rv.setAuthname("权限不存在或已删除");
             }

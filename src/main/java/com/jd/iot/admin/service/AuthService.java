@@ -217,8 +217,9 @@ public class AuthService {
         List<AuthVO> res = new ArrayList<AuthVO>();
         List<AuthVO> temp = new ArrayList<AuthVO>();
         l.stream().forEach(r -> authid.add(r.getAuthid()));
-        authrepository.findAllAuthOrderbyResid().forEach(a -> {
-            AuthVO av = new AuthVO(a);
+        List<Auth> la = authrepository.findAllAuthOrderbyResid();
+        for (int i = 0; i < la.size(); i++) {
+            AuthVO av = new AuthVO(la.get(i));
             try {
                 String r = resourcerepository.getResname(av.getResid());
                 if (r == null) {
@@ -235,7 +236,15 @@ public class AuthService {
                 av.setSelected(false);
             }
             res.add(av);
-        });
+        }
+        /*
+         * authrepository.findAllAuthOrderbyResid().forEach(a -> { AuthVO av = new
+         * AuthVO(a); try { String r = resourcerepository.getResname(av.getResid()); if
+         * (r == null) { av.setResname("资源不存在或已删除"); } else { av.setResname(r); } }
+         * catch (Exception e) { av.setResname("资源不存在或已删除"); } if
+         * (authid.contains(av.getId())) { av.setSelected(true); } else {
+         * av.setSelected(false); } res.add(av); });
+         */
         if (res.size() == 1) {
             rRes.add(res);
             return rRes;

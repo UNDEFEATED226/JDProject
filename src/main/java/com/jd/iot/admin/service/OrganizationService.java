@@ -169,8 +169,7 @@ public class OrganizationService {
     public long page() {
         if (organizationrepository.count() % 20 != 0) {
             return organizationrepository.count() / 20 + 1;
-        } else {
-            return organizationrepository.count() / 20;
         }
+        return organizationrepository.count() / 20;
     }
 }

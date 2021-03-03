@@ -198,9 +198,8 @@ public class AuthService {
     public long page() {
         if (authrepository.count() % 20 != 0) {
             return authrepository.count() / 20 + 1;
-        } else {
-            return authrepository.count() / 20;
         }
+        return authrepository.count() / 20;
     }
 
     /**

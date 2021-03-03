@@ -8,7 +8,6 @@ import com.jd.iot.admin.vo.UserRoleVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -185,8 +184,7 @@ public class UserRoleService {
     public long page() {
         if (userrolerepository.count() % 20 != 0) {
             return userrolerepository.count() / 20 + 1;
-        } else {
-            return userrolerepository.count() / 20;
         }
+            return userrolerepository.count() / 20;
     }
 }

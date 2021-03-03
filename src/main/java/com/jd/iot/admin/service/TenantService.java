@@ -7,7 +7,6 @@ import com.jd.iot.admin.vo.TenantVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -170,8 +169,7 @@ public class TenantService {
     public long page() {
         if (tenantrepository.count() % 20 != 0) {
             return tenantrepository.count() / 20 + 1;
-        } else {
-            return tenantrepository.count() / 20;
         }
+            return tenantrepository.count() / 20;
     }
 }

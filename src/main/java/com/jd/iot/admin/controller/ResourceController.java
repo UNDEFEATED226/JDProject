@@ -32,6 +32,72 @@ public class ResourceController {
     Gson gson = new Gson();
 
     /**
+     * 添加资源
+     * 
+     * @param resourcevo 需添加的资源
+     * 
+     * @return 成功添加的资源
+     */
+    @PostMapping("/addresource")
+    public ResourceVO addResource(@RequestBody @Validated ResourceVO resourcevo) {
+        log.info("添加资源:[{}]", gson.toJson(resourcevo));
+        return resourceservice.addResource(resourcevo);
+    }
+
+    /**
+     * 根据id删除指定资源
+     * 
+     * @param id 需删除资源的id
+     */
+    @GetMapping("/deleteresource")
+    public void deleteResource(Long id) {
+        try {
+            log.info("删除资源id:[{}]", id);
+            resourceservice.deleteResource(id);
+        } catch (ResponseStatusException e) {
+            log.error("删除资源id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DELETE RESOURCE FAILURE");
+        }
+    }
+
+    /**
+     * 修改指定资源实体
+     * 
+     * @param id         需修改资源的id
+     * @param resourcevo 修改过的资源
+     * 
+     * @return 成功修改的资源
+     */
+    @PostMapping("/editresource/{id}")
+    public ResourceVO editResouce(@PathVariable Long id, @RequestBody @Validated ResourceVO resourcevo) {
+        try {
+            log.info("修改资源id:[{}],资源:{}", id, gson.toJson(resourcevo));
+            return resourceservice.editResource(id, resourcevo);
+        } catch (ResponseStatusException e) {
+            log.error("修改资源id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "EDIT RESOURCE FAILURE");
+        }
+    }
+
+    /**
+     * 通过id查找指定资源
+     * 
+     * @param id 需查找资源的id
+     * 
+     * @return 资源
+     */
+    @GetMapping("/findbyid")
+    public ResourceVO findById(Long id) {
+        try {
+            log.info("查找资源id:[{}]", id);
+            return resourceservice.findById(id);
+        } catch (ResponseStatusException e) {
+            log.error("查找资源id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RESOURCE NOT FOUND");
+        }
+    }
+
+    /**
      * 查询资源列表
      * 
      * @return 资源列表
@@ -104,37 +170,6 @@ public class ResourceController {
     }
 
     /**
-     * 通过id查找指定资源
-     * 
-     * @param id 需查找资源的id
-     * 
-     * @return 资源
-     */
-    @GetMapping("/findbyid")
-    public ResourceVO findById(Long id) {
-        try {
-            log.info("查找资源id:[{}]", id);
-            return resourceservice.findById(id);
-        } catch (ResponseStatusException e) {
-            log.error("查找资源id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RESOURCE NOT FOUND");
-        }
-    }
-
-    /**
-     * 添加资源
-     * 
-     * @param resourcevo 需添加的资源
-     * 
-     * @return 成功添加的资源
-     */
-    @PostMapping("/addresource")
-    public ResourceVO addResource(@RequestBody @Validated ResourceVO resourcevo) {
-        log.info("添加资源:[{}]", gson.toJson(resourcevo));
-        return resourceservice.addResource(resourcevo);
-    }
-
-    /**
      * 根据资源type id查询资源列表
      * 
      * @return 指定type id的资源列表
@@ -149,48 +184,14 @@ public class ResourceController {
      * 根据页号和指定res type id查询资源列表
      * 
      * @param restypeid 指定res type id
-     * @param pageNo 页号
+     * @param pageNo    页号
      * 
      * @return 资源列表
      */
     @GetMapping("/resourcemenupaginated")
     public Page<ResourceVO> resourceMenuPaginated(Long restypeid, int pageNo) {
-        log.info("查找第{}页res type id为{}的资源列表:{}", pageNo,restypeid,gson.toJson(resourceservice.resourceMenuPaginated(restypeid, pageNo)));
+        log.info("查找第{}页res type id为{}的资源列表:{}", pageNo, restypeid,
+                gson.toJson(resourceservice.resourceMenuPaginated(restypeid, pageNo)));
         return resourceservice.resourceMenuPaginated(restypeid, pageNo);
-    }
-
-    /**
-     * 修改指定资源实体
-     * 
-     * @param id         需修改资源的id
-     * @param resourcevo 修改过的资源
-     * 
-     * @return 成功修改的资源
-     */
-    @PostMapping("/editresource/{id}")
-    public ResourceVO editResouce(@PathVariable Long id, @RequestBody @Validated ResourceVO resourcevo) {
-        try {
-            log.info("修改资源id:[{}],资源:{}", id, gson.toJson(resourcevo));
-            return resourceservice.editResource(id, resourcevo);
-        } catch (ResponseStatusException e) {
-            log.error("修改资源id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "EDIT RESOURCE FAILURE");
-        }
-    }
-
-    /**
-     * 根据id删除指定资源
-     * 
-     * @param id 需删除资源的id
-     */
-    @GetMapping("/deleteresource")
-    public void deleteResource(Long id) {
-        try {
-            log.info("删除资源id:[{}]", id);
-            resourceservice.deleteResource(id);
-        } catch (ResponseStatusException e) {
-            log.error("删除资源id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DELETE RESOURCE FAILURE");
-        }
     }
 }

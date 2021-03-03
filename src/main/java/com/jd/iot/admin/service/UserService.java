@@ -4,7 +4,6 @@ import com.jd.iot.admin.entity.User;
 import com.jd.iot.admin.passwordencrypt.PassEncrypt;
 import com.jd.iot.admin.repository.OrganizationRepository;
 import com.jd.iot.admin.repository.UserRepository;
-import com.jd.iot.admin.vo.OrganizationVO;
 import com.jd.iot.admin.vo.UserVO;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -218,8 +217,7 @@ public class UserService {
     public long page() {
         if (userrepository.count() % 20 != 0) {
             return userrepository.count() / 20 + 1;
-        } else {
-            return userrepository.count() / 20;
         }
+        return userrepository.count() / 20;
     }
 }

@@ -31,6 +31,69 @@ public class OrganizationController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     Gson gson = new Gson();
+    
+    /**
+     * 添加组织
+     * 
+     * @param organization 需添加的组织
+     * 
+     * @return 成功添加的组织
+     */
+    @PostMapping("/addorganization")
+    public OrganizationVO addOrganization(@RequestBody @Validated OrganizationVO organizationvo) {
+        log.info("添加组织:[{}]", gson.toJson(organizationvo));
+        return organizationservice.addOrganization(organizationvo);
+    }
+
+    /**
+     * 删除组织
+     * 
+     * @param id 需删除组织的id
+     */
+    @GetMapping("/deleteorganization")
+    public void deleteOrganization(Long id) {
+        try {
+            organizationservice.deleteOrganization(id);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
+        }
+    }
+    
+    /**
+     * 修改组织
+     * 
+     * @param id           需修改组织的id
+     * @param organization 修改过的组织
+     * @return 成功修改的组织
+     */
+    @PostMapping("/editorganization/{id}")
+    public OrganizationVO editOrganization(@PathVariable Long id,
+            @RequestBody @Validated OrganizationVO organizationvo) {
+        try {
+            log.info("修改组织id:[{}],组织:{}", id, gson.toJson(organizationvo));
+            return organizationservice.editOrganization(id, organizationvo);
+        } catch (ResponseStatusException e) {
+            log.error("修改组织id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
+        }
+    }
+    
+    /**
+     * 用id查找指定组织
+     * 
+     * @param id
+     * 
+     * @return 组织
+     */
+    @GetMapping("/findbyid")
+    public OrganizationVO findById(Long id) {
+        try {
+            log.info("查找组织id:[{}],组织:", id, gson.toJson(organizationservice.findById(id)));
+            return organizationservice.findById(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
+        }
+    }
 
     /**
      * 查询组织列表
@@ -76,68 +139,5 @@ public class OrganizationController {
     public long page() {
         log.info("查询组织页数:[{}]", organizationservice.page());
         return organizationservice.page();
-    }
-
-    /**
-     * 用id查找指定组织
-     * 
-     * @param id
-     * 
-     * @return 组织
-     */
-    @GetMapping("/findbyid")
-    public OrganizationVO findById(Long id) {
-        try {
-            log.info("查找组织id:[{}],组织:", id, gson.toJson(organizationservice.findById(id)));
-            return organizationservice.findById(id);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
-        }
-    }
-
-    /**
-     * 添加组织
-     * 
-     * @param organization 需添加的组织
-     * 
-     * @return 成功添加的组织
-     */
-    @PostMapping("/addorganization")
-    public OrganizationVO addOrganization(@RequestBody @Validated OrganizationVO organizationvo) {
-        log.info("添加组织:[{}]", gson.toJson(organizationvo));
-        return organizationservice.addOrganization(organizationvo);
-    }
-
-    /**
-     * 修改组织
-     * 
-     * @param id           需修改组织的id
-     * @param organization 修改过的组织
-     * @return 成功修改的组织
-     */
-    @PostMapping("/editorganization/{id}")
-    public OrganizationVO editOrganization(@PathVariable Long id,
-            @RequestBody @Validated OrganizationVO organizationvo) {
-        try {
-            log.info("修改组织id:[{}],组织:{}", id, gson.toJson(organizationvo));
-            return organizationservice.editOrganization(id, organizationvo);
-        } catch (ResponseStatusException e) {
-            log.error("修改组织id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
-        }
-    }
-
-    /**
-     * 删除组织
-     * 
-     * @param id 需删除组织的id
-     */
-    @GetMapping("/deleteorganization")
-    public void deleteOrganization(Long id) {
-        try {
-            organizationservice.deleteOrganization(id);
-        } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
-        }
     }
 }

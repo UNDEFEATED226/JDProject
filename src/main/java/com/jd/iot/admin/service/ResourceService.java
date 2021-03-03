@@ -22,7 +22,7 @@ public class ResourceService {
 
     @Autowired
     ResourceRepository resourcerepository;
-    
+
     /**
      * 添加资源
      * 
@@ -86,7 +86,7 @@ public class ResourceService {
         resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
         return new ResourceVO(resourcerepository.save(resource));
     }
-    
+
     /**
      * 通过id查找指定资源
      * 
@@ -156,23 +156,22 @@ public class ResourceService {
     public long page() {
         if (resourcerepository.count() % 20 != 0) {
             return resourcerepository.count() / 20 + 1;
-        } else {
-            return resourcerepository.count() / 20;
         }
+        return resourcerepository.count() / 20;
     }
 
-    /**根据指定res type id查询总页数
+    /**
+     * 根据指定res type id查询总页数
      * 
-     * @param restypeid 指定res type id 
-     *  
+     * @param restypeid 指定res type id
+     * 
      * @return 总页数
      */
     public long pageByRestypeid(Long restypeid) {
         if (resourcerepository.countByRestypeid(restypeid) % 20 != 0) {
             return resourcerepository.countByRestypeid(restypeid) / 20 + 1;
-        } else {
-            return resourcerepository.countByRestypeid(restypeid) / 20;
         }
+        return resourcerepository.countByRestypeid(restypeid) / 20;
     }
 
     /**
@@ -191,7 +190,7 @@ public class ResourceService {
      * 根据页号和指定res type id查询资源列表
      * 
      * @param restypeid 指定res type id
-     * @param pageNo 页号
+     * @param pageNo    页号
      * 
      * @return 资源列表
      */

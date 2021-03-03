@@ -29,6 +29,53 @@ public class UserRoleController {
     private static final Logger log = LoggerFactory.getLogger(UserRoleController.class);
 
     Gson gson = new Gson();
+    
+    /**
+     * 添加用户角色
+     * 
+     * @param userrole 需添加的用户角色
+     * 
+     * @return 成功添加的用户角色
+     */
+    @PostMapping("/adduserrole")
+    public UserRoleVO addUserRole(@RequestBody @Validated UserRoleVO userrolevo) {
+        log.info("添加用户角色:[{}]", gson.toJson(userrolevo));
+        return userroleservice.addUserRole(userrolevo);
+    }
+
+    /**
+     * 删除用户角色
+     * 
+     * @param id 需删除用户角色的id
+     */
+    @GetMapping("/deleteuserrole")
+    public void deleteUserRole(Long id) {
+        try {
+            log.info("删除用户角色id:[{}]", id);
+            userroleservice.deleteUserRole(id);
+        } catch (Exception e) {
+            log.error("删除用户角色id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
+        }
+    }
+    
+    /**
+     * 通过id查找指定用户角色
+     * 
+     * @param id 需查找用户角色的id
+     * 
+     * @return 指定用户角色
+     */
+    @GetMapping("/findbyid")
+    public UserRoleVO findById(Long id) {
+        try {
+            log.info("查找用户角色id:[{}],角色:{}", id, gson.toJson(userroleservice.findById(id)));
+            return userroleservice.findById(id);
+        } catch (Exception e) {
+            log.error("查找用户角色id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLE NOT FOUND");
+        }
+    }
 
     /**
      * 查询用户角色列表
@@ -74,52 +121,5 @@ public class UserRoleController {
     public long page() {
         log.info("查询总页数:{}", gson.toJson(userroleservice.page()));
         return userroleservice.page();
-    }
-
-    /**
-     * 通过id查找指定用户角色
-     * 
-     * @param id
-     * 
-     * @return 指定用户实体
-     */
-    @GetMapping("/findbyid")
-    public UserRoleVO findById(Long id) {
-        try {
-            log.info("查找用户角色id:[{}],角色:{}", id, gson.toJson(userroleservice.findById(id)));
-            return userroleservice.findById(id);
-        } catch (Exception e) {
-            log.error("查找用户角色id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLE NOT FOUND");
-        }
-    }
-
-    /**
-     * 添加单个用户角色实体
-     * 
-     * @param role 单个用户角色实体
-     * 
-     * @return
-     */
-    @PostMapping("/adduserrole")
-    public UserRoleVO addUserRole(@RequestBody @Validated UserRoleVO userrolevo) {
-        log.info("添加用户角色:[{}]", gson.toJson(userrolevo));
-        return userroleservice.addUserRole(userrolevo);
-    }
-
-    /**
-     * 删除用户角色
-     * 
-     * @param id 需删除用户角色的id
-     */
-    @GetMapping("/deleteuserrole")
-    public void deleteUserRole(Long id) {
-        try {
-            log.info("删除用户角色id:[{}]", id);
-            userroleservice.deleteUserRole(id);
-        } catch (Exception e) {
-            log.error("删除用户角色id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
-        }
     }
 }

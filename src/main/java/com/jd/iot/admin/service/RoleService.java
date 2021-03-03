@@ -2,9 +2,7 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Role;
 import com.jd.iot.admin.repository.RoleRepository;
-import com.jd.iot.admin.vo.OrganizationVO;
 import com.jd.iot.admin.vo.RoleVO;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -173,9 +171,8 @@ public class RoleService {
     public long page() {
         if (rolerepository.count() % 20 != 0) {
             return rolerepository.count() / 20 + 1;
-        } else {
-            return rolerepository.count() / 20;
         }
+        return rolerepository.count() / 20;
     }
 
     /**
@@ -188,8 +185,7 @@ public class RoleService {
     public long pageByRoletype(Long roletype) {
         if (rolerepository.countByRoletype(roletype) % 20 != 0) {
             return rolerepository.countByRoletype(roletype) / 20 + 1;
-        } else {
-            return rolerepository.countByRoletype(roletype) / 20;
         }
+        return rolerepository.countByRoletype(roletype) / 20;
     }
 }

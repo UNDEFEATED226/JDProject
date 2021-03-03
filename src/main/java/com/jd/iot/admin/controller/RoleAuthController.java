@@ -31,80 +31,6 @@ public class RoleAuthController {
     Gson gson = new Gson();
 
     /**
-     * 查询角色权限列表
-     * 
-     * @return 角色权限列表
-     */
-    @GetMapping("/findallroleauth")
-    public List<RoleAuthVO> findAllRoleAuth() {
-        log.info("查询角色权限列表:[{}]", gson.toJson(roleauthservice.findAllRoleAuth()));
-        return roleauthservice.findAllRoleAuth();
-    }
-
-    /**
-     * 根据页号查询指定角色权限列表
-     * 
-     * @param pageNo 页号
-     * 
-     * @return 指定角色权限列表
-     */
-    @GetMapping("/findallroleauthpaginated")
-    public Page<RoleAuthVO> findAllRoleAuthPaginated(int pageNo) {
-        log.info("查询第{}页角色权限列表:[{}]", pageNo, gson.toJson(roleauthservice.findAllRoleAuthPaginated(pageNo)));
-        return roleauthservice.findAllRoleAuthPaginated(pageNo);
-    }
-
-    /**
-     * 根据指定role id查询权限列表
-     * 
-     * @param roleid 指定role id
-     * 
-     * @return 权限列表
-     */
-    @GetMapping("/findbyroleid")
-    public List<RoleAuthVO> findByRoleid(Long roleid) {
-        return roleauthservice.findByRoleid(roleid);
-    }
-
-    /**
-     * 查询总角色权限数量
-     * 
-     * @return 总角色权限数量
-     */
-    @GetMapping("/count")
-    public long count() {
-        return roleauthservice.count();
-    }
-
-    /**
-     * 查询总页数
-     * 
-     * @return 总页数
-     */
-    @GetMapping("/page")
-    public long page() {
-        return roleauthservice.page();
-    }
-
-    /**
-     * 通过id查找指定角色权限
-     * 
-     * @param id 需查找角色权限的id
-     * 
-     * @return 指定角色权限
-     */
-    @GetMapping("/findbyid")
-    public RoleAuthVO findById(Long id) {
-        try {
-            log.info("查找角色权限id:[{}],角色权限:{}", id, gson.toJson(roleauthservice.findById(id)));
-            return roleauthservice.findById(id);
-        } catch (ResponseStatusException e) {
-            log.error("查找角色权限id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
-        }
-    }
-
-    /**
      * 添加角色权限
      * 
      * @param roleauthvo 需添加的角色权限
@@ -151,16 +77,94 @@ public class RoleAuthController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
         }
     }
-    
+
+    /**
+     * 通过id查找指定角色权限
+     * 
+     * @param id 需查找角色权限的id
+     * 
+     * @return 指定角色权限
+     */
+    @GetMapping("/findbyid")
+    public RoleAuthVO findById(Long id) {
+        try {
+            log.info("查找角色权限id:[{}],角色权限:{}", id, gson.toJson(roleauthservice.findById(id)));
+            return roleauthservice.findById(id);
+        } catch (ResponseStatusException e) {
+            log.error("查找角色权限id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
+        }
+    }
+
+    /**
+     * 查询角色权限列表
+     * 
+     * @return 角色权限列表
+     */
+    @GetMapping("/findallroleauth")
+    public List<RoleAuthVO> findAllRoleAuth() {
+        log.info("查询角色权限列表:[{}]", gson.toJson(roleauthservice.findAllRoleAuth()));
+        return roleauthservice.findAllRoleAuth();
+    }
+
+    /**
+     * 根据页号查询指定角色权限列表
+     * 
+     * @param pageNo 页号
+     * 
+     * @return 指定角色权限列表
+     */
+    @GetMapping("/findallroleauthpaginated")
+    public Page<RoleAuthVO> findAllRoleAuthPaginated(int pageNo) {
+        log.info("查询第{}页角色权限列表:[{}]", pageNo, gson.toJson(roleauthservice.findAllRoleAuthPaginated(pageNo)));
+        return roleauthservice.findAllRoleAuthPaginated(pageNo);
+    }
+
+    /**
+     * 根据指定role id查询权限列表
+     * 
+     * @param roleid 指定role id
+     * 
+     * @return 权限列表
+     */
+    @GetMapping("/findbyroleid")
+    public List<RoleAuthVO> findByRoleid(Long roleid) {
+        log.info("查询权限列表(根据指定role id):[{}]", gson.toJson(roleauthservice.findByRoleid(roleid)));
+        return roleauthservice.findByRoleid(roleid);
+    }
+
+    /**
+     * 查询总角色权限数量
+     * 
+     * @return 总角色权限数量
+     */
+    @GetMapping("/count")
+    public long count() {
+        log.info("查询总角色权限数量:{}", roleauthservice.count());
+        return roleauthservice.count();
+    }
+
+    /**
+     * 查询总页数
+     * 
+     * @return 总页数
+     */
+    @GetMapping("/page")
+    public long page() {
+        log.info("查询总角色权限页数:{}", roleauthservice.page());
+        return roleauthservice.page();
+    }
+
     /**
      * 更新指定角色的权限
      * 
      * @param roleid 指定角色id
-     * @param l 更新后的权限列表
+     * @param l      更新后的权限列表
      * 
      */
     @PostMapping("/changeauth/{roleid}")
     public void changeAuth(@PathVariable Long roleid, @RequestBody List<List<AuthVO>> l) {
+        log.info("更新指定角色权限...");
         roleauthservice.changeAuth(roleid, l);
     }
 }

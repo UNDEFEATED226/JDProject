@@ -29,11 +29,64 @@ public class UserController {
     UserService userservice;
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    
+    /**
+     * 删除用户
+     * 
+     * @param id 需删除用户的id
+     */
+    @GetMapping("/deleteuser")
+    public void deleteUser(Long id) {
+        try {
+            log.info("删除用户id:[{}]", id);
+            userservice.deleteUser(id);
+        } catch (ResponseStatusException e) {
+            log.error("删除用户id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
+        }
+    }
+    
+    /**
+     * 修改指定用户
+     * 
+     * @param id   用户id
+     * @param user 修改后的用户实体
+     * 
+     * @return 成功修改后的用户实体
+     */
+    @PostMapping("/edituser/{id}")
+    public UserVO editUser(@PathVariable Long id, @RequestBody @Validated UserVO uservo) {
+        try {
+            log.info("修改用户id:[{}],用户:{}", id, gson.toJson(uservo));
+            return userservice.editUser(id, uservo);
+        } catch (ResponseStatusException e) {
+            log.error("修改用户id:[{}]失败", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
+        }
+    }
+
+    /**
+     * 用id查找指定用户
+     * 
+     * @param id
+     * 
+     * @return 用户实体
+     */
+    @GetMapping("/findbyid")
+    public UserVO findById(Long id) {
+        try {
+            log.info("查找用户id:[{}],用户:{}", id, gson.toJson(userservice.findById(id)));
+            return userservice.findById(id);
+        } catch (Exception e) {
+            log.error("查找用户id:[{}]失败:{}", id, e.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
+        }
+    }
 
     Gson gson = new Gson();
 
     /**
-     * . 添加单个用户
+     * 添加单个用户
      * 
      * 
      * @param user
@@ -95,58 +148,5 @@ public class UserController {
     public long page() {
         log.info("查询用户页数:[{}]", userservice.page());
         return userservice.page();
-    }
-
-    /**
-     * 用id查找指定用户
-     * 
-     * @param id
-     * 
-     * @return 用户实体
-     */
-    @GetMapping("/findbyid")
-    public UserVO findById(Long id) {
-        try {
-            log.info("查找用户id:[{}],用户:{}", id, gson.toJson(userservice.findById(id)));
-            return userservice.findById(id);
-        } catch (Exception e) {
-            log.error("查找用户id:[{}]失败:{}", id, e.toString());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
-        }
-    }
-
-    /**
-     * 修改指定用户
-     * 
-     * @param id   用户id
-     * @param user 修改后的用户实体
-     * 
-     * @return 成功修改后的用户实体
-     */
-    @PostMapping("/edituser/{id}")
-    public UserVO editUser(@PathVariable Long id, @RequestBody @Validated UserVO uservo) {
-        try {
-            log.info("修改用户id:[{}],用户:{}", id, gson.toJson(uservo));
-            return userservice.editUser(id, uservo);
-        } catch (ResponseStatusException e) {
-            log.error("修改用户id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
-        }
-    }
-
-    /**
-     * 删除用户
-     * 
-     * @param id 需删除用户的id
-     */
-    @GetMapping("/deleteuser")
-    public void deleteUser(Long id) {
-        try {
-            log.info("删除用户id:[{}]", id);
-            userservice.deleteUser(id);
-        } catch (ResponseStatusException e) {
-            log.error("删除用户id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
-        }
     }
 }

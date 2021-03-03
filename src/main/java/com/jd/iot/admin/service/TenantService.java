@@ -86,7 +86,7 @@ public class TenantService {
         try {
             TenantVO t = new TenantVO(tenantrepository.findById(id).get());
             try {
-                String r = userrepository.getUsername(t.getAdminuserid());
+                String r = userrepository.getLoginname(t.getAdminuserid());
                 if (r == null) {
                     t.setAdminname("租户管理员用户不存在或已删除");
                 } else {
@@ -170,6 +170,6 @@ public class TenantService {
         if (tenantrepository.count() % 20 != 0) {
             return tenantrepository.count() / 20 + 1;
         }
-            return tenantrepository.count() / 20;
+        return tenantrepository.count() / 20;
     }
 }

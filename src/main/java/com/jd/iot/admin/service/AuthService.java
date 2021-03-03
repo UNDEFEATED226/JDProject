@@ -8,6 +8,7 @@ import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.vo.AuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -211,13 +212,11 @@ public class AuthService {
      */
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
         List<RoleAuth> l = roleauthrepository.findByRoleid(roleid);
+        List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
         List<Long> authid = new ArrayList<Long>();
         List<AuthVO> res = new ArrayList<AuthVO>();
-        List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
         List<AuthVO> temp = new ArrayList<AuthVO>();
-        for (RoleAuth r : l) {
-            authid.add(r.getAuthid());
-        }
+        l.stream().forEach(r -> authid.add(r.getAuthid()));
         authrepository.findAllAuthOrderbyResid().forEach(a -> {
             AuthVO av = new AuthVO(a);
             try {
@@ -237,13 +236,29 @@ public class AuthService {
             }
             res.add(av);
         });
+        if (res.size() == 1) {
+            rRes.add(res);
+            return rRes;
+        }
         for (int i = 0; i < res.size() - 1; i++) {
-            if (res.get(i).getResid() == res.get(i + 1).getResid()) {
-                temp.add(res.get(i));
+            if (i == res.size() - 2) {
+                if (res.get(i).getResid() == res.get(i + 1).getResid()) {
+                    temp.add(res.get(i));
+                    temp.add(res.get(i + 1));
+                    rRes.add(temp);
+                } else {
+                    temp.add(res.get(i));
+                    rRes.add(temp);
+                    rRes.add(Arrays.asList(res.get(i + 1)));
+                }
             } else {
-                temp.add(res.get(i));
-                rRes.add(temp);
-                temp = new ArrayList<AuthVO>();
+                if (res.get(i).getResid() == res.get(i + 1).getResid()) {
+                    temp.add(res.get(i));
+                } else {
+                    temp.add(res.get(i));
+                    rRes.add(temp);
+                    temp = new ArrayList<AuthVO>();
+                }
             }
         }
         return rRes;

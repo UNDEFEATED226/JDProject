@@ -35,24 +35,26 @@ public class RoleController {
     /**
      * 查询角色列表
      * 
-     * @return 所有角色
+     * @return 角色列表
      */
     @GetMapping("/findallrole")
     public List<RoleVO> findAllRole() {
         log.info("查询角色列表:[{}]", gson.toJson(roleservice.findAllRole()));
         return roleservice.findAllRole();
     }
-
+    
+    /**
+     * 查询指定页号的角色列表
+     * 
+     * @param pageNo 指定页号
+     * 
+     * @return 指定页号的角色列表
+     */
     @GetMapping("/findallrolepaginated")
     public Page<RoleVO> findAllRolePaginated(int pageNo) {
         return roleservice.findAllRolePaginated(pageNo);
     }
-
-    @GetMapping("/rolemenupaginated")
-    public Page<RoleVO> roleMenuPaginated(Long roletype, int pageNo) {
-        return roleservice.roleMenuPaginated(roletype, pageNo);
-    }
-
+    
     /**
      * 查询所有指定角色种类的角色
      * 
@@ -67,6 +69,19 @@ public class RoleController {
     }
 
     /**
+     * 查询指定角色种类和指定页号的角色列表
+     * 
+     * @param roletype 指定角色种类
+     * @param pageNo   指定页号
+     * 
+     * @return 指定角色种类和指定页号的角色列表
+     */
+    @GetMapping("/rolemenupaginated")
+    public Page<RoleVO> roleMenuPaginated(Long roletype, int pageNo) {
+        return roleservice.roleMenuPaginated(roletype, pageNo);
+    }
+
+    /**
      * 查询总角色数量
      * 
      * @return 总角色数量
@@ -77,6 +92,13 @@ public class RoleController {
 
     }
 
+    /**
+     * 根据指定role type查询总角色数量
+     * 
+     * @param roletype 指定role type
+     * 
+     * @return 总角色数量
+     */
     @GetMapping("/countbyroletype")
     public long countByRoletype(Long roletype) {
         return roleservice.countByRoletype(roletype);
@@ -92,6 +114,13 @@ public class RoleController {
         return roleservice.page();
     }
 
+    /**
+     * 根据role type查询总页数
+     * 
+     * @param roletype 指定role type
+     * 
+     * @return 总页数
+     */
     @GetMapping("/pagebyroletype")
     public long pageByRoletype(Long roletype) {
         return roleservice.pageByRoletype(roletype);
@@ -145,6 +174,14 @@ public class RoleController {
         }
     }
 
+
+    /**
+     * 查找指定角色
+     * 
+     * @param id 需查找用户的id
+     * 
+     * @return 成功查找的角色
+     */
     @GetMapping("/findbyid")
     public RoleVO findById(Long id) {
         try {

@@ -23,6 +23,6 @@ public interface AuthRepository extends JpaRepository<Auth, Long> {
     @Query(value = " SELECT COUNT(a) FROM Auth a WHERE isdeleted = 0")
     public long count();
 
-    @Query(value = "SELECT a.authname FROM Auth a WHERE isdeleted = 0 and id = :id")
+    @Query(value = "SELECT a.description FROM Auth a WHERE isdeleted = 0 and id = :id")
     public String getAuthname(@Param(value = "id") Long id);
 }

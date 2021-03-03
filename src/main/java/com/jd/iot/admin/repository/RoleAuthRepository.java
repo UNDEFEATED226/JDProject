@@ -22,4 +22,8 @@ public interface RoleAuthRepository extends JpaRepository<RoleAuth, Long> {
 
     @Query(value = "SELECT r FROM RoleAuth r WHERE isdeleted = 0 AND roleid = :roleid")
     public List<RoleAuth> findByRoleid(@Param(value = "roleid") Long roleid);
+
+    @Query(value = "SELECT r FROM RoleAuth r WHERE isdeleted = 0 AND roleid = :roleid AND authid = :authid")
+    public List<RoleAuth> findByRoleidAndAuthid(@Param(value = "roleid") Long roleid,
+            @Param(value = "authid") Long authid);
 }

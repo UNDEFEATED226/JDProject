@@ -40,7 +40,7 @@ public class User {
     private String realname;
 
     @Size(max = 256)
-    @Column(name = "org_id", nullable = false)
+    @Column(name = "org_id")
     private String orgid;
 
     @Digits(integer = 4, fraction = 0)

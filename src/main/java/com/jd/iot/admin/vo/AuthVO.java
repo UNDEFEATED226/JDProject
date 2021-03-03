@@ -5,16 +5,16 @@ import java.sql.Timestamp;
 import javax.validation.constraints.Size;
 
 public class AuthVO {
-    
+
     private Long id;
-    
+
     private String authname;
 
     @Size(max = 256)
     private String description;
 
     private Long resid;
-    
+
     private String resname;
 
     private Integer isdeleted;
@@ -22,6 +22,8 @@ public class AuthVO {
     private Timestamp createtime;
 
     private Timestamp updatetime;
+
+    private boolean selected;
 
     public AuthVO() {
 
@@ -71,6 +73,14 @@ public class AuthVO {
 
     public Long getResid() {
         return resid;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public void setResid(Long resid) {

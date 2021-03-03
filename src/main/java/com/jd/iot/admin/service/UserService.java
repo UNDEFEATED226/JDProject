@@ -11,7 +11,6 @@ import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -46,17 +45,12 @@ public class UserService {
      * 
      */
     public UserVO addUser(UserVO uservo) {
-        OrganizationVO organizationvo;
         User user = new User(uservo);
         try {
-            organizationvo = organizationservice.findById(Long.parseLong(uservo.getOrgid()));
-        } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
-        }
-        if (organizationvo.getTenantid().equals("") || organizationvo.getTenantid() == null) {
+            user.setTenantid(
+                    Long.parseLong(organizationservice.findById(Long.parseLong(user.getOrgid())).getTenantid()));
+        } catch (Exception e) {
             user.setTenantid(null);
-        } else {
-            user.setTenantid(Long.parseLong(organizationvo.getTenantid()));
         }
         Long max = userrepository.maxId();
         if (max == null) {
@@ -125,9 +119,9 @@ public class UserService {
             UserVO u = new UserVO(userrepository.findById(id).get());
             try {
                 String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
-                if( r == null) {
+                if (r == null) {
                     u.setOrgname("公司不存在或已删除");
-                }else {
+                } else {
                     u.setOrgname(r);
                 }
             } catch (Exception e) {
@@ -167,9 +161,9 @@ public class UserService {
             UserVO uv = new UserVO(u);
             try {
                 String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
-                if( r == null) {
+                if (r == null) {
                     uv.setOrgname("公司不存在或已删除");
-                }else {
+                } else {
                     uv.setOrgname(r);
                 }
             } catch (Exception e) {
@@ -194,9 +188,9 @@ public class UserService {
             UserVO uv = new UserVO(u);
             try {
                 String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
-                if( r == null) {
+                if (r == null) {
                     uv.setOrgname("公司不存在或已删除");
-                }else {
+                } else {
                     uv.setOrgname(r);
                 }
             } catch (Exception e) {

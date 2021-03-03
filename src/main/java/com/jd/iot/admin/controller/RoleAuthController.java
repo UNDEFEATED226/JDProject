@@ -151,4 +151,16 @@ public class RoleAuthController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
         }
     }
+    
+    /**
+     * 更新指定角色的权限
+     * 
+     * @param roleid 指定角色id
+     * @param l 更新后的权限列表
+     * 
+     */
+    @PostMapping("/changeauth/{roleid}")
+    public void changeAuth(@PathVariable Long roleid, @RequestBody List<List<AuthVO>> l) {
+        roleauthservice.changeAuth(roleid, l);
+    }
 }

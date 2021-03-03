@@ -138,4 +138,16 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AUTH NOT FOUND");
         }
     }
+
+    /**
+     * 根据指定角色id查询权限列表(权限列表中角色拥有权限的selected属性为true,反之则为false)
+     * 
+     * @param roleid 指定角色id
+     * 
+     * @return 权限列表
+     */
+    @GetMapping("/findauthbyroleid")
+    public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
+        return authservice.findAuthByRoleid(roleid);
+    }
 }

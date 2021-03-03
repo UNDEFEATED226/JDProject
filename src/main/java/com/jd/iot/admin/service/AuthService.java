@@ -1,8 +1,10 @@
 package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Auth;
+import com.jd.iot.admin.entity.RoleAuth;
 import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.repository.ResourceRepository;
+import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.vo.AuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ public class AuthService {
 
     @Autowired
     ResourceRepository resourcerepository;
+
+    @Autowired
+    RoleAuthRepository roleauthrepository;
 
     /**
      * 添加权限
@@ -87,9 +92,9 @@ public class AuthService {
             AuthVO av = new AuthVO(authrepository.findById(id).get());
             try {
                 String r = resourcerepository.getResname(av.getResid());
-                if(r == null) {
+                if (r == null) {
                     av.setResname("资源不存在或已删除");
-                }else {
+                } else {
                     av.setResname(r);
                 }
             } catch (Exception e) {
@@ -112,9 +117,9 @@ public class AuthService {
             AuthVO av = new AuthVO(a);
             try {
                 String r = resourcerepository.getResname(av.getResid());
-                if(r == null) {
+                if (r == null) {
                     av.setResname("资源不存在或已删除");
-                }else {
+                } else {
                     av.setResname(r);
                 }
             } catch (Exception e) {
@@ -136,9 +141,9 @@ public class AuthService {
             AuthVO av = new AuthVO(a);
             try {
                 String r = resourcerepository.getResname(av.getResid());
-                if(r == null) {
+                if (r == null) {
                     av.setResname("资源不存在或已删除");
-                }else {
+                } else {
                     av.setResname(r);
                 }
             } catch (Exception e) {
@@ -163,9 +168,9 @@ public class AuthService {
             AuthVO av = new AuthVO(a);
             try {
                 String r = resourcerepository.getResname(av.getResid());
-                if(r == null) {
+                if (r == null) {
                     av.setResname("资源不存在或已删除");
-                }else {
+                } else {
                     av.setResname(r);
                 }
             } catch (Exception e) {
@@ -196,5 +201,52 @@ public class AuthService {
         } else {
             return authrepository.count() / 20;
         }
+    }
+
+    /**
+     * 根据指定角色id查询权限列表(权限列表中角色拥有权限的selected属性为true,反之则为false)
+     * 
+     * @param roleid 指定角色id
+     * 
+     * @return 权限列表
+     */
+    public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
+        List<RoleAuth> l = roleauthrepository.findByRoleid(roleid);
+        List<Long> authid = new ArrayList<Long>();
+        List<AuthVO> res = new ArrayList<AuthVO>();
+        List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
+        List<AuthVO> temp = new ArrayList<AuthVO>();
+        for (RoleAuth r : l) {
+            authid.add(r.getAuthid());
+        }
+        authrepository.findAllAuthOrderbyResid().forEach(a -> {
+            AuthVO av = new AuthVO(a);
+            try {
+                String r = resourcerepository.getResname(av.getResid());
+                if (r == null) {
+                    av.setResname("资源不存在或已删除");
+                } else {
+                    av.setResname(r);
+                }
+            } catch (Exception e) {
+                av.setResname("资源不存在或已删除");
+            }
+            if (authid.contains(av.getId())) {
+                av.setSelected(true);
+            } else {
+                av.setSelected(false);
+            }
+            res.add(av);
+        });
+        for (int i = 0; i < res.size() - 1; i++) {
+            if (res.get(i).getResid() == res.get(i + 1).getResid()) {
+                temp.add(res.get(i));
+            } else {
+                temp.add(res.get(i));
+                rRes.add(temp);
+                temp = new ArrayList<AuthVO>();
+            }
+        }
+        return rRes;
     }
 }

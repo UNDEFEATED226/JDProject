@@ -10,7 +10,6 @@ import com.jd.iot.admin.vo.RoleAuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -35,6 +34,9 @@ public class RoleAuthService {
 
     @Autowired
     ResourceRepository resourcerepository;
+
+    @Autowired
+    AuthService authservice;
 
     /**
      * 添加角色权限
@@ -285,9 +287,46 @@ public class RoleAuthService {
     public long page() {
         if (roleauthrepository.count() % 20 != 0) {
             return roleauthrepository.count() / 20 + 1;
-        } else {
-            return roleauthrepository.count() / 20;
         }
+        return roleauthrepository.count() / 20;
+
     }
 
+    /**
+     * 更新指定角色的权限
+     * 
+     * @param roleid 指定角色id
+     * @param l 更新后的权限列表
+     * 
+     */
+    public void changeAuth(Long roleid, List<List<AuthVO>> l) {
+        List<List<AuthVO>> original = authservice.findAuthByRoleid(roleid);
+        List<AuthVO> add = new ArrayList<AuthVO>();
+        List<AuthVO> delete = new ArrayList<AuthVO>();
+        for (int i = 0; i < l.size(); i++) {
+            for (int j = 0; j < l.get(i).size(); j++) {
+                if (l.get(i).get(j).isSelected() != original.get(i).get(j).isSelected()) {
+                    if (l.get(i).get(j).isSelected() == true) {
+                        add.add(l.get(i).get(j));
+                    } else {
+                        delete.add(l.get(i).get(j));
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < add.size(); i++) {
+            RoleAuth r = new RoleAuth();
+            r.setRoleid(roleid);
+            r.setAuthid(add.get(i).getId());
+            r.setIsdeleted(0);
+            r.setCreatetime(new Timestamp(System.currentTimeMillis()));
+            r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            roleauthrepository.save(r);
+            System.out.println("添加");
+        }
+        delete.stream().forEach(a -> {
+            List<RoleAuth> temp = roleauthrepository.findByRoleidAndAuthid(roleid, a.getId());
+            temp.stream().forEach(res -> deleteRoleAuth(res.getId()));
+        });
+    }
 }

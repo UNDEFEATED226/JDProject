@@ -135,7 +135,7 @@ public class UserController {
     }
 
     /**
-     * 软删用户
+     * 删除用户
      * 
      * @param id 需删除用户的id
      */

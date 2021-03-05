@@ -1,8 +1,10 @@
 package com.jd.iot.admin.controller;
 
+import com.jd.iot.admin.entity.Auth;
 import com.jd.iot.admin.service.RoleAuthService;
 import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleAuthVO;
+import com.jd.iot.admin.vo.AuthWithResname;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,5 +168,18 @@ public class RoleAuthController {
     public void changeAuth(@PathVariable Long roleid, @RequestBody List<List<AuthVO>> l) {
         log.info("更新指定角色权限...");
         roleauthservice.changeAuth(roleid, l);
+    }
+
+    /**
+     * 根据指定角色id查询权限列表(权限列表中角色拥有权限的selected属性为true,反之则为false)
+     * 
+     * @param roleid 指定角色id
+     * 
+     * @return 权限列表
+     */
+    @GetMapping("/findauthbyroleid")
+    public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
+        log.info("根据角色id查询权限列表:[]", roleid, gson.toJson(roleauthservice.findAuthByRoleid(roleid)));
+        return roleauthservice.findAuthByRoleid(roleid);
     }
 }

@@ -1,5 +1,6 @@
 package com.jd.iot.admin.service;
 
+import com.jd.iot.admin.entity.Auth;
 import com.jd.iot.admin.entity.RoleAuth;
 import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.repository.ResourceRepository;
@@ -7,8 +8,11 @@ import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.repository.RoleRepository;
 import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleAuthVO;
+import com.jd.iot.admin.vo.AuthWithResname;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -300,7 +304,7 @@ public class RoleAuthService {
      * 
      */
     public void changeAuth(Long roleid, List<List<AuthVO>> l) {
-        List<List<AuthVO>> original = authservice.findAuthByRoleid(roleid);
+        List<List<AuthVO>> original = findAuthByRoleid(roleid);
         for (int i = 0; i < l.size(); i++) {
             for (int j = 0; j < l.get(i).size(); j++) {
                 if (l.get(i).get(j).isSelected() != original.get(i).get(j).isSelected()) {
@@ -321,5 +325,43 @@ public class RoleAuthService {
                 }
             }
         }
+    }
+
+    /**
+     * 根据指定角色id查询权限列表(权限列表中角色拥有权限的selected属性为true,反之则为false)
+     * 
+     * @param roleid 指定角色id
+     * 
+     * @return 权限列表
+     */
+    public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
+        List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
+        List<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
+        List<AuthVO> res = new ArrayList<AuthVO>();
+        roleauthrepository.findAuthOrderbyResid().stream().forEach(a -> {
+            AuthVO av = new AuthVO(a.getAuth());
+            av.setResname(a.getResname());
+            if (authid.contains(av.getId())) {
+                av.setSelected(true);
+            }
+            res.add(av);
+        });
+        if (res.size() == 1) {
+            rRes.add(res);
+            return rRes;
+        }
+        int index = 0;
+        for (int i = 0; i < res.size() - 1; i++) {
+            if (res.get(i).getResid() != res.get(i + 1).getResid()) {
+                rRes.add(res.subList(index, i + 1));
+                index = i + 1;
+            }
+        }
+        if (res.get(res.size() - 1).getResid() == res.get(res.size() - 2).getResid()) {
+            rRes.add(res.subList(index, res.size()));
+        } else {
+            rRes.add(Arrays.asList(res.get(res.size() - 1)));
+        }
+        return rRes;
     }
 }

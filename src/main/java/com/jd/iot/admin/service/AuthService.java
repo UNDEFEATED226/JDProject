@@ -202,46 +202,4 @@ public class AuthService {
         }
         return authrepository.count() / 20;
     }
-
-    /**
-     * 根据指定角色id查询权限列表(权限列表中角色拥有权限的selected属性为true,反之则为false)
-     * 
-     * @param roleid 指定角色id
-     * 
-     * @return 权限列表
-     */
-    public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
-        System.out.println("Initiating start:" + System.currentTimeMillis());
-        List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
-        List<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
-        List<AuthVO> res = new ArrayList<AuthVO>();
-        System.out.println("Initiating ends:" + System.currentTimeMillis());
-        System.out.println("***");
-        System.out.println("实体转VO-map start:" + System.currentTimeMillis());
-        authrepository.findAllAuthOrderbyResid().forEach(a -> {
-            AuthVO av = new AuthVO(a);
-            if (authid.contains(av.getId())) {
-                av.setSelected(true);
-            }
-            res.add(av);
-        });
-        System.out.println("实体转VO-map end:" + System.currentTimeMillis());
-        if (res.size() == 1) {
-            rRes.add(res);
-            return rRes;
-        }
-        int index = 0;
-        for (int i = 0; i < res.size() - 1; i++) {
-            if (res.get(i).getResid() != res.get(i + 1).getResid()) {
-                rRes.add(res.subList(index, i + 1));
-                index = i + 1;
-            }
-        }
-        if (res.get(res.size() - 1).getResid() == res.get(res.size() - 2).getResid()) {
-            rRes.add(res.subList(index, res.size()));
-        } else {
-            rRes.add(Arrays.asList(res.get(res.size() - 1)));
-        }
-        return rRes;
-    }
 }

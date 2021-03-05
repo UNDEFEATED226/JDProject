@@ -139,17 +139,4 @@ public class AuthController {
         log.info("查询总权限页数:{}", authservice.page());
         return authservice.page();
     }
-
-    /**
-     * 根据指定角色id查询权限列表(权限列表中角色拥有权限的selected属性为true,反之则为false)
-     * 
-     * @param roleid 指定角色id
-     * 
-     * @return 权限列表
-     */
-    @GetMapping("/findauthbyroleid")
-    public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
-        log.info("根据角色id查询权限列表:[]", roleid, gson.toJson(authservice.findAuthByRoleid(roleid)));
-        return authservice.findAuthByRoleid(roleid);
-    }
 }

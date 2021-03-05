@@ -296,37 +296,30 @@ public class RoleAuthService {
      * 更新指定角色的权限
      * 
      * @param roleid 指定角色id
-     * @param l 更新后的权限列表
+     * @param l      更新后的权限列表
      * 
      */
     public void changeAuth(Long roleid, List<List<AuthVO>> l) {
         List<List<AuthVO>> original = authservice.findAuthByRoleid(roleid);
-        List<AuthVO> add = new ArrayList<AuthVO>();
-        List<AuthVO> delete = new ArrayList<AuthVO>();
         for (int i = 0; i < l.size(); i++) {
             for (int j = 0; j < l.get(i).size(); j++) {
                 if (l.get(i).get(j).isSelected() != original.get(i).get(j).isSelected()) {
                     if (l.get(i).get(j).isSelected() == true) {
-                        add.add(l.get(i).get(j));
+                        RoleAuth r = new RoleAuth();
+                        r.setRoleid(roleid);
+                        r.setAuthid(l.get(i).get(j).getId());
+                        r.setIsdeleted(0);
+                        r.setCreatetime(new Timestamp(System.currentTimeMillis()));
+                        r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+                        roleauthrepository.save(r);
                     } else {
-                        delete.add(l.get(i).get(j));
+                        roleauthrepository.findByRoleidAndAuthid(roleid, l.get(i).get(j).getId()).stream()
+                                .forEach(r -> {
+                                    deleteRoleAuth(r.getId());
+                                });
                     }
                 }
             }
         }
-        for (int i = 0; i < add.size(); i++) {
-            RoleAuth r = new RoleAuth();
-            r.setRoleid(roleid);
-            r.setAuthid(add.get(i).getId());
-            r.setIsdeleted(0);
-            r.setCreatetime(new Timestamp(System.currentTimeMillis()));
-            r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-            roleauthrepository.save(r);
-            System.out.println("添加");
-        }
-        delete.stream().forEach(a -> {
-            List<RoleAuth> temp = roleauthrepository.findByRoleidAndAuthid(roleid, a.getId());
-            temp.stream().forEach(res -> deleteRoleAuth(res.getId()));
-        });
     }
 }

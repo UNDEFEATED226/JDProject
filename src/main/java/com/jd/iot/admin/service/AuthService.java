@@ -211,15 +211,11 @@ public class AuthService {
      * @return 权限列表
      */
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
-        List<RoleAuth> l = roleauthrepository.findByRoleid(roleid);
         List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
-        List<Long> authid = new ArrayList<Long>();
+        List<Long> authid = new ArrayList<Long>(roleauthrepository.findAuthidByRoleid(roleid));
         List<AuthVO> res = new ArrayList<AuthVO>();
-        List<AuthVO> temp = new ArrayList<AuthVO>();
-        l.stream().forEach(r -> authid.add(r.getAuthid()));
-        List<Auth> la = authrepository.findAllAuthOrderbyResid();
-        for (int i = 0; i < la.size(); i++) {
-            AuthVO av = new AuthVO(la.get(i));
+        authrepository.findAllAuthOrderbyResid().forEach(a -> {
+            AuthVO av = new AuthVO(a);
             try {
                 String r = resourcerepository.getResname(av.getResid());
                 if (r == null) {
@@ -236,39 +232,22 @@ public class AuthService {
                 av.setSelected(false);
             }
             res.add(av);
-        }
-        /*
-         * authrepository.findAllAuthOrderbyResid().forEach(a -> { AuthVO av = new
-         * AuthVO(a); try { String r = resourcerepository.getResname(av.getResid()); if
-         * (r == null) { av.setResname("资源不存在或已删除"); } else { av.setResname(r); } }
-         * catch (Exception e) { av.setResname("资源不存在或已删除"); } if
-         * (authid.contains(av.getId())) { av.setSelected(true); } else {
-         * av.setSelected(false); } res.add(av); });
-         */
+        });
         if (res.size() == 1) {
             rRes.add(res);
             return rRes;
         }
+        int index = 0;
         for (int i = 0; i < res.size() - 1; i++) {
-            if (i == res.size() - 2) {
-                if (res.get(i).getResid() == res.get(i + 1).getResid()) {
-                    temp.add(res.get(i));
-                    temp.add(res.get(i + 1));
-                    rRes.add(temp);
-                } else {
-                    temp.add(res.get(i));
-                    rRes.add(temp);
-                    rRes.add(Arrays.asList(res.get(i + 1)));
-                }
-            } else {
-                if (res.get(i).getResid() == res.get(i + 1).getResid()) {
-                    temp.add(res.get(i));
-                } else {
-                    temp.add(res.get(i));
-                    rRes.add(temp);
-                    temp = new ArrayList<AuthVO>();
-                }
+            if (res.get(i).getResid() != res.get(i + 1).getResid()) {
+                rRes.add(res.subList(index, i + 1));
+                index = i + 1;
             }
+        }
+        if (res.get(res.size() - 1).getResid() == res.get(res.size() - 2).getResid()) {
+            rRes.add(res.subList(index, res.size()));
+        } else {
+            rRes.add(Arrays.asList(res.get(res.size() - 1)));
         }
         return rRes;
     }

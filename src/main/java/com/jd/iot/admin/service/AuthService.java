@@ -211,28 +211,21 @@ public class AuthService {
      * @return 权限列表
      */
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
+        System.out.println("Initiating start:" + System.currentTimeMillis());
         List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
-        List<Long> authid = new ArrayList<Long>(roleauthrepository.findAuthidByRoleid(roleid));
+        List<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
         List<AuthVO> res = new ArrayList<AuthVO>();
+        System.out.println("Initiating ends:" + System.currentTimeMillis());
+        System.out.println("***");
+        System.out.println("实体转VO-map start:" + System.currentTimeMillis());
         authrepository.findAllAuthOrderbyResid().forEach(a -> {
             AuthVO av = new AuthVO(a);
-            try {
-                String r = resourcerepository.getResname(av.getResid());
-                if (r == null) {
-                    av.setResname("资源不存在或已删除");
-                } else {
-                    av.setResname(r);
-                }
-            } catch (Exception e) {
-                av.setResname("资源不存在或已删除");
-            }
             if (authid.contains(av.getId())) {
                 av.setSelected(true);
-            } else {
-                av.setSelected(false);
             }
             res.add(av);
         });
+        System.out.println("实体转VO-map end:" + System.currentTimeMillis());
         if (res.size() == 1) {
             rRes.add(res);
             return rRes;

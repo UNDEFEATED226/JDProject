@@ -24,8 +24,7 @@ public interface RoleAuthRepository extends JpaRepository<RoleAuth, Long> {
     @Query(value = "SELECT count(ra) FROM RoleAuth ra INNER JOIN Role r ON ra.roleid = r.id INNER JOIN Auth a ON ra.authid = a.id INNER JOIN Resource re on a.resid = re.id WHERE ra.isdeleted = 0 AND re.isdeleted = 0 and r.isdeleted = 0 AND a.isdeleted = 0")
     public long count();
 
-    @Query(value = "SELECT r FROM RoleAuth r WHERE isdeleted = 0 AND roleid = :roleid")
-    public List<RoleAuth> findByRoleid(@Param(value = "roleid") Long roleid);
+
 
     @Query(value = "SELECT r FROM RoleAuth r WHERE isdeleted = 0 AND roleid = :roleid AND authid = :authid")
     public List<RoleAuth> findByRoleidAndAuthid(@Param(value = "roleid") Long roleid,

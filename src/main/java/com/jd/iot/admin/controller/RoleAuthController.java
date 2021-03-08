@@ -103,19 +103,6 @@ public class RoleAuthController {
     }
 
     /**
-     * 根据指定role id查询权限列表
-     * 
-     * @param roleid 指定role id
-     * 
-     * @return 权限列表
-     */
-    @GetMapping("/findbyroleid")
-    public List<RoleAuthVO> findByRoleid(Long roleid) {
-        log.info("查询权限列表(根据指定role id):[{}]", gson.toJson(roleauthservice.findByRoleid(roleid)));
-        return roleauthservice.findByRoleid(roleid);
-    }
-
-    /**
      * 查询总角色权限数量
      * 
      * @return 总角色权限数量

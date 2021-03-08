@@ -111,52 +111,6 @@ public class RoleAuthService {
     }
 
     /**
-     * 根据指定role id查询角色权限列表
-     * 
-     * @param roleid 指定role id
-     * 
-     * @return 角色权限列表
-     */
-    public List<RoleAuthVO> findByRoleid(Long roleid) {
-        List<RoleAuthVO> lv = new ArrayList<RoleAuthVO>();
-        roleauthrepository.findByRoleid(roleid).stream().forEach(r -> {
-            RoleAuthVO rv = new RoleAuthVO(r);
-            try {
-                String str = rolerepository.getRolename(rv.getRoleid());
-                if (str == null) {
-                    rv.setRolename("角色不存在或已删除");
-                } else {
-                    rv.setRolename(str);
-                }
-            } catch (Exception e) {
-                rv.setRolename("角色不存在或已删除");
-            }
-            try {
-                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
-                if (str == null) {
-                    rv.setResname("资源不存在或已删除");
-                } else {
-                    rv.setResname(str);
-                }
-            } catch (Exception e) {
-                rv.setResname("资源不存在或已删除");
-            }
-            try {
-                String str = authrepository.getAuthname(rv.getAuthid());
-                if (str == null) {
-                    rv.setAuthname("权限不存在或已删除");
-                } else {
-                    rv.setAuthname(str);
-                }
-            } catch (Exception e) {
-                rv.setAuthname("权限不存在或已删除");
-            }
-            lv.add(rv);
-        });
-        return lv;
-    }
-
-    /**
      * 查询总角色权限数量
      * 
      * @return 总角色权限数量

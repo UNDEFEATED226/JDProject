@@ -15,7 +15,6 @@ import com.jd.iot.admin.vo.UserRoleVO;
 @Entity
 @Table(name = "iot_hub_rbac_user_role")
 public class UserRole {
-
     @Id
     @Digits(integer = 11, fraction = 0)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

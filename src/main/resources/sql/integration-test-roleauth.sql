@@ -10,5 +10,5 @@ CREATE TABLE iot_hub_rbac_role_auth(
 )
 ;
 
-INSERT INTO iot_hub_rbac_role_auth VALUES (1,null,null,0,null,'2021-2-18 10:23:00');
-INSERT INTO iot_hub_rbac_role_auth VALUES (2,null,null,0,null,'2021-2-18 10:26:00');
+INSERT INTO iot_hub_rbac_role_auth VALUES (1,1,1,0,null,'2021-2-18 10:23:00');
+INSERT INTO iot_hub_rbac_role_auth VALUES (2,2,2,0,null,'2021-2-18 10:26:00');

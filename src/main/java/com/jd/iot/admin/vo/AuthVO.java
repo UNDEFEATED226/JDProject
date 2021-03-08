@@ -39,6 +39,17 @@ public class AuthVO {
         updatetime = auth.getUpdatetime();
     }
 
+    public AuthVO(Auth auth, String resname) {
+        id = auth.getId();
+        authname = auth.getAuthname();
+        description = auth.getDescription();
+        resid = auth.getResid();
+        isdeleted = auth.getIsdeleted();
+        createtime = auth.getCreatetime();
+        updatetime = auth.getUpdatetime();
+        this.resname = resname;
+    }
+
     public Long getId() {
         return id;
     }

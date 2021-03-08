@@ -28,7 +28,7 @@ public class TenantController {
     public static final Logger log = LoggerFactory.getLogger(TenantController.class);
 
     Gson gson = new Gson();
-    
+
     /**
      * 添加租户
      * 
@@ -57,7 +57,7 @@ public class TenantController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TENANT NOT FOUND");
         }
     }
-    
+
     /**
      * 修改租户
      * 
@@ -126,10 +126,10 @@ public class TenantController {
      */
     @GetMapping("/count")
     public long count() {
-        log.info("查询总租户数量:{}",gson.toJson(tenantservice.count()));
+        log.info("查询总租户数量:{}", gson.toJson(tenantservice.count()));
         return tenantservice.count();
     }
-    
+
     /**
      * 查询总租户页数
      * 
@@ -137,7 +137,7 @@ public class TenantController {
      */
     @GetMapping("/page")
     public long page() {
-        log.info("查询总租户页数:{}",gson.toJson(tenantservice.page()));
+        log.info("查询总租户页数:{}", gson.toJson(tenantservice.page()));
         return tenantservice.page();
     }
 }

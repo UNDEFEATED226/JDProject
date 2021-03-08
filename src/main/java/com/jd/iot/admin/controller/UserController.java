@@ -29,7 +29,7 @@ public class UserController {
     UserService userservice;
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    
+
     /**
      * 删除用户
      * 
@@ -45,7 +45,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
     }
-    
+
     /**
      * 修改指定用户
      * 

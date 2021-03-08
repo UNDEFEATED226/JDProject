@@ -5,6 +5,7 @@ import static org.junit.Assert.assertSame;
 
 import com.jd.iot.admin.IotCoreApplication;
 import com.jd.iot.admin.entity.RoleAuth;
+import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.service.RoleAuthService;
 import com.jd.iot.admin.vo.RoleAuthVO;
 import org.junit.jupiter.api.Assertions;
@@ -33,6 +34,9 @@ public class RoleAuthControllerTest {
     @Autowired
     private RoleAuthService roleauthservice;
 
+    @Autowired
+    private RoleAuthRepository roleauthrepository;
+
     @Test
     @Sql({ "classpath:sql/integration-test-roleauth.sql" })
     public void emptyTest() {
@@ -47,24 +51,6 @@ public class RoleAuthControllerTest {
         System.out.println("***");
         System.out.println(res);
         System.out.println("***");
-    }
-
-    @Test
-    @Sql({ "classpath:sql/integration-test-roleauth.sql" })
-    // 处理不存在参数
-    public void findById_test() {
-        Assertions.assertThrows(ResponseStatusException.class, () -> {
-            roleauthservice.findById(900L);
-        });
-    }
-
-    @Test
-    @Sql({ "classpath:sql/integration-test-roleauth.sql" })
-    // 是否可以正确查找指定角色权限
-    public void findById2_test() {
-        RoleAuthVO roleauth = this.restTemplate.getForObject("http://localhost:" + port + "/roleauth/findbyid?id={id}",
-                RoleAuthVO.class, 1);
-        assertEquals(roleauth.getId().longValue(), roleauthservice.findById(1L).getId().longValue());
     }
 
     @Test
@@ -88,8 +74,8 @@ public class RoleAuthControllerTest {
         ravo.setAuthid(69L);
         RoleAuthVO roleauthvo = this.restTemplate
                 .postForObject("http://localhost:" + port + "/roleauth/editroleauth/{id}", ravo, RoleAuthVO.class, 1);
-        assertEquals(roleauthvo.getRoleid(), roleauthservice.findById(1L).getRoleid());
-        assertEquals(roleauthvo.getAuthid(), roleauthservice.findById(1L).getAuthid());
+        assertEquals(roleauthvo.getRoleid(), roleauthrepository.findById(1L).get().getRoleid());
+        assertEquals(roleauthvo.getAuthid(), roleauthrepository.findById(1L).get().getAuthid());
     }
 
     @Test
@@ -97,7 +83,7 @@ public class RoleAuthControllerTest {
     // 检查是否可以成功删除指定角色权限
     public void deleteRoleAuth_Test() {
         this.restTemplate.getForObject("http://localhost:" + port + "/roleauth/deleteroleauth?id={id}", void.class, 1);
-        assertSame(roleauthservice.findById(1L).getIsdeleted(), 1);
+        assertSame(roleauthrepository.findById(1L).get().getIsdeleted(), 1);
     }
 
     @Test
@@ -122,9 +108,11 @@ public class RoleAuthControllerTest {
 
     // 检查是否可以成功查询用户总数
     @Test
-    @Sql({ "classpath:sql/integration-test-roleauth.sql" })
+    @Sql({ "classpath:sql/integration-test-roleauth.sql", "classpath:sql/integration-test-role.sql",
+            "classpath:sql/integration-test-auth.sql", "classpath:sql/integration-test-resource.sql" })
     public void count_test() {
         Long count = this.restTemplate.getForObject("http://localhost:" + port + "/roleauth/count", long.class);
+        System.out.println("count:" + count);
         assertEquals(count.longValue(), 2L);
     }
 

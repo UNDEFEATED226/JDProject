@@ -9,5 +9,5 @@ CREATE TABLE iot_hub_rbac_user_role(
     update_time timestamp NOT NULL
 );
 
-INSERT INTO iot_hub_rbac_user_role(id, user_id, role_id,is_deleted,create_time, update_time) VALUES (8, 108, 1,0,'2021-1-26 10:20:23','2021-1-26 10:20:25');
-INSERT INTO iot_hub_rbac_user_role(id, user_id, role_id,is_deleted,create_time, update_time) VALUES (9, 109, 2,0,'2021-1-26 10:20:23','2021-1-26 10:20:25');
+INSERT INTO iot_hub_rbac_user_role(id, user_id, role_id,is_deleted,create_time, update_time) VALUES (8, 107, 1,0,'2021-1-26 10:20:23','2021-1-26 10:20:25');
+INSERT INTO iot_hub_rbac_user_role(id, user_id, role_id,is_deleted,create_time, update_time) VALUES (9, 107, 2,0,'2021-1-26 10:20:23','2021-1-26 10:20:25');

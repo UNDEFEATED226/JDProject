@@ -1,10 +1,8 @@
 package com.jd.iot.admin.controller;
 
-import com.jd.iot.admin.entity.Auth;
 import com.jd.iot.admin.service.RoleAuthService;
 import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleAuthVO;
-import com.jd.iot.admin.vo.AuthWithResname;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,24 +74,6 @@ public class RoleAuthController {
             return roleauthservice.editRoleAuth(id, roleauthvo);
         } catch (ResponseStatusException e) {
             log.error("修改角色权限id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
-        }
-    }
-
-    /**
-     * 通过id查找指定角色权限
-     * 
-     * @param id 需查找角色权限的id
-     * 
-     * @return 指定角色权限
-     */
-    @GetMapping("/findbyid")
-    public RoleAuthVO findById(Long id) {
-        try {
-            log.info("查找角色权限id:[{}],角色权限:{}", id, gson.toJson(roleauthservice.findById(id)));
-            return roleauthservice.findById(id);
-        } catch (ResponseStatusException e) {
-            log.error("查找角色权限id:[{}]失败", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
         }
     }

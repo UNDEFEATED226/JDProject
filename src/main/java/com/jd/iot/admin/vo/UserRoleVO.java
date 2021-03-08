@@ -12,7 +12,7 @@ public class UserRoleVO {
     private Long roleid;
 
     private String username;
-    
+
     private String rolename;
 
     private Integer isdeleted;
@@ -32,6 +32,18 @@ public class UserRoleVO {
         isdeleted = userrole.getIsdeleted();
         createtime = userrole.getCreatetime();
         updatetime = userrole.getUpdatetime();
+    }
+
+    public UserRoleVO(UserRole userrole, String username, String rolename) {
+        id = userrole.getId();
+        userid = userrole.getUserid();
+        roleid = userrole.getRoleid();
+        isdeleted = userrole.getIsdeleted();
+        createtime = userrole.getCreatetime();
+        updatetime = userrole.getUpdatetime();
+        this.rolename = rolename;
+        this.username = username;
+
     }
 
     public String getUsername() {
@@ -66,7 +78,6 @@ public class UserRoleVO {
         this.roleid = roleid;
     }
 
-    
     public String getRolename() {
         return rolename;
     }

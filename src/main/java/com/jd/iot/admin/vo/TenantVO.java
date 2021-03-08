@@ -23,7 +23,7 @@ public class TenantVO {
 
     @Digits(integer = 11, fraction = 0)
     private Long adminuserid;
-    
+
     private String adminname;
 
     public TenantVO() {
@@ -38,6 +38,17 @@ public class TenantVO {
         createtime = tenant.getCreatetime();
         updatetime = tenant.getUpdatetime();
         adminuserid = tenant.getAdminuserid();
+    }
+
+    public TenantVO(Tenant tenant, String adminname) {
+        id = tenant.getId();
+        name = tenant.getName();
+        businessassignment = tenant.getBusinessassignment();
+        isdeleted = tenant.getIsdeleted();
+        createtime = tenant.getCreatetime();
+        updatetime = tenant.getUpdatetime();
+        adminuserid = tenant.getAdminuserid();
+        this.adminname = adminname;
     }
 
     public Long getId() {

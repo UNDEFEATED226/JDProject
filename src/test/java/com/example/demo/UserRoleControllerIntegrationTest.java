@@ -54,7 +54,7 @@ public class UserRoleControllerIntegrationTest {
         UserRoleVO r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
                 UserRoleVO.class, 8);
         assertEquals(8L, r.getId().longValue());
-        assertEquals(108L, r.getUserid().longValue());
+        assertEquals(107L, r.getUserid().longValue());
     }
 
     // 是否可以正确添加新角色并且赋值正确
@@ -75,7 +75,7 @@ public class UserRoleControllerIntegrationTest {
     public void findById_Test() {
         UserRoleVO u = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
                 UserRoleVO.class, 8L);
-        assertEquals(108L, u.getUserid().longValue());
+        assertEquals(107L, u.getUserid().longValue());
     }
 
     // 处理不存在参数
@@ -118,7 +118,8 @@ public class UserRoleControllerIntegrationTest {
 
     // 检查是否可以成功查询用户角色总数
     @Test
-    @Sql({ "classpath:sql/integration-test-userrole.sql" })
+    @Sql({ "classpath:sql/integration-test-userrole.sql", "classpath:sql/integration-test-user.sql",
+            "classpath:sql/integration-test-role.sql" })
     public void count_test() {
         Long count = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/count", long.class);
         assertEquals(count.longValue(), 2L);

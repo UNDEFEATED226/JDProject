@@ -29,7 +29,7 @@ public class UserRoleController {
     private static final Logger log = LoggerFactory.getLogger(UserRoleController.class);
 
     Gson gson = new Gson();
-    
+
     /**
      * 添加用户角色
      * 
@@ -58,7 +58,7 @@ public class UserRoleController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
         }
     }
-    
+
     /**
      * 通过id查找指定用户角色
      * 

@@ -8,7 +8,6 @@ import com.jd.iot.admin.vo.UserVO;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -155,22 +154,7 @@ public class UserService {
      * @return 用户列表
      */
     public List<UserVO> findAllUser() {
-        List<UserVO> lv = new ArrayList<UserVO>();
-        userrepository.findAllUser().stream().forEach(u -> {
-            UserVO uv = new UserVO(u);
-            try {
-                String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
-                if (r == null) {
-                    uv.setOrgname("公司不存在或已删除");
-                } else {
-                    uv.setOrgname(r);
-                }
-            } catch (Exception e) {
-                uv.setOrgname(null);
-            }
-            lv.add(uv);
-        });
-        return lv;
+        return userrepository.findAllUser();
     }
 
     /**
@@ -182,21 +166,7 @@ public class UserService {
      */
     public Page<UserVO> findAllUserPaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<UserVO> lv = new ArrayList<UserVO>();
-        userrepository.findAllUserPaginated(pageable).stream().forEach(u -> {
-            UserVO uv = new UserVO(u);
-            try {
-                String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
-                if (r == null) {
-                    uv.setOrgname("公司不存在或已删除");
-                } else {
-                    uv.setOrgname(r);
-                }
-            } catch (Exception e) {
-                uv.setOrgname(null);
-            }
-            lv.add(uv);
-        });
+        List<UserVO> lv = userrepository.findAllUserPaginated(pageable);
         return new PageImpl<UserVO>(lv);
     }
 

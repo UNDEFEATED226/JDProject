@@ -1,6 +1,5 @@
 package com.jd.iot.admin.service;
 
-import com.jd.iot.admin.entity.Auth;
 import com.jd.iot.admin.entity.RoleAuth;
 import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.repository.ResourceRepository;
@@ -8,8 +7,6 @@ import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.repository.RoleRepository;
 import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleAuthVO;
-import com.jd.iot.admin.vo.AuthWithResname;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,51 +88,7 @@ public class RoleAuthService {
         return new RoleAuthVO(roleauthrepository.save(r));
     }
 
-    /**
-     * 通过id查找指定角色权限
-     * 
-     * @param id 需查找角色权限的id
-     * 
-     * @return 指定角色权限
-     */
-    public RoleAuthVO findById(Long id) {
-        try {
-            RoleAuthVO rv = new RoleAuthVO(roleauthrepository.findById(id).get());
-            try {
-                String str = rolerepository.getRolename(rv.getRoleid());
-                if (str == null) {
-                    rv.setRolename("角色不存在或已删除");
-                } else {
-                    rv.setRolename(str);
-                }
-            } catch (Exception e) {
-                rv.setRolename("角色不存在或已删除");
-            }
-            try {
-                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
-                if (str == null) {
-                    rv.setResname("资源不存在或已删除");
-                } else {
-                    rv.setResname(str);
-                }
-            } catch (Exception e) {
-                rv.setResname("资源不存在或已删除");
-            }
-            try {
-                String str = authrepository.getAuthname(rv.getAuthid());
-                if (str == null) {
-                    rv.setAuthname("权限不存在或已删除");
-                } else {
-                    rv.setAuthname(str);
-                }
-            } catch (Exception e) {
-                rv.setAuthname("权限不存在或已删除");
-            }
-            return rv;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
-        }
-    }
+   
 
     /**
      * 查询角色权限列表
@@ -143,42 +96,7 @@ public class RoleAuthService {
      * @return 角色权限列表
      */
     public List<RoleAuthVO> findAllRoleAuth() {
-        List<RoleAuthVO> lv = new ArrayList<RoleAuthVO>();
-        roleauthrepository.findAllRoleAuth().stream().forEach(r -> {
-            RoleAuthVO rv = new RoleAuthVO(r);
-            try {
-                String str = rolerepository.getRolename(rv.getRoleid());
-                if (str == null) {
-                    rv.setRolename("角色不存在或已删除");
-                } else {
-                    rv.setRolename(str);
-                }
-            } catch (Exception e) {
-                rv.setRolename("角色不存在或已删除");
-            }
-            try {
-                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
-                if (str == null) {
-                    rv.setResname("资源不存在或已删除");
-                } else {
-                    rv.setResname(str);
-                }
-            } catch (Exception e) {
-                rv.setResname("资源不存在或已删除");
-            }
-            try {
-                String str = authrepository.getAuthname(rv.getAuthid());
-                if (str == null) {
-                    rv.setAuthname("权限不存在或已删除");
-                } else {
-                    rv.setAuthname(str);
-                }
-            } catch (Exception e) {
-                rv.setAuthname("权限不存在或已删除");
-            }
-            lv.add(rv);
-        });
-        return lv;
+        return roleauthrepository.findAllRoleAuth();
     }
 
     /**
@@ -189,42 +107,8 @@ public class RoleAuthService {
      * @return 指定角色权限列表
      */
     public Page<RoleAuthVO> findAllRoleAuthPaginated(int pageNo) {
-        List<RoleAuthVO> lv = new ArrayList<RoleAuthVO>();
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        roleauthrepository.findAllRoleAuthPaginated(pageable).stream().forEach(r -> {
-            RoleAuthVO rv = new RoleAuthVO(r);
-            try {
-                String str = rolerepository.getRolename(rv.getRoleid());
-                if (str == null) {
-                    rv.setRolename("角色不存在或已删除");
-                } else {
-                    rv.setRolename(str);
-                }
-            } catch (Exception e) {
-                rv.setRolename("角色不存在或已删除");
-            }
-            try {
-                String str = resourcerepository.getResname(authrepository.findById(rv.getAuthid()).get().getResid());
-                if (str == null) {
-                    rv.setResname("资源不存在或已删除");
-                } else {
-                    rv.setResname(str);
-                }
-            } catch (Exception e) {
-                rv.setResname("资源不存在或已删除");
-            }
-            try {
-                String str = authrepository.getAuthname(rv.getAuthid());
-                if (str == null) {
-                    rv.setAuthname("权限不存在或已删除");
-                } else {
-                    rv.setAuthname(str);
-                }
-            } catch (Exception e) {
-                rv.setAuthname("权限不存在或已删除");
-            }
-            lv.add(rv);
-        });
+        List<RoleAuthVO> lv = roleauthrepository.findAllRoleAuthPaginated(pageable);
         return new PageImpl<RoleAuthVO>(lv);
     }
 
@@ -339,12 +223,10 @@ public class RoleAuthService {
         List<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
         List<AuthVO> res = new ArrayList<AuthVO>();
         roleauthrepository.findAuthOrderbyResid().stream().forEach(a -> {
-            AuthVO av = new AuthVO(a.getAuth());
-            av.setResname(a.getResname());
-            if (authid.contains(av.getId())) {
-                av.setSelected(true);
+            if (authid.contains(a.getId())) {
+                a.setSelected(true);
             }
-            res.add(av);
+            res.add(a);
         });
         if (res.size() == 1) {
             rRes.add(res);

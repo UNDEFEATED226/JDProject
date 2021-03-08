@@ -3,6 +3,7 @@ package com.example.demo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import com.jd.iot.admin.IotCoreApplication;
+import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.service.AuthService;
 import com.jd.iot.admin.vo.AuthVO;
 import org.junit.jupiter.api.Assertions;
@@ -41,9 +42,6 @@ public class AuthControllerIntegrationTest {
     // 测试是否能成功获得权限列表
     public void getAllAuth_test() {
         String res = this.restTemplate.getForObject("http://localhost:" + port + "/auth/findallauth", String.class);
-        System.out.println("***");
-        System.out.println(res);
-        System.out.println("***");
     }
 
     @Test
@@ -75,7 +73,7 @@ public class AuthControllerIntegrationTest {
     }
 
     @Test
-    @Sql({ "classpath:sql/integration-test-auth.sql" })
+    @Sql({ "classpath:sql/integration-test-auth.sql", "classpath:sql/integration-test-resource.sql" })
     // 检查是否可以成功修改指定权限
     public void editAuth_test() {
         AuthVO avo = new AuthVO();
@@ -91,7 +89,7 @@ public class AuthControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-auth.sql" })
     // 检查是否可以成功删除指定权限
-    public void deleteRole_Test() {
+    public void deleteAuth_test() {
         this.restTemplate.getForObject("http://localhost:" + port + "/auth/deleteauth?id={id}", void.class, 1);
         assertSame(authservice.findById(1L).getIsdeleted(), 1);
     }
@@ -104,22 +102,18 @@ public class AuthControllerIntegrationTest {
             authservice.deleteAuth(900L);
         });
     }
-    
+
     // 检查是否可以成功分页
     @Test
     @Sql({ "classpath:sql/integration-test-auth.sql" })
     public void pagination_test() {
         String res = this.restTemplate.getForObject(
-                "http://localhost:" + port + "/auth/findallauthpaginated?pageNo={pageNo}", String.class,
-                1);
-        System.out.println("***");
-        System.out.println(res);
-        System.out.println("***");
+                "http://localhost:" + port + "/auth/findallauthpaginated?pageNo={pageNo}", String.class, 1);
     }
 
     // 检查是否可以成功查询组织总数
     @Test
-    @Sql({ "classpath:sql/integration-test-auth.sql" })
+    @Sql({ "classpath:sql/integration-test-auth.sql","classpath:sql/integration-test-resource.sql" })
     public void count_test() {
         Long count = this.restTemplate.getForObject("http://localhost:" + port + "/auth/count", long.class);
         assertEquals(count.longValue(), 2L);

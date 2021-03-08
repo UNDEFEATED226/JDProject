@@ -91,6 +91,30 @@ public class UserVO {
         mobile = user.getMobile();
     }
 
+    public UserVO(User user, String orgname) {
+        id = user.getId();
+        userid = user.getUserid();
+        loginname = user.getLoginname();
+        password = user.getPassword();
+        realname = user.getRealname();
+        orgid = user.getOrgid();
+        isdeleted = user.getIsdeleted();
+        email = user.getEmail();
+        sex = user.getSex();
+        comment = user.getComment();
+        createtime = user.getCreatetime();
+        updatetime = user.getUpdatetime();
+        tenantid = user.getTenantid();
+        userstatus = user.getUserstatus();
+        usergroupid = user.getUsergroupid();
+        tenantid = user.getTenantid();
+        istenantadmin = user.getIstenantadmin();
+        isforbidden = user.getIsforbidden();
+        fullparentid = user.getFullparentid();
+        mobile = user.getMobile();
+        this.orgname = orgname;
+    }
+
     public Long getId() {
         return id;
     }

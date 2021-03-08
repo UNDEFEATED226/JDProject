@@ -107,22 +107,7 @@ public class TenantService {
      * @return 租户列表
      */
     public List<TenantVO> findAllTenant() {
-        List<TenantVO> lv = new ArrayList<TenantVO>();
-        tenantrepository.findAllTenant().stream().forEach(t -> {
-            TenantVO tv = new TenantVO(t);
-            try {
-                String r = userrepository.getUsername(t.getAdminuserid());
-                if (r == null) {
-                    tv.setAdminname("租户管理员用户不存在或已删除");
-                } else {
-                    tv.setAdminname(r);
-                }
-            } catch (Exception e) {
-                tv.setAdminname("租户管理员用户不存在或已删除");
-            }
-            lv.add(tv);
-        });
-        return lv;
+        return tenantrepository.findAllTenant();
     }
 
     /**
@@ -133,22 +118,8 @@ public class TenantService {
      * @return 指定租户列表
      */
     public Page<TenantVO> findAllTenantPaginated(int pageNo) {
-        List<TenantVO> lv = new ArrayList<TenantVO>();
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        tenantrepository.findAllTenantPaginated(pageable).stream().forEach(t -> {
-            TenantVO tv = new TenantVO(t);
-            try {
-                String r = userrepository.getUsername(t.getAdminuserid());
-                if (r == null) {
-                    tv.setAdminname("租户管理员用户不存在或已删除");
-                } else {
-                    tv.setAdminname(r);
-                }
-            } catch (Exception e) {
-                tv.setAdminname("租户管理员用户不存在或已删除");
-            }
-            lv.add(tv);
-        });
+        List<TenantVO> lv = tenantrepository.findAllTenantPaginated(pageable);
         return new PageImpl<TenantVO>(lv);
     }
 

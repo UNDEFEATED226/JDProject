@@ -6,7 +6,6 @@ import com.jd.iot.admin.repository.UserRepository;
 import com.jd.iot.admin.repository.UserRoleRepository;
 import com.jd.iot.admin.vo.UserRoleVO;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -102,32 +101,7 @@ public class UserRoleService {
      * @return 用户角色列表
      */
     public List<UserRoleVO> findAllUserRole() {
-        List<UserRoleVO> lv = new ArrayList<UserRoleVO>();
-        userrolerepository.findAllUserRole().stream().forEach(u -> {
-            UserRoleVO ur = new UserRoleVO(u);
-            try {
-                String r = rolerepository.getRolename(u.getRoleid());
-                if (r == null) {
-                    ur.setRolename("角色不存在或已删除");
-                } else {
-                    ur.setRolename(r);
-                }
-            } catch (Exception e) {
-                ur.setRolename("角色不存在或已删除");
-            }
-            try {
-                String r = userrepository.getUsername(u.getUserid());
-                if (r == null) {
-                    ur.setUsername("用户不存在或已删除");
-                } else {
-                    ur.setUsername(r);
-                }
-            } catch (Exception e) {
-                ur.setUsername("用户不存在或已删除");
-            }
-            lv.add(ur);
-        });
-        return lv;
+        return userrolerepository.findAllUserRole();
     }
 
     /**
@@ -139,31 +113,7 @@ public class UserRoleService {
      */
     public Page<UserRoleVO> findAllUserRolePaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<UserRoleVO> lv = new ArrayList<UserRoleVO>();
-        userrolerepository.findAllUserRolePaginated(pageable).stream().forEach(u -> {
-            UserRoleVO ur = new UserRoleVO(u);
-            try {
-                String r = rolerepository.getRolename(u.getRoleid());
-                if (r == null) {
-                    ur.setRolename("角色不存在或已删除");
-                } else {
-                    ur.setRolename(r);
-                }
-            } catch (Exception e) {
-                ur.setRolename("角色不存在或已删除");
-            }
-            try {
-                String r = userrepository.getUsername(u.getUserid());
-                if (r == null) {
-                    ur.setUsername("用户不存在或已删除");
-                } else {
-                    ur.setUsername(r);
-                }
-            } catch (Exception e) {
-                ur.setUsername("用户不存在或已删除");
-            }
-            lv.add(ur);
-        });
+        List<UserRoleVO> lv = userrolerepository.findAllUserRolePaginated(pageable);
         return new PageImpl<UserRoleVO>(lv);
     }
 
@@ -185,6 +135,6 @@ public class UserRoleService {
         if (userrolerepository.count() % 20 != 0) {
             return userrolerepository.count() / 20 + 1;
         }
-            return userrolerepository.count() / 20;
+        return userrolerepository.count() / 20;
     }
 }

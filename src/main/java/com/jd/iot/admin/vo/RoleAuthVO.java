@@ -15,7 +15,7 @@ public class RoleAuthVO {
     private Long authid;
 
     private String authname;
-    
+
     private String resname;
 
     private Integer isdeleted;
@@ -35,6 +35,17 @@ public class RoleAuthVO {
         isdeleted = roleauth.getIsdeleted();
         createtime = roleauth.getCreatetime();
         updatetime = roleauth.getUpdatetime();
+    }
+
+    public RoleAuthVO(RoleAuth roleauth, String rolename, String authname) {
+        id = roleauth.getId();
+        roleid = roleauth.getRoleid();
+        authid = roleauth.getAuthid();
+        isdeleted = roleauth.getIsdeleted();
+        createtime = roleauth.getCreatetime();
+        updatetime = roleauth.getUpdatetime();
+        this.rolename = rolename;
+        this.authname = authname;
     }
 
     public Long getId() {

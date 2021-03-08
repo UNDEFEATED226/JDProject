@@ -1,14 +1,11 @@
 package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Auth;
-import com.jd.iot.admin.entity.RoleAuth;
 import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.repository.ResourceRepository;
 import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.vo.AuthVO;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -113,22 +110,7 @@ public class AuthService {
      * @return 权限列表
      */
     public List<AuthVO> findAllAuth() {
-        List<AuthVO> lv = new ArrayList<AuthVO>();
-        authrepository.findAllAuth().stream().forEach(a -> {
-            AuthVO av = new AuthVO(a);
-            try {
-                String r = resourcerepository.getResname(av.getResid());
-                if (r == null) {
-                    av.setResname("资源不存在或已删除");
-                } else {
-                    av.setResname(r);
-                }
-            } catch (Exception e) {
-                av.setResname("资源不存在或已删除");
-            }
-            lv.add(av);
-        });
-        return lv;
+        return authrepository.findAllAuth();
     }
 
     /**
@@ -137,22 +119,7 @@ public class AuthService {
      * @return 以res id排序的权限列表
      */
     public List<AuthVO> findAllAuthOrderbyResid() {
-        List<AuthVO> lv = new ArrayList<AuthVO>();
-        authrepository.findAllAuthOrderbyResid().stream().forEach(a -> {
-            AuthVO av = new AuthVO(a);
-            try {
-                String r = resourcerepository.getResname(av.getResid());
-                if (r == null) {
-                    av.setResname("资源不存在或已删除");
-                } else {
-                    av.setResname(r);
-                }
-            } catch (Exception e) {
-                av.setResname("资源不存在或已删除");
-            }
-            lv.add(av);
-        });
-        return lv;
+        return authrepository.findAllAuth();
     }
 
     /**
@@ -164,22 +131,7 @@ public class AuthService {
      */
     public Page<AuthVO> findAllAuthPaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<AuthVO> lv = new ArrayList<AuthVO>();
-        authrepository.findAllAuthPaginated(pageable).stream().forEach(a -> {
-            AuthVO av = new AuthVO(a);
-            try {
-                String r = resourcerepository.getResname(av.getResid());
-                if (r == null) {
-                    av.setResname("资源不存在或已删除");
-                } else {
-                    av.setResname(r);
-                }
-            } catch (Exception e) {
-                av.setResname("资源不存在或已删除");
-            }
-            lv.add(av);
-        });
-        return new PageImpl<AuthVO>(lv);
+        return new PageImpl<AuthVO>(authrepository.findAllAuthPaginated(pageable));
     }
 
     /**

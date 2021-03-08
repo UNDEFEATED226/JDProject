@@ -5,6 +5,7 @@ import com.jd.iot.admin.repository.OrganizationRepository;
 import com.jd.iot.admin.repository.TenantRepository;
 import com.jd.iot.admin.vo.OrganizationVO;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,8 +35,8 @@ public class OrganizationService {
      */
     public OrganizationVO addOrganization(OrganizationVO organizationvo) {
         Organization organization = new Organization(organizationvo);
-        organization.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        organization.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        organization.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new OrganizationVO(organizationrepository.save(organization));
     }
 
@@ -48,7 +49,7 @@ public class OrganizationService {
         try {
             Organization organization = organizationrepository.findById(id).get();
             organization.setIsdeleted(1);
-            organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            organization.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             organizationrepository.save(organization);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, " ORGANIZATION NOT FOUND");
@@ -70,7 +71,7 @@ public class OrganizationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, " ORGANIZATION NOT FOUND");
         }
         Organization organization = new Organization(organizationvo);
-        organization.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        organization.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new OrganizationVO(organizationrepository.save(organization));
     }
 

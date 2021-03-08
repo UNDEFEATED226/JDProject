@@ -8,6 +8,7 @@ import com.jd.iot.admin.vo.UserVO;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,15 +51,15 @@ public class UserService {
         } catch (Exception e) {
             user.setTenantid(null);
         }
-        Long max = userrepository.maxId();
-        if (max == null) {
+        Long maxId = userrepository.maxId();
+        if (maxId == null) {
             user.setUserid("jd-iot-" + getMd5(String.valueOf(1L)));
         } else {
-            user.setUserid("jd-iot-" + getMd5(String.valueOf(max + 1)));
+            user.setUserid("jd-iot-" + getMd5(String.valueOf(maxId + 1)));
         }
         user.setPassword(PassEncrypt.getMd5(user.getPassword()));
-        user.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        user.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        user.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new UserVO(userrepository.save(user));
     }
 
@@ -71,7 +72,7 @@ public class UserService {
         try {
             User user = userrepository.findById(id).get();
             user.setIsdeleted(1);
-            user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            user.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             userrepository.save(user);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
@@ -101,7 +102,7 @@ public class UserService {
             user.setTenantid(null);
         }
         user.setPassword(PassEncrypt.getMd5(uservo.getPassword()));
-        user.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new UserVO(userrepository.save(user));
     }
 
@@ -114,18 +115,18 @@ public class UserService {
      */
     public UserVO findById(Long id) {
         try {
-            UserVO u = new UserVO(userrepository.findById(id).get());
+            UserVO user = new UserVO(userrepository.findById(id).get());
             try {
-                String r = organizationrepository.getOrgname(Long.parseLong(u.getOrgid()));
-                if (r == null) {
-                    u.setOrgname("公司不存在或已删除");
+                String orgname = organizationrepository.getOrgname(Long.parseLong(user.getOrgid()));
+                if (orgname == null) {
+                    user.setOrgname("公司不存在或已删除");
                 } else {
-                    u.setOrgname(r);
+                    user.setOrgname(orgname);
                 }
             } catch (Exception e) {
-                u.setOrgname("公司不存在或已删除");
+                user.setOrgname("公司不存在或已删除");
             }
-            return u;
+            return user;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }

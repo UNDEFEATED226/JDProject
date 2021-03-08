@@ -6,6 +6,7 @@ import com.jd.iot.admin.repository.ResourceRepository;
 import com.jd.iot.admin.repository.RoleAuthRepository;
 import com.jd.iot.admin.vo.AuthVO;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,8 +39,8 @@ public class AuthService {
      */
     public AuthVO addAuth(AuthVO authvo) {
         Auth auth = new Auth(authvo);
-        auth.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        auth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        auth.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        auth.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new AuthVO(authrepository.save(auth));
     }
 
@@ -52,7 +53,7 @@ public class AuthService {
         try {
             Auth auth = authrepository.findById(id).get();
             auth.setIsdeleted(1);
-            auth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            auth.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             authrepository.save(auth);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AUTH NOT FOUND");
@@ -69,12 +70,12 @@ public class AuthService {
      */
     public AuthVO editAuthVO(Long id, AuthVO authvo) {
         try {
-            authrepository.findById(id).get();
+            authrepository.findById(id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AUTH NOT FOUND");
         }
         Auth auth = new Auth(authvo);
-        auth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        auth.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new AuthVO(authrepository.save(auth));
     }
 

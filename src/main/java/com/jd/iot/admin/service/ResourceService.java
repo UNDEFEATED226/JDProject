@@ -5,6 +5,7 @@ import com.jd.iot.admin.repository.ResourceRepository;
 import com.jd.iot.admin.vo.ResourceVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,8 @@ public class ResourceService {
         } else {
             resource.setId(maxId + 1);
         }
-        resource.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        resource.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        resource.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new ResourceVO(resourcerepository.save(resource));
     }
 
@@ -61,7 +62,7 @@ public class ResourceService {
         try {
             Resource resource = resourcerepository.findById(id).get();
             resource.setIsdeleted(1);
-            resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            resource.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             resourcerepository.save(resource);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DELETE RESOURCE FAILURE");
@@ -83,7 +84,7 @@ public class ResourceService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, " ORGANIZATION NOT FOUND");
         }
         Resource resource = new Resource(resourcevo);
-        resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        resource.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new ResourceVO(resourcerepository.save(resource));
     }
 
@@ -181,10 +182,10 @@ public class ResourceService {
      * @return 指定type id的资源列表
      */
     public List<ResourceVO> resourceMenu(Long restypeid) {
-        List<ResourceVO> lv = new ArrayList<ResourceVO>();
-        resourcerepository.findAllByRestypeid(restypeid).stream().map(r -> lv.add(new ResourceVO(r)))
-                .collect(Collectors.toList());
-        return lv;
+        List<ResourceVO> resourceList = new ArrayList<ResourceVO>();
+        resourcerepository.findAllByRestypeid(restypeid).stream()
+                .map(resource -> resourceList.add(new ResourceVO(resource))).collect(Collectors.toList());
+        return resourceList;
     }
 
     /**

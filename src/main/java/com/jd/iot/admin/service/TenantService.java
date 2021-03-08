@@ -5,6 +5,7 @@ import com.jd.iot.admin.repository.TenantRepository;
 import com.jd.iot.admin.repository.UserRepository;
 import com.jd.iot.admin.vo.TenantVO;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,8 +35,8 @@ public class TenantService {
      */
     public TenantVO addTenant(TenantVO tenantvo) {
         Tenant tenant = new Tenant(tenantvo);
-        tenant.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        tenant.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        tenant.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        tenant.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new TenantVO(tenantrepository.save(tenant));
     }
 
@@ -48,7 +49,7 @@ public class TenantService {
         try {
             Tenant tenant = tenantrepository.findById(id).get();
             tenant.setIsdeleted(1);
-            tenant.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            tenant.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             tenantrepository.save(tenant);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TENANT NOT FOUND");
@@ -70,7 +71,7 @@ public class TenantService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TENANT NOT FOUND");
         }
         Tenant tenant = new Tenant(tenantvo);
-        tenant.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        tenant.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new TenantVO(tenantrepository.save(tenant));
     }
 
@@ -83,18 +84,18 @@ public class TenantService {
      */
     public TenantVO findById(Long id) {
         try {
-            TenantVO t = new TenantVO(tenantrepository.findById(id).get());
+            TenantVO tenant = new TenantVO(tenantrepository.findById(id).get());
             try {
-                String r = userrepository.getLoginname(t.getAdminuserid());
-                if (r == null) {
-                    t.setAdminname("租户管理员用户不存在或已删除");
+                String loginname = userrepository.getLoginname(tenant.getAdminuserid());
+                if (loginname == null) {
+                    tenant.setAdminname("租户管理员用户不存在或已删除");
                 } else {
-                    t.setAdminname(r);
+                    tenant.setAdminname(loginname);
                 }
             } catch (Exception e) {
-                t.setAdminname("租户管理员用户不存在或已删除");
+                tenant.setAdminname("租户管理员用户不存在或已删除");
             }
-            return t;
+            return tenant;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TENANT NOT FOUND");
         }

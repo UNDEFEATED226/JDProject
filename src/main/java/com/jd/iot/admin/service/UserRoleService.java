@@ -6,6 +6,7 @@ import com.jd.iot.admin.repository.UserRepository;
 import com.jd.iot.admin.repository.UserRoleRepository;
 import com.jd.iot.admin.vo.UserRoleVO;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,8 +39,8 @@ public class UserRoleService {
      */
     public UserRoleVO addUserRole(UserRoleVO userrolevo) {
         UserRole userrole = new UserRole(userrolevo);
-        userrole.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        userrole.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        userrole.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new UserRoleVO(userrolerepository.save(userrole));
     }
 
@@ -52,7 +53,7 @@ public class UserRoleService {
         try {
             UserRole userrole = userrolerepository.findById(id).get();
             userrole.setIsdeleted(1);
-            userrole.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            userrole.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             userrolerepository.save(userrole);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
@@ -68,28 +69,28 @@ public class UserRoleService {
      */
     public UserRoleVO findById(Long id) {
         try {
-            UserRoleVO u = new UserRoleVO(userrolerepository.findById(id).get());
+            UserRoleVO userrole = new UserRoleVO(userrolerepository.findById(id).get());
             try {
-                String r = rolerepository.getRolename(u.getRoleid());
-                if (r == null) {
-                    u.setRolename("角色不存在或已删除");
+                String rolename = rolerepository.getRolename(userrole.getRoleid());
+                if (rolename == null) {
+                    userrole.setRolename("角色不存在或已删除");
                 } else {
-                    u.setRolename(r);
+                    userrole.setRolename(rolename);
                 }
             } catch (Exception e) {
-                u.setRolename("角色不存在或已删除");
+                userrole.setRolename("角色不存在或已删除");
             }
             try {
-                String r = userrepository.getUsername(u.getUserid());
-                if (r == null) {
-                    u.setUsername("用户不存在或已删除");
+                String rolename = userrepository.getUsername(userrole.getUserid());
+                if (rolename == null) {
+                    userrole.setUsername("用户不存在或已删除");
                 } else {
-                    u.setUsername(r);
+                    userrole.setUsername(rolename);
                 }
             } catch (Exception e) {
-                u.setUsername("用户不存在或已删除");
+                userrole.setUsername("用户不存在或已删除");
             }
-            return u;
+            return userrole;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
         }

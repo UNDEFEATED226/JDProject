@@ -5,6 +5,7 @@ import com.jd.iot.admin.repository.RoleRepository;
 import com.jd.iot.admin.vo.RoleVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,10 @@ public class RoleService {
      * @return 成功添加的角色
      */
     public RoleVO addRole(RoleVO rolevo) {
-        Role r = new Role(rolevo);
-        r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        r.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        return new RoleVO(rolerepository.save(r));
+        Role role = new Role(rolevo);
+        role.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        role.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        return new RoleVO(rolerepository.save(role));
     }
 
     /**
@@ -44,10 +45,10 @@ public class RoleService {
      */
     public void deleteRole(Long id) {
         try {
-            Role r = rolerepository.findById(id).get();
-            r.setIsdeleted(1);
-            r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-            rolerepository.save(r);
+            Role role = rolerepository.findById(id).get();
+            role.setIsdeleted(1);
+            role.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+            rolerepository.save(role);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLE NOT FOUND");
         }
@@ -67,9 +68,9 @@ public class RoleService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLE NOT FOUND");
         }
-        Role r = new Role(rolevo);
-        r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return new RoleVO(rolerepository.save(r));
+        Role role = new Role(rolevo);
+        role.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        return new RoleVO(rolerepository.save(role));
     }
 
     /**
@@ -93,9 +94,9 @@ public class RoleService {
      * @return 角色列表
      */
     public List<RoleVO> findAllRole() {
-        List<RoleVO> lv = new ArrayList<RoleVO>();
-        rolerepository.findAllRole().stream().map(r -> lv.add(new RoleVO(r))).collect(Collectors.toList());
-        return lv;
+        List<RoleVO> roleList = new ArrayList<RoleVO>();
+        rolerepository.findAllRole().stream().map(role -> roleList.add(new RoleVO(role))).collect(Collectors.toList());
+        return roleList;
     }
 
     /**
@@ -107,10 +108,10 @@ public class RoleService {
      */
     public Page<RoleVO> findAllRolePaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<RoleVO> lv = new ArrayList<RoleVO>();
-        rolerepository.findAllRolePaginated(pageable).stream().map(r -> lv.add(new RoleVO(r)))
+        List<RoleVO> roleList = new ArrayList<RoleVO>();
+        rolerepository.findAllRolePaginated(pageable).stream().map(role -> roleList.add(new RoleVO(role)))
                 .collect(Collectors.toList());
-        return new PageImpl<RoleVO>(lv);
+        return new PageImpl<RoleVO>(roleList);
     }
 
     /**
@@ -121,10 +122,10 @@ public class RoleService {
      * @return 所有指定角色种类的角色
      */
     public List<RoleVO> roleMenu(Long roletype) {
-        List<RoleVO> lv = new ArrayList<RoleVO>();
-        rolerepository.findAllByRoletype(roletype).stream().map(r -> lv.add(new RoleVO(r)))
+        List<RoleVO> roleList = new ArrayList<RoleVO>();
+        rolerepository.findAllByRoletype(roletype).stream().map(role -> roleList.add(new RoleVO(role)))
                 .collect(Collectors.toList());
-        return lv;
+        return roleList;
     }
 
     /**
@@ -137,10 +138,10 @@ public class RoleService {
      */
     public Page<RoleVO> roleMenuPaginated(Long roletype, int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<RoleVO> lv = new ArrayList<RoleVO>();
-        rolerepository.findAllByRoletypePaginated(roletype, pageable).stream().map(r -> lv.add(new RoleVO(r)))
-                .collect(Collectors.toList());
-        return new PageImpl<RoleVO>(lv);
+        List<RoleVO> roleList = new ArrayList<RoleVO>();
+        rolerepository.findAllByRoletypePaginated(roletype, pageable).stream()
+                .map(role -> roleList.add(new RoleVO(role))).collect(Collectors.toList());
+        return new PageImpl<RoleVO>(roleList);
     }
 
     /**

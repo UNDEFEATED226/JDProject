@@ -10,8 +10,8 @@ import com.jd.iot.admin.vo.RoleAuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +51,8 @@ public class RoleAuthService {
      */
     public RoleAuthVO addRoleAuth(RoleAuthVO roleauthvo) {
         RoleAuth role = new RoleAuth(roleauthvo);
-        role.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        role.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        role.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        role.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new RoleAuthVO(roleauthrepository.save(role));
     }
 
@@ -65,7 +65,7 @@ public class RoleAuthService {
         try {
             RoleAuth roleauth = roleauthrepository.findById(id).get();
             roleauth.setIsdeleted(1);
-            roleauth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            roleauth.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             roleauthrepository.save(roleauth);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
@@ -87,7 +87,7 @@ public class RoleAuthService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
         }
         RoleAuth roleauth = new RoleAuth(roleauthvo);
-        roleauth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        roleauth.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         return new RoleAuthVO(roleauthrepository.save(roleauth));
     }
 
@@ -142,23 +142,23 @@ public class RoleAuthService {
      * @param l      更新后的权限列表
      * 
      */
-    public void changeAuth(Long roleid, List<List<AuthVO>> l) {
-        List<List<AuthVO>> original = findAuthByRoleid(roleid);
-        for (int i = 0; i < l.size(); i++) {
-            for (int j = 0; j < l.get(i).size(); j++) {
-                if (l.get(i).get(j).isSelected() != original.get(i).get(j).isSelected()) {
-                    if (l.get(i).get(j).isSelected() == true) {
-                        RoleAuth r = new RoleAuth();
-                        r.setRoleid(roleid);
-                        r.setAuthid(l.get(i).get(j).getId());
-                        r.setIsdeleted(0);
-                        r.setCreatetime(new Timestamp(System.currentTimeMillis()));
-                        r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-                        roleauthrepository.save(r);
+    public void changeAuth(Long roleid, List<List<AuthVO>> newAuthList) {
+        List<List<AuthVO>> originalAuthList = findAuthByRoleid(roleid);
+        for (int i = 0; i < newAuthList.size(); i++) {
+            for (int j = 0; j < newAuthList.get(i).size(); j++) {
+                if (newAuthList.get(i).get(j).isSelected() != originalAuthList.get(i).get(j).isSelected()) {
+                    if (newAuthList.get(i).get(j).isSelected() == true) {
+                        RoleAuth roleauth = new RoleAuth();
+                        roleauth.setRoleid(roleid);
+                        roleauth.setAuthid(newAuthList.get(i).get(j).getId());
+                        roleauth.setIsdeleted(0);
+                        roleauth.setCreatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+                        roleauth.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+                        roleauthrepository.save(roleauth);
                     } else {
-                        roleauthrepository.findByRoleidAndAuthid(roleid, l.get(i).get(j).getId()).stream()
-                                .forEach(r -> {
-                                    deleteRoleAuth(r.getId());
+                        roleauthrepository.findByRoleidAndAuthid(roleid, newAuthList.get(i).get(j).getId()).stream()
+                                .forEach(roleauth -> {
+                                    deleteRoleAuth(roleauth.getId());
                                 });
                     }
                 }
@@ -175,7 +175,7 @@ public class RoleAuthService {
      */
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
         List<List<AuthVO>> sortedAuthList = new ArrayList<List<AuthVO>>();
-        Map<Long, Long> authid = new HashMap<Long, Long>();
+        HashMap<Long, Long> authid = new HashMap<Long, Long>();
         List<AuthVO> authList = roleauthrepository.findAuthOrderbyResid();
         roleauthrepository.findAuthidByRoleid(roleid).forEach(auth -> {
             authid.put(auth, auth);

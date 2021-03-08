@@ -10,6 +10,7 @@ import com.jd.iot.admin.vo.RoleAuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,10 +48,10 @@ public class RoleAuthService {
      * @return 成功添加的角色权限
      */
     public RoleAuthVO addRoleAuth(RoleAuthVO roleauthvo) {
-        RoleAuth r = new RoleAuth(roleauthvo);
-        r.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return new RoleAuthVO(roleauthrepository.save(r));
+        RoleAuth role = new RoleAuth(roleauthvo);
+        role.setCreatetime(new Timestamp(System.currentTimeMillis()));
+        role.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        return new RoleAuthVO(roleauthrepository.save(role));
     }
 
     /**
@@ -60,10 +61,10 @@ public class RoleAuthService {
      */
     public void deleteRoleAuth(Long id) {
         try {
-            RoleAuth r = roleauthrepository.findById(id).get();
-            r.setIsdeleted(1);
-            r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-            roleauthrepository.save(r);
+            RoleAuth roleauth = roleauthrepository.findById(id).get();
+            roleauth.setIsdeleted(1);
+            roleauth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            roleauthrepository.save(roleauth);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
         }
@@ -83,9 +84,9 @@ public class RoleAuthService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLEAUTH NOT FOUND");
         }
-        RoleAuth r = new RoleAuth(roleauthvo);
-        r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        return new RoleAuthVO(roleauthrepository.save(r));
+        RoleAuth roleauth = new RoleAuth(roleauthvo);
+        roleauth.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+        return new RoleAuthVO(roleauthrepository.save(roleauth));
     }
 
     /**
@@ -171,30 +172,30 @@ public class RoleAuthService {
      * @return 权限列表
      */
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
-        List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
-        List<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
-        List<AuthVO> res = roleauthrepository.findAuthOrderbyResid();
-        res.stream().forEach(a -> {
-            if (authid.contains(a.getId())) {
-                a.setSelected(true);
+        List<List<AuthVO>> sortedAuthList = new ArrayList<List<AuthVO>>();
+        HashSet<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
+        List<AuthVO> authList = roleauthrepository.findAuthOrderbyResid();
+        authList.stream().forEach(auth -> {
+            if (authid.contains(auth.getId())) {
+                auth.setSelected(true);
             }
         });
-        if (res.size() == 1) {
-            rRes.add(res);
-            return rRes;
+        if (authList.size() == 1) {
+            sortedAuthList.add(authList);
+            return sortedAuthList;
         }
         int index = 0;
-        for (int i = 0; i < res.size() - 1; i++) {
-            if (res.get(i).getResid() != res.get(i + 1).getResid()) {
-                rRes.add(res.subList(index, i + 1));
+        for (int i = 0; i < authList.size() - 1; i++) {
+            if (authList.get(i).getResid() != authList.get(i + 1).getResid()) {
+                sortedAuthList.add(authList.subList(index, i + 1));
                 index = i + 1;
             }
         }
-        if (res.get(res.size() - 1).getResid() == res.get(res.size() - 2).getResid()) {
-            rRes.add(res.subList(index, res.size()));
+        if (authList.get(authList.size() - 1).getResid() == authList.get(authList.size() - 2).getResid()) {
+            sortedAuthList.add(authList.subList(index, authList.size()));
         } else {
-            rRes.add(Arrays.asList(res.get(res.size() - 1)));
+            sortedAuthList.add(Arrays.asList(authList.get(authList.size() - 1)));
         }
-        return rRes;
+        return sortedAuthList;
     }
 }

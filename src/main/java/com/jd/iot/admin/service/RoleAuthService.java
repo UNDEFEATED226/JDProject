@@ -88,8 +88,6 @@ public class RoleAuthService {
         return new RoleAuthVO(roleauthrepository.save(r));
     }
 
-   
-
     /**
      * 查询角色权限列表
      * 
@@ -221,12 +219,11 @@ public class RoleAuthService {
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
         List<List<AuthVO>> rRes = new ArrayList<List<AuthVO>>();
         List<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
-        List<AuthVO> res = new ArrayList<AuthVO>();
-        roleauthrepository.findAuthOrderbyResid().stream().forEach(a -> {
+        List<AuthVO> res = roleauthrepository.findAuthOrderbyResid();
+        res.stream().forEach(a -> {
             if (authid.contains(a.getId())) {
                 a.setSelected(true);
             }
-            res.add(a);
         });
         if (res.size() == 1) {
             rRes.add(res);

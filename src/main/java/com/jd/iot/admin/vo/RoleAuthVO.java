@@ -37,7 +37,7 @@ public class RoleAuthVO {
         updatetime = roleauth.getUpdatetime();
     }
 
-    public RoleAuthVO(RoleAuth roleauth, String rolename, String authname) {
+    public RoleAuthVO(RoleAuth roleauth, String rolename, String authname, String resname) {
         id = roleauth.getId();
         roleid = roleauth.getRoleid();
         authid = roleauth.getAuthid();
@@ -46,6 +46,7 @@ public class RoleAuthVO {
         updatetime = roleauth.getUpdatetime();
         this.rolename = rolename;
         this.authname = authname;
+        this.resname = resname;
     }
 
     public Long getId() {

@@ -5,7 +5,6 @@ import com.jd.iot.admin.repository.TenantRepository;
 import com.jd.iot.admin.repository.UserRepository;
 import com.jd.iot.admin.vo.TenantVO;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

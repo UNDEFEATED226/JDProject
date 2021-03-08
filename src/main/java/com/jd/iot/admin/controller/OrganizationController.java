@@ -31,7 +31,7 @@ public class OrganizationController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     Gson gson = new Gson();
-    
+
     /**
      * 添加组织
      * 
@@ -58,7 +58,7 @@ public class OrganizationController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
         }
     }
-    
+
     /**
      * 修改组织
      * 
@@ -77,7 +77,7 @@ public class OrganizationController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
         }
     }
-    
+
     /**
      * 用id查找指定组织
      * 

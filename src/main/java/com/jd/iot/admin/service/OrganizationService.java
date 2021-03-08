@@ -5,7 +5,6 @@ import com.jd.iot.admin.repository.OrganizationRepository;
 import com.jd.iot.admin.repository.TenantRepository;
 import com.jd.iot.admin.vo.OrganizationVO;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -107,22 +106,7 @@ public class OrganizationService {
      * @return 组织列表
      */
     public List<OrganizationVO> findAllOrganization() {
-        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
-        organizationrepository.findAllOrganization().stream().forEach(o -> {
-            OrganizationVO ov = new OrganizationVO(o);
-            try {
-                String r = tenantrepository.getTenantname(Long.parseLong(o.getTenantid()));
-                if (r == null) {
-                    ov.setTenantname("租户不存在或已删除");
-                } else {
-                    ov.setTenantname(r);
-                }
-            } catch (Exception e) {
-                ov.setTenantname("租户不存在或已删除");
-            }
-            lv.add(ov);
-        });
-        return lv;
+        return organizationrepository.findAllOrganization();
     }
 
     /**
@@ -134,21 +118,7 @@ public class OrganizationService {
      */
     public Page<OrganizationVO> findAllOrganizationPaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<OrganizationVO> lv = new ArrayList<OrganizationVO>();
-        organizationrepository.findAllOrganizationPaginated(pageable).stream().forEach(o -> {
-            OrganizationVO ov = new OrganizationVO(o);
-            try {
-                String r = tenantrepository.getTenantname(Long.parseLong(o.getTenantid()));
-                if (r == null) {
-                    ov.setTenantname("租户不存在或已删除");
-                } else {
-                    ov.setTenantname(r);
-                }
-            } catch (Exception e) {
-                ov.setTenantname("租户不存在或已删除");
-            }
-            lv.add(ov);
-        });
+        List<OrganizationVO> lv = organizationrepository.findAllOrganizationPaginated(pageable);
         return new PageImpl<OrganizationVO>(lv);
     }
 

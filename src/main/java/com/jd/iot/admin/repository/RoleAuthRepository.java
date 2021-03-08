@@ -15,10 +15,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoleAuthRepository extends JpaRepository<RoleAuth, Long> {
 
-    @Query(value = "SELECT new com.jd.iot.admin.vo.RoleAuthVO(ra,r.rolename,a.authname) FROM RoleAuth ra INNER JOIN Role r ON ra.roleid = r.id INNER JOIN Auth a ON ra.authid = a.id INNER JOIN Resource re on a.resid = re.id WHERE ra.isdeleted = 0 AND re.isdeleted = 0 and r.isdeleted = 0 AND a.isdeleted = 0")
+    @Query(value = "SELECT new com.jd.iot.admin.vo.RoleAuthVO(ra,r.rolename,a.authname,re.resname) FROM RoleAuth ra INNER JOIN Role r ON ra.roleid = r.id INNER JOIN Auth a ON ra.authid = a.id INNER JOIN Resource re on a.resid = re.id WHERE ra.isdeleted = 0 AND re.isdeleted = 0 and r.isdeleted = 0 AND a.isdeleted = 0")
     public List<RoleAuthVO> findAllRoleAuth();
 
-    @Query(value = "SELECT new com.jd.iot.admin.vo.RoleAuthVO(ra,r.rolename,a.authname) FROM RoleAuth ra INNER JOIN Role r ON ra.roleid = r.id INNER JOIN Auth a ON ra.authid = a.id INNER JOIN Resource re on a.resid = re.id WHERE ra.isdeleted = 0 AND re.isdeleted = 0 and r.isdeleted = 0 AND a.isdeleted = 0")
+    @Query(value = "SELECT new com.jd.iot.admin.vo.RoleAuthVO(ra,r.rolename,a.authname,re.resname) FROM RoleAuth ra INNER JOIN Role r ON ra.roleid = r.id INNER JOIN Auth a ON ra.authid = a.id INNER JOIN Resource re on a.resid = re.id WHERE ra.isdeleted = 0 AND re.isdeleted = 0 and r.isdeleted = 0 AND a.isdeleted = 0")
     public List<RoleAuthVO> findAllRoleAuthPaginated(Pageable pageable);
 
     @Query(value = "SELECT count(ra) FROM RoleAuth ra INNER JOIN Role r ON ra.roleid = r.id INNER JOIN Auth a ON ra.authid = a.id INNER JOIN Resource re on a.resid = re.id WHERE ra.isdeleted = 0 AND re.isdeleted = 0 and r.isdeleted = 0 AND a.isdeleted = 0")

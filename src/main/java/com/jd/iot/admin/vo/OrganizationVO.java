@@ -32,7 +32,7 @@ public class OrganizationVO {
 
     @Size(max = 64)
     private String tenantid;
-    
+
     private String tenantname;
 
     private Timestamp updatetime;
@@ -64,6 +64,24 @@ public class OrganizationVO {
         isdeleted = organization.getIsdeleted();
         fullparentid = organization.getFullparentid();
         ishavechild = organization.getIshavechild();
+    }
+
+    public OrganizationVO(Organization organization, String tenantname) {
+        id = organization.getId();
+        orgname = organization.getOrgname();
+        parentorgid = organization.getParentorgid();
+        orglevel = organization.getOrglevel();
+        orgtype = organization.getOrgtype();
+        orgtypename = organization.getOrgtypename();
+        orgcatlog = organization.getOrgcatlog();
+        baseorgcode = organization.getBaseorgcode();
+        tenantid = organization.getTenantid();
+        createtime = organization.getCreatetime();
+        updatetime = organization.getUpdatetime();
+        isdeleted = organization.getIsdeleted();
+        fullparentid = organization.getFullparentid();
+        ishavechild = organization.getIshavechild();
+        this.tenantname = tenantname;
     }
 
     public Long getId() {

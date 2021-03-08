@@ -10,8 +10,10 @@ import com.jd.iot.admin.vo.RoleAuthVO;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -173,10 +175,13 @@ public class RoleAuthService {
      */
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
         List<List<AuthVO>> sortedAuthList = new ArrayList<List<AuthVO>>();
-        HashSet<Long> authid = roleauthrepository.findAuthidByRoleid(roleid);
+        Map<Long, Long> authid = new HashMap<Long, Long>();
         List<AuthVO> authList = roleauthrepository.findAuthOrderbyResid();
+        roleauthrepository.findAuthidByRoleid(roleid).forEach(auth -> {
+            authid.put(auth, auth);
+        });
         authList.stream().forEach(auth -> {
-            if (authid.contains(auth.getId())) {
+            if (authid.containsKey(auth.getId())) {
                 auth.setSelected(true);
             }
         });

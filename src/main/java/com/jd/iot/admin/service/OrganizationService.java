@@ -85,11 +85,11 @@ public class OrganizationService {
         try {
             OrganizationVO o = new OrganizationVO(organizationrepository.findById(id).get());
             try {
-                String r = tenantrepository.getTenantname(Long.parseLong(o.getTenantid()));
-                if (r == null) {
+                String tenantname = tenantrepository.getTenantname(Long.parseLong(o.getTenantid()));
+                if (tenantname == null) {
                     o.setTenantname("租户不存在或已删除");
                 } else {
-                    o.setTenantname(r);
+                    o.setTenantname(tenantname);
                 }
             } catch (Exception e) {
                 o.setTenantname("租户不存在或已删除");

@@ -87,18 +87,18 @@ public class AuthService {
      */
     public AuthVO findById(Long id) {
         try {
-            AuthVO av = new AuthVO(authrepository.findById(id).get());
+            AuthVO authvo = new AuthVO(authrepository.findById(id).get());
             try {
-                String r = resourcerepository.getResname(av.getResid());
+                String r = resourcerepository.getResname(authvo.getResid());
                 if (r == null) {
-                    av.setResname("资源不存在或已删除");
+                    authvo.setResname("资源不存在或已删除");
                 } else {
-                    av.setResname(r);
+                    authvo.setResname(r);
                 }
             } catch (Exception e) {
-                av.setResname("资源不存在或已删除");
+                authvo.setResname("资源不存在或已删除");
             }
-            return av;
+            return authvo;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AUTH NOT FOUND");
         }

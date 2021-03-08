@@ -32,20 +32,20 @@ public class ResourceService {
      */
     public ResourceVO addResource(ResourceVO resourcevo) {
         Resource resource = new Resource(resourcevo);
-        Long max;
+        Long maxId;
         if (resource.getRestypeid() == 1L || resource.getRestypeid() == 2L) {
-            max = resourcerepository.maxId1();
+            maxId = resourcerepository.maxId1();
         } else {
-            max = resourcerepository.maxId2();
+            maxId = resourcerepository.maxId2();
         }
-        if (max == null) {
+        if (maxId == null) {
             if (resource.getRestypeid() == 1L || resource.getRestypeid() == 2L) {
                 resource.setId(1L);
             } else {
                 resource.setId(1000001L);
             }
         } else {
-            resource.setId(max + 1);
+            resource.setId(maxId + 1);
         }
         resource.setCreatetime(new Timestamp(System.currentTimeMillis()));
         resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
@@ -59,10 +59,10 @@ public class ResourceService {
      */
     public void deleteResource(Long id) {
         try {
-            Resource r = resourcerepository.findById(id).get();
-            r.setIsdeleted(1);
-            r.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-            resourcerepository.save(r);
+            Resource resource = resourcerepository.findById(id).get();
+            resource.setIsdeleted(1);
+            resource.setUpdatetime(new Timestamp(System.currentTimeMillis()));
+            resourcerepository.save(resource);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DELETE RESOURCE FAILURE");
         }
@@ -108,9 +108,10 @@ public class ResourceService {
      * @return 资源列表
      */
     public List<ResourceVO> findAllResource() {
-        List<ResourceVO> lv = new ArrayList<ResourceVO>();
-        resourcerepository.findAllResource().stream().map(s -> lv.add(new ResourceVO(s))).collect(Collectors.toList());
-        return lv;
+        List<ResourceVO> resourceList = new ArrayList<ResourceVO>();
+        resourcerepository.findAllResource().stream().map(resource -> resourceList.add(new ResourceVO(resource)))
+                .collect(Collectors.toList());
+        return resourceList;
     }
 
     /**
@@ -123,7 +124,7 @@ public class ResourceService {
     public Page<ResourceVO> findAllResourcePaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
         List<ResourceVO> lv = new ArrayList<ResourceVO>();
-        resourcerepository.findAllResourcePaginated(pageable).stream().map(r -> lv.add(new ResourceVO(r)))
+        resourcerepository.findAllResourcePaginated(pageable).stream().map(resource -> lv.add(new ResourceVO(resource)))
                 .collect(Collectors.toList());
         return new PageImpl<ResourceVO>(lv);
     }

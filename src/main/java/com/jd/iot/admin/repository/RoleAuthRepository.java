@@ -3,8 +3,6 @@ package com.jd.iot.admin.repository;
 import com.jd.iot.admin.entity.RoleAuth;
 import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleAuthVO;
-
-import java.util.HashSet;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,7 +28,7 @@ public interface RoleAuthRepository extends JpaRepository<RoleAuth, Long> {
             @Param(value = "authid") Long authid);
 
     @Query(value = "SELECT a.id FROM RoleAuth r INNER JOIN Auth a ON r.authid = a.id WHERE a.isdeleted = 0 AND r.isdeleted = 0 AND r.roleid = :roleid")
-    public HashSet<Long> findAuthidByRoleid(@Param(value = "roleid") Long roleid);
+    public List<Long> findAuthidByRoleid(@Param(value = "roleid") Long roleid);
 
     @Query(value = "SELECT new com.jd.iot.admin.vo.AuthVO(a,r.resname) FROM Auth a INNER JOIN Resource r on a.resid = r.id WHERE a.isdeleted = 0 AND r.isdeleted = 0 ORDER BY a.resid")
     public List<AuthVO> findAuthOrderbyResid();

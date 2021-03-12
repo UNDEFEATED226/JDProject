@@ -1,5 +1,6 @@
 package com.jd.iot.admin.entity;
 
+import com.jd.iot.admin.vo.OrganizationVO;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.jd.iot.admin.vo.OrganizationVO;
-
-//Organization Entity
+//组织实体
 @Entity
 @Table(name = "iot_hub_rbac_organization")
 public class Organization {

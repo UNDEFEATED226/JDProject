@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 资源实体
+//资源服务
 @Service
 public class ResourceService {
 
@@ -118,7 +118,7 @@ public class ResourceService {
     /**
      * 根据页号查询指定资源列表
      * 
-     * @param pageable 页号
+     * @param pageNo 页号
      * 
      * @return 指定资源列表
      */

@@ -1,5 +1,6 @@
 package com.jd.iot.admin.entity;
 
+import com.jd.iot.admin.vo.UserRoleVO;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 
-import com.jd.iot.admin.vo.UserRoleVO;
-
-//Role Entity
+//用户角色
 @Entity
 @Table(name = "iot_hub_rbac_user_role")
 public class UserRole {

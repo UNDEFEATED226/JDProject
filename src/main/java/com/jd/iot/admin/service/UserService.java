@@ -3,6 +3,7 @@ package com.jd.iot.admin.service;
 import com.jd.iot.admin.entity.User;
 import com.jd.iot.admin.passwordencrypt.PassEncrypt;
 import com.jd.iot.admin.repository.OrganizationRepository;
+import com.jd.iot.admin.repository.TenantRepository;
 import com.jd.iot.admin.repository.UserRepository;
 import com.jd.iot.admin.vo.UserVO;
 import java.math.BigInteger;
@@ -19,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for User Entity
+//用户服务
 @Service
 public class UserService {
 
@@ -35,6 +36,9 @@ public class UserService {
     @Autowired
     OrganizationRepository organizationrepository;
 
+    @Autowired
+    TenantRepository tenantrepository;
+
     /**
      * 添加用户
      * 
@@ -45,12 +49,6 @@ public class UserService {
      */
     public UserVO addUser(UserVO uservo) {
         User user = new User(uservo);
-        try {
-            user.setTenantid(
-                    Long.parseLong(organizationservice.findById(Long.parseLong(user.getOrgid())).getTenantid()));
-        } catch (Exception e) {
-            user.setTenantid(null);
-        }
         Long maxId = userrepository.maxId();
         if (maxId == null) {
             user.setUserid("jd-iot-" + getMd5(String.valueOf(1L)));
@@ -117,19 +115,20 @@ public class UserService {
         try {
             UserVO user = new UserVO(userrepository.findById(id).get());
             try {
-                String orgname = organizationrepository.getOrgname(Long.parseLong(user.getOrgid()));
-                if (orgname == null) {
-                    user.setOrgname("公司不存在或已删除");
-                } else {
-                    user.setOrgname(orgname);
-                }
+                user.setOrgname(organizationrepository.findById(Long.parseLong(user.getOrgid())).get().getOrgname());
             } catch (Exception e) {
-                user.setOrgname("公司不存在或已删除");
+                user.setOrgname("组织不存在或已删除");
+            }
+            try {
+                user.setTenantname(tenantrepository.findById(user.getTenantid()).get().getName());
+            } catch (Exception e) {
+                user.setTenantname("租户不存在或已删除");
             }
             return user;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
+
     }
 
     /**
@@ -190,5 +189,19 @@ public class UserService {
             return userrepository.count() / 20 + 1;
         }
         return userrepository.count() / 20;
+    }
+
+    /**
+     * 查询用户id最大值+1
+     * 
+     * @return 用户id最大值+1
+     */
+    public Long maxId() {
+        Long maxId = userrepository.maxId();
+        if (maxId == null) {
+            return 1L;
+        } else {
+            return maxId + 1;
+        }
     }
 }

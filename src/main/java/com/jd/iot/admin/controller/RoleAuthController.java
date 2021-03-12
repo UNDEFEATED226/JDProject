@@ -1,5 +1,6 @@
 package com.jd.iot.admin.controller;
 
+import com.google.gson.Gson;
 import com.jd.iot.admin.service.RoleAuthService;
 import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleAuthVO;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import com.google.gson.Gson;
 
 @RestController
 @RequestMapping("/roleauth")
@@ -144,9 +144,9 @@ public class RoleAuthController {
      * 
      * @return 权限列表
      */
-    @GetMapping("/findauthbyroleid")
+    @GetMapping("/authlistbyroleid")
     public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
-        log.info("根据角色id查询权限列表:[]", roleid, gson.toJson(roleauthservice.findAuthByRoleid(roleid)));
-        return roleauthservice.findAuthByRoleid(roleid);
+        log.info("根据角色id查询权限列表:[]", roleid, gson.toJson(roleauthservice.authListByRoleid(roleid)));
+        return roleauthservice.authListByRoleid(roleid);
     }
 }

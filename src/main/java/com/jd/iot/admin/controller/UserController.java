@@ -30,6 +30,26 @@ public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
+    Gson gson = new Gson();
+    
+    /**
+     * 添加用户
+     *
+     * @param user 需添加的用户
+     * 
+     * @return 添加成功的用户
+     */
+    @PostMapping("/adduser")
+    public UserVO addUser(@RequestBody @Validated UserVO uservo) {
+        try {
+            log.info("添加用户:{}", gson.toJson(uservo));
+            return userservice.addUser(uservo);
+        } catch (ResponseStatusException e) {
+            log.error("添加用户[{}]失败", gson.toJson(uservo));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ADD USER FAILURE");
+        }
+    }
+
     /**
      * 删除用户
      * 
@@ -49,10 +69,10 @@ public class UserController {
     /**
      * 修改指定用户
      * 
-     * @param id   用户id
-     * @param user 修改后的用户实体
+     * @param id     用户id
+     * @param uservo 修改后的用户
      * 
-     * @return 成功修改后的用户实体
+     * @return 成功修改后的用户
      */
     @PostMapping("/edituser/{id}")
     public UserVO editUser(@PathVariable Long id, @RequestBody @Validated UserVO uservo) {
@@ -83,31 +103,10 @@ public class UserController {
         }
     }
 
-    Gson gson = new Gson();
-
     /**
-     * 添加单个用户
+     * 查询用户列表
      * 
-     * 
-     * @param user
-     * 
-     * @return 添加成功的用户实体
-     */
-    @PostMapping("/adduser")
-    public UserVO addUser(@RequestBody @Validated UserVO uservo) {
-        try {
-            log.info("添加用户:{}", gson.toJson(uservo));
-            return userservice.addUser(uservo);
-        } catch (ResponseStatusException e) {
-            log.error("添加用户[{}]失败", gson.toJson(uservo));
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ADD USER FAILURE");
-        }
-    }
-
-    /**
-     * 查找所有用户实体
-     * 
-     * @return 所有用户实体
+     * @return 用户列表
      */
     @GetMapping("/findalluser")
     public List<UserVO> findAllUser() {
@@ -148,5 +147,15 @@ public class UserController {
     public long page() {
         log.info("查询用户页数:[{}]", userservice.page());
         return userservice.page();
+    }
+
+    /**
+     * 查询用户id最大值+1
+     * 
+     * @return 用户id最大值+1
+     */
+    @GetMapping("/maxid")
+    public Long maxId() {
+        return userservice.maxId();
     }
 }

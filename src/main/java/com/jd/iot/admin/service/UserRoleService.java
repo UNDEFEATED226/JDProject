@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 用户角色
+//用户角色服务
 @Service
 public class UserRoleService {
 
@@ -61,39 +61,22 @@ public class UserRoleService {
     }
 
     /**
-     * 通过id查找指定用户角色
+     * 修改用户角色
      * 
-     * @param id 需查找用户角色的id
+     * @param id         需修改用户角色的id
+     * @param userrolevo 修改过的用户角色
      * 
-     * @return 指定用户角色
+     * @return 成功修改的用户角色
      */
-    public UserRoleVO findById(Long id) {
+    public UserRoleVO editUserRole(Long id, UserRoleVO userrolevo) {
         try {
-            UserRoleVO userrole = new UserRoleVO(userrolerepository.findById(id).get());
-            try {
-                String rolename = rolerepository.getRolename(userrole.getRoleid());
-                if (rolename == null) {
-                    userrole.setRolename("角色不存在或已删除");
-                } else {
-                    userrole.setRolename(rolename);
-                }
-            } catch (Exception e) {
-                userrole.setRolename("角色不存在或已删除");
-            }
-            try {
-                String rolename = userrepository.getUsername(userrole.getUserid());
-                if (rolename == null) {
-                    userrole.setUsername("用户不存在或已删除");
-                } else {
-                    userrole.setUsername(rolename);
-                }
-            } catch (Exception e) {
-                userrole.setUsername("用户不存在或已删除");
-            }
-            return userrole;
+            userrolerepository.findById(id).get();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
         }
+        UserRole userrole = new UserRole(userrolevo);
+        userrole.setUpdatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        return new UserRoleVO(userrolerepository.save(userrole));
     }
 
     /**

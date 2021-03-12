@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 权限
+//权限服务
 @Service
 public class AuthService {
 
@@ -68,7 +68,7 @@ public class AuthService {
      * 
      * @return 成功修改的权限
      */
-    public AuthVO editAuthVO(Long id, AuthVO authvo) {
+    public AuthVO editAuth(Long id, AuthVO authvo) {
         try {
             authrepository.findById(id);
         } catch (Exception e) {
@@ -103,6 +103,7 @@ public class AuthService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AUTH NOT FOUND");
         }
+
     }
 
     /**

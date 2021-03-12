@@ -11,13 +11,12 @@ import org.springframework.stereotype.Repository;
 //Repository for 用户角色
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
-    @Query(value = "SELECT new com.jd.iot.admin.vo.UserRoleVO(ur,u.realname,r.rolename) FROM UserRole ur INNER JOIN User u ON ur.userid = u.id INNER JOIN Role r ON ur.roleid = r.id WHERE ur.isdeleted = 0 AND u.isdeleted = 0 AND r.isdeleted = 0")
-    public List<UserRoleVO> findAllUserRolePaginated(Pageable pageable);
-
-    @Query(value = "SELECT COUNT(ur) FROM UserRole ur INNER JOIN User u ON ur.userid = u.id INNER JOIN Role r ON ur.roleid = r.id WHERE ur.isdeleted = 0 AND u.isdeleted = 0 AND r.isdeleted = 0")
-    public long count();
-
-    @Query(value = "SELECT new com.jd.iot.admin.vo.UserRoleVO(ur,u.realname,r.rolename) FROM UserRole ur INNER JOIN User u ON ur.userid = u.id INNER JOIN Role r ON ur.roleid = r.id WHERE ur.isdeleted = 0 AND u.isdeleted = 0 AND r.isdeleted = 0")
+    @Query(value = "SELECT new com.jd.iot.admin.vo.UserRoleVO(ur,u.loginname,r.rolename) FROM UserRole ur INNER JOIN User u ON ur.userid = u.id LEFT JOIN Role r ON ur.roleid = r.id WHERE ur.isdeleted = 0 AND u.isdeleted = 0 AND r.isdeleted = 0")
     public List<UserRoleVO> findAllUserRole();
 
+    @Query(value = "SELECT new com.jd.iot.admin.vo.UserRoleVO(ur,u.loginname,r.rolename) FROM UserRole ur INNER JOIN User u ON ur.userid = u.id LEFT JOIN Role r ON ur.roleid = r.id WHERE ur.isdeleted = 0 AND u.isdeleted = 0 AND r.isdeleted = 0")
+    public List<UserRoleVO> findAllUserRolePaginated(Pageable pageable);
+
+    @Query(value = "SELECT COUNT(ur) FROM UserRole ur INNER JOIN User u ON ur.userid = u.id LEFT JOIN Role r ON ur.roleid = r.id WHERE ur.isdeleted = 0 AND u.isdeleted = 0 AND r.isdeleted = 0")
+    public long count();
 }

@@ -1,5 +1,6 @@
 package com.jd.iot.admin.entity;
 
+import com.jd.iot.admin.vo.RoleVO;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 
-import com.jd.iot.admin.vo.RoleVO;
-
+//角色实体
 @Entity
 @Table(name = "iot_hub_rbac_role")
 public class Role {
@@ -175,5 +175,4 @@ public class Role {
     public void setIsdefault(Integer isdefault) {
         this.isdefault = isdefault;
     }
-
 }

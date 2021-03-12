@@ -2,8 +2,10 @@ package com.jd.iot.admin.controller;
 
 import com.google.gson.Gson;
 import com.jd.iot.admin.service.RoleService;
+import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleVO;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -196,5 +196,17 @@ public class RoleController {
     public long pageByRoletype(Long roletype) {
         log.info("查询角色总页数(根据role type:{}):{}", roletype, roleservice.pageByRoletype(roletype));
         return roleservice.pageByRoletype(roletype);
+    }
+
+    /**
+     * 查询指定角色所拥有的权限
+     * 
+     * @param id 需查询角色的id
+     * 
+     * @return 指定角色拥有的权限列表
+     */
+    @GetMapping("/authlistforrole")
+    public List<AuthVO> authListForRole(Long id) {
+        return roleservice.authListForRole(id);
     }
 }

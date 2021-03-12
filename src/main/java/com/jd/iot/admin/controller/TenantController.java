@@ -1,8 +1,8 @@
 package com.jd.iot.admin.controller;
 
+import com.google.gson.Gson;
 import com.jd.iot.admin.service.TenantService;
 import com.jd.iot.admin.vo.TenantVO;
-import com.google.gson.Gson;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

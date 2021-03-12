@@ -1,8 +1,8 @@
 package com.jd.iot.admin.controller;
 
+import com.google.gson.Gson;
 import com.jd.iot.admin.service.AuthService;
 import com.jd.iot.admin.vo.AuthVO;
-import com.google.gson.Gson;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public class AuthController {
     public AuthVO editAuth(@PathVariable Long id, @RequestBody @Validated AuthVO authvo) {
         try {
             log.info("修改权限id:[{}],权限:", id, authvo);
-            return authservice.editAuthVO(id, authvo);
+            return authservice.editAuth(id, authvo);
         } catch (ResponseStatusException e) {
             log.error("修改权限id:[{}]失败", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AUTH NOT FOUND");

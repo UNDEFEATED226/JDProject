@@ -2,12 +2,12 @@ package com.jd.iot.admin.service;
 
 import com.jd.iot.admin.entity.Role;
 import com.jd.iot.admin.repository.RoleRepository;
+import com.jd.iot.admin.repository.TenantRepository;
+import com.jd.iot.admin.vo.AuthVO;
 import com.jd.iot.admin.vo.RoleVO;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,12 +17,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 角色
+//角色服务
 @Service
 public class RoleService {
 
     @Autowired
     RoleRepository rolerepository;
+
+    @Autowired
+    TenantRepository tenantrepository;
 
     /**
      * 添加角色
@@ -82,7 +85,13 @@ public class RoleService {
      */
     public RoleVO findById(Long id) {
         try {
-            return new RoleVO(rolerepository.findById(id).get());
+            RoleVO role = new RoleVO(rolerepository.findById(id).get());
+            try {
+                role.setTenantname(tenantrepository.getTenantname(role.getTenantid()));
+            } catch (Exception e) {
+                role.setTenantname("租户不存在或已删除");
+            }
+            return role;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLE NOT FOUND");
         }
@@ -94,9 +103,7 @@ public class RoleService {
      * @return 角色列表
      */
     public List<RoleVO> findAllRole() {
-        List<RoleVO> roleList = new ArrayList<RoleVO>();
-        rolerepository.findAllRole().stream().map(role -> roleList.add(new RoleVO(role))).collect(Collectors.toList());
-        return roleList;
+        return rolerepository.findAllRole();
     }
 
     /**
@@ -108,10 +115,8 @@ public class RoleService {
      */
     public Page<RoleVO> findAllRolePaginated(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<RoleVO> roleList = new ArrayList<RoleVO>();
-        rolerepository.findAllRolePaginated(pageable).stream().map(role -> roleList.add(new RoleVO(role)))
-                .collect(Collectors.toList());
-        return new PageImpl<RoleVO>(roleList);
+        List<RoleVO> paginatedRoleList = rolerepository.findAllRolePaginated(pageable);
+        return new PageImpl<RoleVO>(paginatedRoleList);
     }
 
     /**
@@ -122,10 +127,7 @@ public class RoleService {
      * @return 所有指定角色种类的角色
      */
     public List<RoleVO> roleMenu(Long roletype) {
-        List<RoleVO> roleList = new ArrayList<RoleVO>();
-        rolerepository.findAllByRoletype(roletype).stream().map(role -> roleList.add(new RoleVO(role)))
-                .collect(Collectors.toList());
-        return roleList;
+        return rolerepository.findAllByRoletype(roletype);
     }
 
     /**
@@ -138,10 +140,8 @@ public class RoleService {
      */
     public Page<RoleVO> roleMenuPaginated(Long roletype, int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, 20);
-        List<RoleVO> roleList = new ArrayList<RoleVO>();
-        rolerepository.findAllByRoletypePaginated(roletype, pageable).stream()
-                .map(role -> roleList.add(new RoleVO(role))).collect(Collectors.toList());
-        return new PageImpl<RoleVO>(roleList);
+        List<RoleVO> paginatedRoleList = rolerepository.findAllByRoletypePaginated(roletype, pageable);
+        return new PageImpl<RoleVO>(paginatedRoleList);
     }
 
     /**
@@ -188,5 +188,16 @@ public class RoleService {
             return rolerepository.countByRoletype(roletype) / 20 + 1;
         }
         return rolerepository.countByRoletype(roletype) / 20;
+    }
+
+    /**
+     * 查询指定角色所拥有的权限
+     * 
+     * @param id 需查询角色的id
+     * 
+     * @return 指定角色的所有权限
+     */
+    public List<AuthVO> authListForRole(Long id) {
+        return rolerepository.authListForRole(id);
     }
 }

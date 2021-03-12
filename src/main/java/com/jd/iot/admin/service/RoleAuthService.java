@@ -11,9 +11,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 角色权限
+//角色权限服务
 @Service
 public class RoleAuthService {
 
@@ -132,18 +131,17 @@ public class RoleAuthService {
             return roleauthrepository.count() / 20 + 1;
         }
         return roleauthrepository.count() / 20;
-
     }
 
     /**
      * 更新指定角色的权限
      * 
-     * @param roleid 指定角色id
-     * @param l      更新后的权限列表
+     * @param roleid      指定角色id
+     * @param newAuthList 更新后的权限列表
      * 
      */
     public void changeAuth(Long roleid, List<List<AuthVO>> newAuthList) {
-        List<List<AuthVO>> originalAuthList = findAuthByRoleid(roleid);
+        List<List<AuthVO>> originalAuthList = authListByRoleid(roleid);
         for (int i = 0; i < newAuthList.size(); i++) {
             for (int j = 0; j < newAuthList.get(i).size(); j++) {
                 if (newAuthList.get(i).get(j).isSelected() != originalAuthList.get(i).get(j).isSelected()) {
@@ -171,17 +169,14 @@ public class RoleAuthService {
      * 
      * @param roleid 指定角色id
      * 
-     * @return 权限列表
+     * @return 权限列表(根据资源id分组)
      */
-    public List<List<AuthVO>> findAuthByRoleid(Long roleid) {
+    public List<List<AuthVO>> authListByRoleid(Long roleid) {
         List<List<AuthVO>> sortedAuthList = new ArrayList<List<AuthVO>>();
-        HashMap<Long, Long> authid = new HashMap<Long, Long>();
+        HashSet<Long> authIdList = roleauthrepository.findAuthidByRoleid(roleid);
         List<AuthVO> authList = roleauthrepository.findAuthOrderbyResid();
-        roleauthrepository.findAuthidByRoleid(roleid).forEach(auth -> {
-            authid.put(auth, auth);
-        });
         authList.stream().forEach(auth -> {
-            if (authid.containsKey(auth.getId())) {
+            if (authIdList.contains(auth.getId())) {
                 auth.setSelected(true);
             }
         });
@@ -191,12 +186,12 @@ public class RoleAuthService {
         }
         int index = 0;
         for (int i = 0; i < authList.size() - 1; i++) {
-            if (authList.get(i).getResid() != authList.get(i + 1).getResid()) {
+            if (!authList.get(i).getResid().equals(authList.get(i + 1).getResid())) {
                 sortedAuthList.add(authList.subList(index, i + 1));
                 index = i + 1;
             }
         }
-        if (authList.get(authList.size() - 1).getResid() == authList.get(authList.size() - 2).getResid()) {
+        if (authList.get(authList.size() - 1).getResid().equals(authList.get(authList.size() - 2).getResid())) {
             sortedAuthList.add(authList.subList(index, authList.size()));
         } else {
             sortedAuthList.add(Arrays.asList(authList.get(authList.size() - 1)));

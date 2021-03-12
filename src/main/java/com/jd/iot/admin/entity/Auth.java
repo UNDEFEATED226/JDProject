@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 
+//权限实体
 @Entity
 @Table(name = "iot_hub_rbac_auth")
 public class Auth {

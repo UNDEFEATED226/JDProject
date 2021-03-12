@@ -55,6 +55,8 @@ public class UserVO {
     @Digits(integer = 20, fraction = 0)
     private Long tenantid;
 
+    private String tenantname;
+
     private Integer istenantadmin;
 
     private Integer isforbidden;
@@ -91,7 +93,7 @@ public class UserVO {
         mobile = user.getMobile();
     }
 
-    public UserVO(User user, String orgname) {
+    public UserVO(User user, String orgname, String tenantname) {
         id = user.getId();
         userid = user.getUserid();
         loginname = user.getLoginname();
@@ -113,6 +115,7 @@ public class UserVO {
         fullparentid = user.getFullparentid();
         mobile = user.getMobile();
         this.orgname = orgname;
+        this.tenantname = tenantname;
     }
 
     public Long getId() {
@@ -241,6 +244,14 @@ public class UserVO {
 
     public void setTenantid(Long tenantid) {
         this.tenantid = tenantid;
+    }
+
+    public String getTenantname() {
+        return tenantname;
+    }
+
+    public void setTenantname(String tenantname) {
+        this.tenantname = tenantname;
     }
 
     public Integer getIstenantadmin() {

@@ -2,10 +2,11 @@ package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+
 import com.jd.iot.admin.IotCoreApplication;
+import com.jd.iot.admin.repository.UserRoleRepository;
 import com.jd.iot.admin.service.UserRoleService;
 import com.jd.iot.admin.vo.UserRoleVO;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.server.ResponseStatusException;
 
 @ActiveProfiles({ "integration" })
 @RunWith(SpringRunner.class)
@@ -27,6 +27,9 @@ public class UserRoleControllerIntegrationTest {
 
     @Autowired
     UserRoleService userroleservice;
+
+    @Autowired
+    UserRoleRepository userrolerepository;
 
     @Autowired
     TestRestTemplate restTemplate;
@@ -51,8 +54,7 @@ public class UserRoleControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-userrole.sql" })
     public void compareUserEntity_Test() {
-        UserRoleVO r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
-                UserRoleVO.class, 8);
+        UserRoleVO r = new UserRoleVO(userrolerepository.findById(8L).get());
         assertEquals(8L, r.getId().longValue());
         assertEquals(107L, r.getUserid().longValue());
     }
@@ -69,40 +71,11 @@ public class UserRoleControllerIntegrationTest {
         assertEquals(u.getId().longValue(), 10L);
     }
 
-    // 是否能够成功查找指定用户角色
-    @Test
-    @Sql({ "classpath:sql/integration-test-userrole.sql" })
-    public void findById_Test() {
-        UserRoleVO u = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
-                UserRoleVO.class, 8L);
-        assertEquals(107L, u.getUserid().longValue());
-    }
-
-    // 处理不存在参数
-    @Test
-    @Sql({ "classpath:sql/integration-test-userrole.sql" })
-    public void findById_Test1() {
-        Assertions.assertThrows(ResponseStatusException.class, () -> {
-            userroleservice.findById(100L);
-        });
-    }
-
-    // 处理非法参数，期待数字输入字符
-    @Test
-    @Sql({ "classpath:sql/integration-test-userrole.sql" })
-    public void findById_Test2() {
-        UserRoleVO r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
-                UserRoleVO.class, "abc");
-        assertEquals(r.getId(), null);
-    }
-
     @Test
     @Sql({ "classpath:sql/integration-test-userrole.sql" })
     public void deleteUserRole_test() {
         this.restTemplate.getForObject("http://localhost:" + port + "/userrole/deleteuserrole?id={id}", void.class, 8L);
-        UserRoleVO r = this.restTemplate.getForObject("http://localhost:" + port + "/userrole/findbyid?id={id}",
-                UserRoleVO.class, 8L);
-        assertSame(r.getIsdeleted(), 1);
+        assertSame(userrolerepository.findById(8L).get().getIsdeleted(), 1);
     }
 
     // 检查是否可以成功分页

@@ -1,10 +1,11 @@
 package com.example.demo;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+
 import com.jd.iot.admin.IotCoreApplication;
 import com.jd.iot.admin.service.RoleService;
 import com.jd.iot.admin.vo.RoleVO;
-import static org.junit.Assert.assertEquals;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -99,7 +100,7 @@ public class RoleControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-role.sql" })
     public void deleteRole_Test() {
         this.restTemplate.getForObject("http://localhost:" + port + "/role/deleterole?id={id}", void.class, 1);
-        assertSame(roleservice.findById(1L).getIsdeleted(), 1);
+        assertSame(roleservice.findById(1L).getIsdeleted(),1);
     }
 
     // 检查是否可以成功分页

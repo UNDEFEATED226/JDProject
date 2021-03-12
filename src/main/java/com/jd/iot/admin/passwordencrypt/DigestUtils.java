@@ -1,6 +1,5 @@
 package com.jd.iot.admin.passwordencrypt;
 
-import java.io.UnsupportedEncodingException;
 
 /*
  * Copyright 2002-2016 the original author or authors.

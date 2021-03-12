@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,21 +60,12 @@ public class UserRoleController {
         }
     }
 
-    /**
-     * 通过id查找指定用户角色
-     * 
-     * @param id 需查找用户角色的id
-     * 
-     * @return 指定用户角色
-     */
-    @GetMapping("/findbyid")
-    public UserRoleVO findById(Long id) {
+    @PostMapping("/edituserrole/{id}")
+    public UserRoleVO editUserRole(@PathVariable Long id, @RequestBody @Validated UserRoleVO userrolevo) {
         try {
-            log.info("查找用户角色id:[{}],角色:{}", id, gson.toJson(userroleservice.findById(id)));
-            return userroleservice.findById(id);
+            return userroleservice.editUserRole(id, userrolevo);
         } catch (Exception e) {
-            log.error("查找用户角色id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ROLE NOT FOUND");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
         }
     }
 

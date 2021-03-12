@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 租户
+//租户服务
 @Service
 public class TenantService {
 
@@ -84,18 +84,7 @@ public class TenantService {
      */
     public TenantVO findById(Long id) {
         try {
-            TenantVO tenant = new TenantVO(tenantrepository.findById(id).get());
-            try {
-                String loginname = userrepository.getLoginname(tenant.getAdminuserid());
-                if (loginname == null) {
-                    tenant.setAdminname("租户管理员用户不存在或已删除");
-                } else {
-                    tenant.setAdminname(loginname);
-                }
-            } catch (Exception e) {
-                tenant.setAdminname("租户管理员用户不存在或已删除");
-            }
-            return tenant;
+            return new TenantVO(tenantrepository.findById(id).get());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TENANT NOT FOUND");
         }

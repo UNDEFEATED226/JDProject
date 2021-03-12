@@ -65,7 +65,7 @@ public class TenantControllerIntegrationTest {
         tenantvo.setName("修改名字");
         TenantVO t = this.restTemplate.postForObject("http://localhost:" + port + "/tenant/edittenant/{id}", tenantvo,
                 TenantVO.class, 1);
-        assertEquals(t.getName(),"修改名字");
+        assertEquals(t.getName(), "修改名字");
 
     }
 
@@ -74,9 +74,7 @@ public class TenantControllerIntegrationTest {
     @Sql({ "classpath:sql/integration-test-tenant.sql" })
     public void deleteTenant_test() {
         this.restTemplate.getForObject("http://localhost:" + port + "/tenant/deletetenant?id={id}", void.class, 1);
-        TenantVO tenantvo = this.restTemplate.getForObject("http://localhost:" + port + "tenant/findbyid?id={id}",
-                TenantVO.class, 1);
-        assertSame(tenantvo.getIsdeleted(), 1);
+        assertSame(tenantservice.findById(1L).getIsdeleted(), 1);
     }
 
     // 测试是否能通过id成功查找指定租户
@@ -89,14 +87,13 @@ public class TenantControllerIntegrationTest {
         assertEquals(tenantvo.getId().longValue(), 1L);
         assertEquals(tenantvo.getName(), tenantservice.findById(1L).getName());
     }
-    
+
     // 检查是否可以成功分页
     @Test
     @Sql({ "classpath:sql/integration-test-tenant.sql" })
     public void pagination_test() {
         String res = this.restTemplate.getForObject(
-                "http://localhost:" + port + "/tenant/findalltenantpaginated?pageNo={pageNo}", String.class,
-                1);
+                "http://localhost:" + port + "/tenant/findalltenantpaginated?pageNo={pageNo}", String.class, 1);
         System.out.println("***");
         System.out.println(res);
         System.out.println("***");

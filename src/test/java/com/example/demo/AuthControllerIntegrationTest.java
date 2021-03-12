@@ -2,8 +2,8 @@ package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+
 import com.jd.iot.admin.IotCoreApplication;
-import com.jd.iot.admin.repository.AuthRepository;
 import com.jd.iot.admin.service.AuthService;
 import com.jd.iot.admin.vo.AuthVO;
 import org.junit.jupiter.api.Assertions;
@@ -113,7 +113,7 @@ public class AuthControllerIntegrationTest {
 
     // 检查是否可以成功查询组织总数
     @Test
-    @Sql({ "classpath:sql/integration-test-auth.sql","classpath:sql/integration-test-resource.sql" })
+    @Sql({ "classpath:sql/integration-test-auth.sql", "classpath:sql/integration-test-resource.sql" })
     public void count_test() {
         Long count = this.restTemplate.getForObject("http://localhost:" + port + "/auth/count", long.class);
         assertEquals(count.longValue(), 2L);

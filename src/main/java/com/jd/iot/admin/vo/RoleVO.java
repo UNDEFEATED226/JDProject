@@ -21,6 +21,8 @@ public class RoleVO {
     @Digits(integer = 20, fraction = 0)
     private Long tenantid;
 
+    private String tenantname;
+
     private Integer isdeleted;
 
     @Digits(integer = 1, fraction = 0)
@@ -32,7 +34,7 @@ public class RoleVO {
 
     @Size(max = 100)
     private String rolecode;
-    
+
     @Digits(integer = 1, fraction = 0)
     private Integer isforbidden;
 
@@ -55,6 +57,22 @@ public class RoleVO {
         rolecode = role.getRolecode();
         isforbidden = role.getIsforbidden();
         isdefault = role.getIsdefault();
+    }
+
+    public RoleVO(Role role, String tenantname) {
+        id = role.getId();
+        rolename = role.getRolename();
+        roletype = role.getRoletype();
+        description = role.getDescription();
+        tenantid = role.getTenantid();
+        isdeleted = role.getIsdeleted();
+        issystem = role.getIssystem();
+        createtime = role.getCreatetime();
+        updatetime = role.getUpdatetime();
+        rolecode = role.getRolecode();
+        isforbidden = role.getIsforbidden();
+        isdefault = role.getIsdefault();
+        this.tenantname = tenantname;
     }
 
     public Long getId() {
@@ -95,6 +113,14 @@ public class RoleVO {
 
     public void setTenantid(Long tenantid) {
         this.tenantid = tenantid;
+    }
+
+    public String getTenantname() {
+        return tenantname;
+    }
+
+    public void setTenantname(String tenantname) {
+        this.tenantname = tenantname;
     }
 
     public Integer getIsdeleted() {

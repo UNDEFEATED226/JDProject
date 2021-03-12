@@ -62,8 +62,8 @@ public class OrganizationController {
     /**
      * 修改组织
      * 
-     * @param id           需修改组织的id
-     * @param organization 修改过的组织
+     * @param id             需修改组织的id
+     * @param organizationvo 修改过的组织
      * @return 成功修改的组织
      */
     @PostMapping("/editorganization/{id}")

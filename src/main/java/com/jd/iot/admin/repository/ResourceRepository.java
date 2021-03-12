@@ -33,8 +33,8 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     public long count();
 
     @Query(value = "SELECT COUNT(r) FROM Resource r WHERE isdeleted = 0 AND restypeid = :restypeid")
-    public long countByRestypeid(@Param(value = "restypeid") Long restypeid);
-
+    public long countByRestypeid(@Param(value = "restypeid") Long restypeid); 
+    
     @Query(value = "SELECT r.resname FROM Resource r WHERE isdeleted = 0 AND id = :id")
     public String getResname(@Param(value = "id") Long id);
 }

@@ -1,5 +1,6 @@
 package com.jd.iot.admin.entity;
 
+import com.jd.iot.admin.vo.ResourceVO;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +9,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.jd.iot.admin.vo.ResourceVO;
 
 //资源实体
 @Entity
@@ -63,10 +62,6 @@ public class Resource {
     @Column(name = "full_name")
     private String fullname;
 
-    /*@Column(name = "`ORDER`")
-    @Digits(integer = 255, fraction = 0)
-    private Long orderBy;*/
-
     @Digits(integer = 1, fraction = 0)
     private Integer selected;
 
@@ -104,7 +99,6 @@ public class Resource {
         description = resourcevo.getDescription();
         routecode = resourcevo.getRoutecode();
         fullname = resourcevo.getFullname();
-        /*orderBy = resourcevo.getOrder();*/
         selected = resourcevo.getSelected();
         isshow = resourcevo.getIsshow();
         title = resourcevo.getTitle();
@@ -208,15 +202,7 @@ public class Resource {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
-
-    /*public Long getOrder() {
-        return orderBy;
-    }
-
-    public void setOrder(Long order) {
-        this.orderBy = order;
-    }*/
-
+    
     public Integer getSelected() {
         return selected;
     }

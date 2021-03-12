@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//Service for 组织实体
+//组织服务
 @Service
 public class OrganizationService {
 
@@ -29,7 +29,7 @@ public class OrganizationService {
     /**
      * 添加组织
      * 
-     * @param 需添加的组织
+     * @param organizationvo 需添加的组织
      * 
      * @return 成功添加的组织
      */
@@ -60,7 +60,7 @@ public class OrganizationService {
      * 修改组织
      * 
      * @param id           需修改组织的id
-     * @param organization 修改过的组织
+     * @param organizationvo 修改过的组织
      * 
      * @return 成功修改的组织
      */

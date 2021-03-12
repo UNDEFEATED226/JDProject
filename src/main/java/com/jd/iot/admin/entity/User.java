@@ -13,7 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-//User Entity
+//用户实体
 @Entity
 @Table(name = "iot_hub_rbac_user")
 public class User {

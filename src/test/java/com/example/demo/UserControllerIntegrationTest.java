@@ -2,6 +2,7 @@ package com.example.demo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+
 import com.jd.iot.admin.IotCoreApplication;
 import com.jd.iot.admin.service.UserService;
 import com.jd.iot.admin.vo.UserVO;
@@ -121,7 +122,7 @@ public class UserControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql" })
     public void count_test() {
-        Long count = this.restTemplate.getForObject("http://localhost:"+port+"/user/count", long.class);
+        Long count = this.restTemplate.getForObject("http://localhost:" + port + "/user/count", long.class);
         assertEquals(count.longValue(), 1L);
     }
 
@@ -129,7 +130,7 @@ public class UserControllerIntegrationTest {
     @Test
     @Sql({ "classpath:sql/integration-test-user.sql" })
     public void page_test() {
-        Long page = this.restTemplate.getForObject("http://localhost:"+port+"/user/page", long.class);
+        Long page = this.restTemplate.getForObject("http://localhost:" + port + "/user/page", long.class);
         assertEquals(page.longValue(), 1L);
     }
 }

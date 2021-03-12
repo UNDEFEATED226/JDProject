@@ -190,18 +190,4 @@ public class UserService {
         }
         return userrepository.count() / 20;
     }
-
-    /**
-     * 查询用户id最大值+1
-     * 
-     * @return 用户id最大值+1
-     */
-    public Long maxId() {
-        Long maxId = userrepository.maxId();
-        if (maxId == null) {
-            return 1L;
-        } else {
-            return maxId + 1;
-        }
-    }
 }

@@ -31,7 +31,7 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     Gson gson = new Gson();
-    
+
     /**
      * 添加用户
      *
@@ -147,15 +147,5 @@ public class UserController {
     public long page() {
         log.info("查询用户页数:[{}]", userservice.page());
         return userservice.page();
-    }
-
-    /**
-     * 查询用户id最大值+1
-     * 
-     * @return 用户id最大值+1
-     */
-    @GetMapping("/maxid")
-    public Long maxId() {
-        return userservice.maxId();
     }
 }

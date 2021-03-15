@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-//Controller for organization
+//组织controller
 @Slf4j
 @RestController
 @RequestMapping("/organization")
@@ -53,8 +53,10 @@ public class OrganizationController {
     @GetMapping("/deleteorganization")
     public void deleteOrganization(Long id) {
         try {
+            log.info("删除组织id:[{}]", id);
             organizationservice.deleteOrganization(id);
         } catch (ResponseStatusException e) {
+            log.error("删除组织id:[{}]失败", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
         }
     }
@@ -91,6 +93,7 @@ public class OrganizationController {
             log.info("查找组织id:[{}],组织:", id, gson.toJson(organizationservice.findById(id)));
             return organizationservice.findById(id);
         } catch (Exception e) {
+            log.error("查找组织id:[{}]失败", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ORGANIZATION NOT FOUND");
         }
     }

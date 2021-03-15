@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 
-//用户角色
+//用户角色实体
 @Entity
 @Table(name = "iot_hub_rbac_user_role")
 public class UserRole {

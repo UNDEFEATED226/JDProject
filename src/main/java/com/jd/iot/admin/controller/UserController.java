@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-//Controller for 用户实体
+//用户controller
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -81,7 +81,7 @@ public class UserController {
             return userservice.editUser(id, uservo);
         } catch (ResponseStatusException e) {
             log.error("修改用户id:[{}]失败", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
     }
 

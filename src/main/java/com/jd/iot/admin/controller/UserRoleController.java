@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+//用户角色controller
 @Slf4j
 @RestController
 @RequestMapping("/userrole")
@@ -60,11 +61,21 @@ public class UserRoleController {
         }
     }
 
+    /**
+     * 修改用户角色
+     * 
+     * @param id         需修改用户角色的id
+     * @param userrolevo 修改过的用户角色
+     * 
+     * @return 成功修改的用户角色
+     */
     @PostMapping("/edituserrole/{id}")
     public UserRoleVO editUserRole(@PathVariable Long id, @RequestBody @Validated UserRoleVO userrolevo) {
         try {
+            log.info("修改用户角色id:[{}],用户角色:{}", id, gson.toJson(userrolevo));
             return userroleservice.editUserRole(id, userrolevo);
         } catch (Exception e) {
+            log.info("修改用户角色id:[{}]失败", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USERROLE NOT FOUND");
         }
     }
